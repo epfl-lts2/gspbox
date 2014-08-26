@@ -13,3 +13,12 @@ Setup
 =====
 
 To use the toolbox, start Matlab, change to the 'gsp' directory and run
+
+  gsp_start
+  
+This will set up the necessary paths and perform the necessary initializations.
+
+To compile the mex interfaces for faster execution of the toolbox and install 3rd party software type the command
+
+  gsp_install
+  
