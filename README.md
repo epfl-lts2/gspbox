@@ -1,24 +1,44 @@
 Graph Signal Processing Toolbox (GSPBox)
 ======
 
-The official repository of the Graph Signal Processing Toolbox (GSPBox)
+The official Graph Signal Processing Toolbox (GSPBox)
 
-Install
-=======
+Running the toolbox
+==
 
-You can simply clone the repository, or download the package. 
-The toolbox is contained in the 'gsp' directory and in all the subdirectories. 
+In Matlab type
 
-Setup
-=====
+        gsp_start
+        
+as the first command from the installation directory. This will set up the correct paths.
 
-To use the toolbox, start Matlab, change to the 'gsp' directory and run
+The gsp_start command will add all the necessary subdirectories (so
+please don't add these manually), and it will print a statement
+telling you which backend you are currently using.
 
-    gsp_start
-  
-This will set up the necessary paths and perform the necessary initializations.
+Compiling the toolbox
+===
 
-To compile the mex interfaces for faster execution of the toolbox and install 3rd party software type the command
+In Matlab type
 
-    gsp_install
+        gsp_make
+        
+as the first command from the installation directory. This will try to compile the mex interface for 
+the third party components: AMD and LDL. 
+
+
+Installing third party software
+====
+
+In Matlab type 
+
+        gsp_install
+
+as the first command from the installation directory. This will try to download and install third party 
+software.
+
+Documentation
+===
+
+You can find the complete online documentation here : http://lts2research.epfl.ch/gsp/doc/start/
   
