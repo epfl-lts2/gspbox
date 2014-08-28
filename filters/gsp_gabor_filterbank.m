@@ -16,7 +16,7 @@ function [ g ] = gsp_gabor_filterbank( G,k )
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_gabor_filterbank.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.0
+% This file is part of GSPbox version 0.3.1
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

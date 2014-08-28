@@ -36,7 +36,7 @@ function [G] = gsp_compute_fourier_basis(G,param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_compute_fourier_basis.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.0
+% This file is part of GSPbox version 0.3.1
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -107,5 +107,23 @@ G.lmax=max(G.e);
 
 G.mu = max(abs(G.U(:)));
 
+end
+
+
+function [U,E] = gsp_full_eigen(L)
+%GSP_FULL_EIGEN Compute and order the eigen decomposition of L
+
+    % Compute and all eigenvalues and eigenvectors 
+    [eigenvectors,eigenvalues,~]=svd(full(L));
+    %[eigenvectors,eigenvalues]=eig(full(L));
+    
+    % Sort eigenvectors and eigenvalues
+    [E,inds] = sort(diag(eigenvalues),'ascend');
+    eigenvectors=eigenvectors(:,inds);
+    
+    % Set first component of each eigenvector to be nonnegative
+    signs=sign(eigenvectors(1,:));
+    signs(signs==0)=1;
+    U = eigenvectors*diag(signs);
 end
 
