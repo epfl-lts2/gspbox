@@ -26,6 +26,10 @@ In Matlab type
 as the first command from the installation directory. This will try to compile the mex interface for 
 the third party components: AMD and LDL. 
 
+You need the library stdc++ to compile AMD and LDL. On Ubuntu you can type:
+
+        sudo apt-get install libstdc++6
+
 
 Installing third party software
 ====
@@ -36,6 +40,7 @@ In Matlab type
 
 as the first command from the installation directory. This will try to download and install third party 
 software.
+
 
 Documentation
 ===

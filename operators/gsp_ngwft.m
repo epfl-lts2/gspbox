@@ -25,7 +25,7 @@ function [ C ] = gsp_ngwft(G,f,g, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_ngwft.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.0
+% This file is part of GSPbox version 0.3.1
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
