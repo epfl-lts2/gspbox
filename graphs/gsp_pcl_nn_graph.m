@@ -76,8 +76,7 @@ function [ G ] = gsp_pcl_nn_graph( Xin, param )
     if ~isfield(param, 'epsilon'), param.epsilon = 0.01; end
 
     [N, d] = size(Xin);
-    
-    
+   
     Xout = Xin;
     
     %Center the point cloud
@@ -106,9 +105,9 @@ function [ G ] = gsp_pcl_nn_graph( Xin, param )
             
             % Fill the 3-col values with [i, j, exp(-d(i,j)^2 / sigma)]
             for ii = 1:N
-                spidx((ii-1)*10+1:ii*10, 1) = repmat(ii, k, 1);
-                spidx((ii-1)*10+1:ii*10, 2) = NN(ii, 2:end)';
-                spidx((ii-1)*10+1:ii*10, 3) = exp(-D(ii,2:end).^2/param.sigma);
+                spidx((ii-1)*k+1:ii*k, 1) = repmat(ii, k, 1);
+                spidx((ii-1)*k+1:ii*k, 2) = NN(ii, 2:end)';
+                spidx((ii-1)*k+1:ii*k, 3) = exp(-D(ii,2:end).^2/param.sigma);
             end
             
             %Actually create the sparse matrix from the 3-col values
