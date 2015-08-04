@@ -15,18 +15,11 @@ function [pdf]=gsp_erdos_renyi_density_normalized(y,N,p)
 %   eigenvalues of an Erdos-Renyi random graph with N vertices and edge
 %   probability p. This is a semicircular density function.
 %
-%   See also:  
-%
-%   Demos:  
-%
-%   Requires: 
-% 
-%
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/utils/gsp_erdos_renyi_density_normalized.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -52,3 +45,4 @@ function [pdf]=gsp_erdos_renyi_density_normalized(y,N,p)
 %   REFERENCE:
   
 pdf=sqrt((p*N)/(1-p))*(1/(2*pi))*real((y>1-2*sqrt((1-p)/(p*N))).*(y<1+2*sqrt((1-p)/(p*N))).*sqrt(4-p*N/(1-p)*(1-y).^2));
+

@@ -39,8 +39,8 @@ function [signal,ca] = gsp_pyramid_synthesis(Gs,coeff,param)
 %   Demo: gsp_demo_pyramid
 %
 %   References:
-%     I. Pesenson. Variational splines and paley-wiener spaces on
-%     combinatorial graphs. Constructive Approximation, 29(1):1-21, 2009.
+%     I. Pesenson. Variational splines and paley--wiener spaces on
+%     combinatorial graphs. Constructive Approximation, 29(1):1--21, 2009.
 %     
 %     D. I. Shuman, M. J. Faraji, and P. Vandergheynst. A framework for
 %     multiscale transforms on graphs. arXiv preprint arXiv:1308.4942, 2013.
@@ -49,7 +49,7 @@ function [signal,ca] = gsp_pyramid_synthesis(Gs,coeff,param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_pyramid_synthesis.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -79,13 +79,13 @@ if nargin < 3
     param = struct;
 end
     
-if ~isfield(param,'cheb_order'), param.cheb_order = 100; end
+if ~isfield(param,'order'), param.order = 100; end
 
 Nl = length(Gs)-1;
 
 % Initisalization
 Nt = Gs{Nl+1}.N;
-ca{Nl+1} = coeff(1:Nt);
+ca{Nl+1} = coeff(1:Nt, :);
 
 ind = Nt+1;
 % Reconstruct each level
@@ -94,7 +94,7 @@ for ii = 1:Nl
     % Compute prediction
     s_pred = gsp_interpolate(Gs{Nl+1-ii},Gs{Nl+2-ii},ca{Nl+2-ii},param);
     % Compute the ca coeff
-    ca{Nl+1-ii} = s_pred + coeff(ind:(ind+Nt-1));
+    ca{Nl+1-ii} = s_pred + coeff(ind:(ind+Nt-1), :);
     
     ind = ind + Nt;
 end
@@ -248,3 +248,4 @@ end
 % end
 %     
 % end
+

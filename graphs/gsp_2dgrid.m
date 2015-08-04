@@ -19,7 +19,7 @@ function [G]=gsp_2dgrid(N,M)
 %   See also: gsp_ring, gsp_path
 %
 %   References:
-%     G. Strang. The discrete cosine transform. SIAM review, 41(1):135-147,
+%     G. Strang. The discrete cosine transform. SIAM review, 41(1):135--147,
 %     1999.
 %     
 %     
@@ -27,7 +27,7 @@ function [G]=gsp_2dgrid(N,M)
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_2dgrid.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -81,9 +81,9 @@ end
 G.W = sparse(i_inds,j_inds,ones(K*M+J*N,1),N*M,N*M);
 
 % Create coordinates
-G.coords = [repmat((1:N)',M,1),...
-        reshape(repmat((1:M),N,1),M*N,1) ];
-G.plotting.limits = [0, N+1, 0, M+1];
+G.coords = [repmat((0:(N-1))'/N,M,1),...
+        reshape(repmat((0:(M-1))/M,N,1),M*N,1) ];
+G.plotting.limits = [-1/N, 1+1/N, -1/M, 1+1/M];
 
 G.type = '2d-grid';
 G.plotting.vertex_size = 30;

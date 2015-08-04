@@ -1,4 +1,4 @@
-function [G]=gsp_spectrum_cdf_approx(G,varargin)
+function [G]=gsp_spectrum_cdf_approx(G,param)
 %GSP_SPECTRUM_CDF_APPROX  Compute an approximation of the cumulative density function of the graph Laplacian eigenvalues
 %   Usage:  G=gsp_spectrum_cdf_approx(G);
 %           G=gsp_spectrum_cdf_approx(G,param);
@@ -7,6 +7,7 @@ function [G]=gsp_spectrum_cdf_approx(G,varargin)
 %         G                     : Graph structure.
 %   Output parameters:
 %         G                     : Graph structure, including the addition of G.spectral_warp_fn
+%         param                 : Structure of additional parameter
 %   Additional parameters:
 %         param.num_pts         : Number of interpolation points
 %         param.use_speedup     : Only perform step 1 (ldlsymbol) of the ldl algorithm once and then repeat the numeric step 2
@@ -59,14 +60,14 @@ function [G]=gsp_spectrum_cdf_approx(G,varargin)
 %     http://www.cise.ufl.edu/research/sparse/ldl/, Jan. 2011.
 %     
 %     T. A. Davis. Algorithm 849: A concise sparse Cholesky factorization
-%     package. ACM Trans. Mathem. Software, 31(4):587-591, Dec. 2005.
+%     package. ACM Trans. Mathem. Software, 31(4):587--591, Dec. 2005.
 %     
 %
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_spectrum_cdf_approx.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -87,6 +88,8 @@ function [G]=gsp_spectrum_cdf_approx(G,varargin)
 %     ArXiv e-prints, Aug. 2014.
 % http://arxiv.org/abs/1408.5781
 
+%TODO this function need to be cleaned
+
 %   AUTHOR : David I Shuman.
 %   TESTING: 
 %   REFERENCE:
@@ -95,10 +98,14 @@ if isfield(G, 'spectral_warp_fn')
     warning('Overwriting spectral warping function');
 end
 
-if ~isempty(varargin)
-    param=varargin{1};
-else
-    param=0;
+% if isfield(G,'e');
+%     [x,y] = gsp_point2dcdf(G.e);
+%     G.spectrum_cdf_approx = @(s) gsp_mono_cubic_warp_fn(x,y,s);
+%     return
+% end
+
+if nargin<2
+    param = struct;
 end
 
 if ~isfield(param, 'num_pts')
@@ -134,7 +141,12 @@ else
 end
 
 if ~isfield(G, 'lmax')
-    G.lmax=sgwt_rough_lmax(G.L);
+    warning(['GSP_SPECTRUM_CDF_APPROX: The variable lmax is not ',...
+            'available. The function will compute it for you. ',...
+            'However, if you apply many time this function, you ',...
+            'should precompute it using the function: ',...
+            'gsp_estimate_lmax']);
+    G = gsp_estimate_lmax(G);
 end
 
 if ~isfield(param, 'ldl_thresh')
@@ -142,6 +154,8 @@ if ~isfield(param, 'ldl_thresh')
 else
     ldl_thresh = param.ldl_thresh;
 end
+
+
 
 counts=zeros(num_pts,1);
 counts(num_pts)=G.N-1;
@@ -197,3 +211,4 @@ interp_y=counts/(G.N-1);
 G.spectrum_cdf_approx = @(s) gsp_mono_cubic_warp_fn(interp_x,interp_y,s);
 
 end
+

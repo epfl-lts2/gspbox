@@ -10,15 +10,15 @@ function [ G ] = gsp_sensor( N,param)
 %   Output parameters
 %       - G     : Graph
 %
-%   This function create a 2 dimentional random sensor graph. All the
-%   coordonates are between 0 and 1.
-%   
+%   This function creates a 2 dimensional random sensor graph. All the
+%   coordinates are between 0 and 1.
+%
 %   param is an optional structure with the following field
 %
 %    param.Nc : Minimum number of connection (default 2)
 %    param.regular*: Flag to fix the number of connections to Nc (default 0)
 %    param.verbose*: display parameter - 0 no log - 1 display the errors (default 1)
-%    param.N_try*: Number of attempt to create the graph (default 50)
+%    param.N_try*: Number of attempts to create the graph (default 50)
 %    param.distribute*: To distribute the points more evenly (default 0)
 %    param.connected*: To force the graph to be connected (default 1)
 %
@@ -33,7 +33,7 @@ function [ G ] = gsp_sensor( N,param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_sensor.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -73,7 +73,6 @@ if ~isfield(param, 'verbose'), param.verbose = 1; end
 if ~isfield(param, 'N_try'), param.N_try = 50; end
 if ~isfield(param, 'distribute'), param.distribute = 0; end
 if ~isfield(param, 'connected'), param.connected = 1; end
-if ~isfield(param, 'set_to_one'), param.set_to_one = 0; end
 
 
 if param.connected
@@ -94,15 +93,10 @@ else
     [W, XCoords, YCoords] = create_weight_matrix(N,param);
 end
 
-if param.set_to_one
-   W(W>0) = 1; 
-end
-
-
 
 % Return the values
 G.W=sparse(W);
-G.W=(G.W+G.W')/2; % to be sure it is undirected
+G.W = gsp_symetrize(G.W);
 
 G.plotting.limits=[0,1,0,1];
 G.N=N;
@@ -181,3 +175,4 @@ function W = get_nc_connection(W,param)
     W=(W+W')/2;
         
 end
+

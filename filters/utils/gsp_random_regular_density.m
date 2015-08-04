@@ -14,18 +14,12 @@ function [pdf]=gsp_random_regular_density(y,r)
 %   eigenvalues of a random regular graph with each vertex having degree r.
 %   This density function is given by McKay's Law.
 %
-%   See also:  
-%
-%   Demos:  
-%
-%   Requires: 
-% 
 %
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/utils/gsp_random_regular_density.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -51,3 +45,4 @@ function [pdf]=gsp_random_regular_density(y,r)
 %   REFERENCE:
   
 pdf=real((y>r-2*sqrt(r-1)).*(y<r+2*sqrt(r-1)).*(r*sqrt(4*(r-1)-(r-y).^2)./(2*pi*(r^2-(r-y).^2))));
+

@@ -24,7 +24,7 @@ function di = gsp_div(G,s)
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_div.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -50,19 +50,19 @@ function di = gsp_div(G,s)
 % Date  : 5 August 2014
 % Testing: test_operators
 
-if ~strcmp(G.lap_type,'combinatorial') 
-    error('Not implemented yet. However ask Nathanael it is very easy');
-end
 
 
 if size(s,1) ~= G.Ne
     error('Signal size not equal to number of edges');
 end
 
+if ~isfield(G,'Diff')
+    warning(['GSP_DIV: To optimize speed, please run',...
+        ' G = gsp_adj2vec(G) before this function']);
+    G = gsp_adj2vec(G);
+end
 
-D = gsp_grad_mat(G);
-
-di = D'*double(s);
+di = G.Diff'*double(s);
 
 if isa(s,'single')
    di = single(di); 

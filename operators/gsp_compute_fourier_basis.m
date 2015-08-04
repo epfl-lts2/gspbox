@@ -1,6 +1,7 @@
 function [G] = gsp_compute_fourier_basis(G,param)
 %GSP_COMPUTE_FOURIER_BASIS Compute the fourier basis of the graph G
-%   Usage:  G = gsp_full_eigen(G);
+%   Usage:  G = gsp_compute_fourier_basis(G);
+%           G = gsp_compute_fourier_basis(G,param);
 %
 %   Input parameters:
 %         G          : Graph structure (or cell array of graph structure) 
@@ -8,7 +9,7 @@ function [G] = gsp_compute_fourier_basis(G,param)
 %   Output parameters:
 %         G          : Graph structure (or cell array of graph structure)
 %
-%   'gsp_full_eigen(G)' computes a full eigendecomposition of the graph
+%   'gsp_compute_fourier_basis(G)' computes a full eigendecomposition of the graph
 %   Laplacian G.L:
 %
 %      L = U Lambda U* 
@@ -36,7 +37,7 @@ function [G] = gsp_compute_fourier_basis(G,param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_compute_fourier_basis.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -75,6 +76,9 @@ end
 
 if ~isfield(param,'verbose'), param.verbose = 1; end
 
+
+
+
 if ( isfield(G,'e') || isfield(G,'U') )
     if param.verbose
         warning(['Laplacian eigenvalues or eigenvectors ',...
@@ -95,6 +99,10 @@ if ( strcmp(G.type,'ring')==1 && mod(G.N,2)==0 )
     inds = gsp_classic2graph_eig_order( G.N );
 %     [G.E, inds]=sort(E,'ascend');
     G.e = E(inds);
+    if strcmp(G.lap_type,'normalized')
+        G.e = G.e/2;
+    end
+    
     G.U = U(:,inds);
 else
     if ~isfield(G,'L')
@@ -105,6 +113,26 @@ end
 
 G.lmax=max(G.e);
 
+if isfield(G,'Gm')
+%     G.Gm = gsp_compute_fourier_basis(G.Gm);
+%     G.Gm.Um1 = G.Gm.U^(-1);
+    N = G.N;
+    w = G.Gm.W(N+1:end,1:N);
+    d = G.Gm.d(N+1:end);
+    Nw = length(d);
+    c = (w*G.U)./(repmat(d,1,N)-repmat(G.e',Nw,1));
+    
+    G.Gm.U = [G.U zeros(N,Nw); c , eye(Nw)];
+    
+    G.Gm.Um1 = [G.U', zeros(N,Nw); -c*G.U', eye(Nw)];
+    G.Gm.e = [G.e;d];
+    G.Gm.lmax = max(G.Gm.e);
+    G.lmax = G.Gm.lmax;
+    
+end
+
+
+
 G.mu = max(abs(G.U(:)));
 
 end
@@ -114,8 +142,11 @@ function [U,E] = gsp_full_eigen(L)
 %GSP_FULL_EIGEN Compute and order the eigen decomposition of L
 
     % Compute and all eigenvalues and eigenvectors 
-    [eigenvectors,eigenvalues,~]=svd(full(L));
-    %[eigenvectors,eigenvalues]=eig(full(L));
+    try
+        [eigenvectors,eigenvalues]=eig(full(L+L')/2);
+    catch
+        [eigenvectors,eigenvalues,~]=svd(full(L+L')/2);
+    end
     
     % Sort eigenvectors and eigenvalues
     [E,inds] = sort(diag(eigenvalues),'ascend');

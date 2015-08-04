@@ -1,4 +1,4 @@
-function [ g ] = gsp_design_itersine( G, Nf, param )
+function [ g,mu ] = gsp_design_itersine( G, Nf, param )
 %GSP_DESIGN_ITERSINE Create a itersine filterbanks
 %   Usage: g = gsp_design_itersine( G, Nf );
 %          g = gsp_design_itersine( G, Nf, param );
@@ -10,6 +10,7 @@ function [ g ] = gsp_design_itersine( G, Nf, param )
 %
 %   Outputs parameters:
 %       g       : filterbanks
+%       mu      : centers of the filters
 %
 %   This function create a itersine half overlap filterbank of Nf filters
 %   Going from 0 to lambda_{max}
@@ -46,7 +47,7 @@ function [ g ] = gsp_design_itersine( G, Nf, param )
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_design_itersine.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -97,11 +98,12 @@ g = cell(Nf,1);
 
 scale = lmax/(Nf-param.overlap+1)*(param.overlap);
 
-
+mu = zeros(Nf,1);
 
 for ii=1:Nf
     g{ii} = @(x) k(x/scale-(ii-param.overlap/2)/param.overlap)...
                     ./sqrt(param.overlap)*sqrt(2);
+    mu(ii) = (ii-param.overlap/2)/param.overlap * scale;
 end
 
 

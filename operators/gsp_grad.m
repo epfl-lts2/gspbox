@@ -23,7 +23,7 @@ function gr = gsp_grad(G,s)
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_grad.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -49,18 +49,16 @@ function gr = gsp_grad(G,s)
 % Testing: test_operators
 
 
-if ~strcmp(G.lap_type,'combinatorial') 
-    error('Not implemented yet. However ask Nathanael it is very easy');
+if ~isfield(G,'Diff')
+    warning(['GSP_GRAD: To optimize speed, please run',...
+        ' G = gsp_adj2vec(G) before this function']);
+    G = gsp_adj2vec(G);
 end
 
-
-
-D = gsp_grad_mat(G);
-
-gr = D*double(s);
+gr = G.Diff*double(s);
 
 if isa(s,'single')
-   gr = single(di); 
+   gr = single(gr);
 end
 
 

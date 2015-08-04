@@ -5,7 +5,7 @@ function [P, info] = gsp_pointcloud( name, max_dim)
 %
 %   Input parameters:
 %           name        : the name of the point cloud to load ('airfoil', 'two_moons', 'bunny')
-%           max_dim     : the maximum dimensionality of the points (only valid for two_moons
+%           max_dim     : the maximum dimensionality of the points (only valid for two_moons)
 %
 %   Output parameters:
 %           P           : set of points in a NxD with N the number of points and D the dimensionality of the pointcloud
@@ -18,19 +18,19 @@ function [P, info] = gsp_pointcloud( name, max_dim)
 %   Note that the bunny is the model from the Stanford Computer Graphics
 %   Laboratory see references. 
 %
-%   See also: gsp_pcl_nn_graph
+%   See also: gsp_nn_graph
 %
 %   References:
 %     G. Turk and M. Levoy. Zippered polygon meshes from range images. In
 %     Proceedings of the 21st annual conference on Computer graphics and
-%     interactive techniques, pages 311-318. ACM, 1994.
+%     interactive techniques, pages 311--318. ACM, 1994.
 %     
 %
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/pointsclouds/gsp_pointcloud.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

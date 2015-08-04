@@ -18,7 +18,7 @@
 %   Url: http://lts2research.epfl.ch/gsp/doc/sgwt_require/sgwt_kernel_meyer.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -44,7 +44,8 @@ l2=4/3;%2*l1;
 l3=8/3;%4*l1;
 v=@(x) x.^4.*(35-84*x+70*x.^2-20*x.^3) ; 
 
-r1ind=find(x>=0 & x<l1);
+% r1ind=find(x>=0 & x<l1);
+r1ind=find(x<l1);
 r2ind=find(x>=l1 & x<l2);
 r3ind=find(x>=l2 & x<l3);
 % as we initialize r with zero, computed function will implicitly be zero for
@@ -62,4 +63,4 @@ switch kerneltype
 end
 
 
-
+end

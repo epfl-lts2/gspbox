@@ -16,7 +16,7 @@ function bool = gsp_isdirected(G)
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_isdirected.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@ else
     W = G;
 end
 
-bool = ~(sum(sum(abs(W - transpose(W)))) == 0);
+bool = sum(sum( abs(W - transpose(W))> eps(10) ))>0;
 
 end
+

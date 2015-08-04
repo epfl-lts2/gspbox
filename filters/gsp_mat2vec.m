@@ -15,7 +15,7 @@ function [ d ,Nf] = gsp_mat2vec( d )
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_mat2vec.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -37,6 +37,16 @@ function [ d ,Nf] = gsp_mat2vec( d )
 % http://arxiv.org/abs/1408.5781
 
 % TESTING: test_filter
+
+if iscell(d)
+    Nc = numel(d);
+    d2 = cell(Nc,1);
+    for ii = 1:Nc
+        d2{ii} = gsp_mat2vec(d{ii});
+    end
+    d = d2;
+    return
+end
 
 [M,Nf,N] = size(d);
 

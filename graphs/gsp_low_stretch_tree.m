@@ -26,7 +26,7 @@ function [G]=gsp_low_stretch_tree(k)
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_low_stretch_tree.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -54,36 +54,38 @@ if nargin < 1
    k = 6; 
 end
 
+ii=[2 3 1 1 4 3];
+jj=[1 1 2 3 3 4];
 
-start_nodes=[1,1,3];
-end_nodes=[2,3,4];
-W=sparse(start_nodes,end_nodes,ones(1,3),4,4);
-W=W+W';
-XCoords=[1,2,1,2];
-YCoords=[1,1,2,2];
+XCoords=[1, 2, 1, 2];
+YCoords=[1, 1, 2, 2];
+
 for p=2:k
-    [ii,jj,~]=find(W);
-    ii=ii';
-    jj=jj';
+    % create the indicies of the weight matrice
     ii_new=[ii,ii+4^(p-1),ii+2*4^(p-1),ii+3*4^(p-1)];
     ii_new_middle=[4^(p-1),4^(p-1),4^(p-1)+(4^p+2)/3,5/3*4^(p-1)+1/3,4^(p-1)+(4^p+2)/3,3*4^(p-1)+1];
-    ii_new_all=[ii_new,ii_new_middle];
+    ii=[ii_new,ii_new_middle];
+
     jj_new=[jj,jj+4^(p-1),jj+2*4^(p-1),jj+3*4^(p-1)]; 
     jj_new_middle=[5/3*4^(p-1)+1/3,4^(p-1)+(4^p+2)/3,3*4^(p-1)+1,4^(p-1),4^(p-1),4^(p-1)+(4^p+2)/3];
-    jj_new_all=[jj_new,jj_new_middle];
-    ww_new=ones(size(ii_new_all));
-    W=sparse(ii_new_all,jj_new_all,ww_new);
+    jj=[jj_new,jj_new_middle];
+    
+    % Create Coords
     YCoords=repmat(YCoords,1,2);
     YCoords_new=[YCoords,YCoords+2^(p-1)];
     YCoords=YCoords_new;
+
     XCoords_new=[XCoords,XCoords+2^(p-1)];
     XCoords=repmat(XCoords_new,1,2);
 end
+
+G.W=sparse(ii,jj,ones(size(ii)));
 G.coords=[XCoords',YCoords'];
+
 G.limits=[0,2^k+1,0,2^k+1];
 G.N=(2^k)^2;
-G.W=W;
 G.root=4^(k-1);
+
 G.plotting.edge_width=1.25;
 G.plotting.vertex_size=75;
 

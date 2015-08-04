@@ -21,7 +21,7 @@ function [ G ] = gsp_erdos_renyi( N,p,param )
 %   param a Matlab structure containing the following fields:
 %
 %      param.connected : flag to force the graph to be connected. By
-%       default, it is 1.
+%       default, it is 0.
 %
 %      param.maxit : is the maximum number of try to connect the graph. 
 %       By default, it is 10.
@@ -36,7 +36,7 @@ function [ G ] = gsp_erdos_renyi( N,p,param )
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_erdos_renyi.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ function [ G ] = gsp_erdos_renyi( N,p,param )
 % Optional input arguments
 if nargin<3, param=struct; end
 
-if ~isfield(param, 'connected'), param.connected=10; end
+if ~isfield(param, 'connected'), param.connected=0; end
 if ~isfield(param, 'maxit'), param.maxit=10; end
 if ~isfield(param, 'verbose'), param.verbose=1 ; end
 
@@ -124,8 +124,8 @@ if param.connected
         end
     end
 else
-   G.W=sparse(triu(rand(N)<p,1));
-   G.W=(G.W+G.W')/2;
+   G.W = sprand(N,N,p)>0;
+   G.W = (G.W+G.W')/2;
 end
     
 

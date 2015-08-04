@@ -25,7 +25,7 @@ function coeff = gsp_pyramid_cell2coeff(ca,pe)
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_pyramid_cell2coeff.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -57,15 +57,17 @@ N = 0;
 for ii = 1 : (Nl+1)
     N = N+length(ca{ii});
 end
-coeff = zeros(N,1);
+
+Nv = size(ca{Nl}, 2);
+coeff = zeros(N,Nv);
 
 Nt = length(ca{Nl+1});
-coeff(1:Nt) = ca{Nl+1};
+coeff(1:Nt, :) = ca{Nl+1};
 
 ind = Nt+1;
 for ii = 1 : Nl
     Nt = length(ca{Nl+1-ii});
-    coeff(ind:(ind+Nt-1)) = pe{Nl+1-ii};
+    coeff(ind:(ind+Nt-1), :) = pe{Nl+1-ii};
     ind = ind + Nt;
 end
 

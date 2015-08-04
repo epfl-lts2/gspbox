@@ -16,7 +16,7 @@ function [ g ] = gsp_gabor_filterbank( G,k )
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_gabor_filterbank.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -40,17 +40,17 @@ function [ g ] = gsp_gabor_filterbank( G,k )
 % Author: Nathanael Perraudin
 % Date  : 13 June 2014
 
-if ~isfield(G,'E')
+if ~isfield(G,'e')
    error(['GSP_GABOR_FILTEBANK: You need first to compute the Fourier basis\n',...
        'You can do it with the function gsp_compute_fourier_basis']);
 end
 
-Nf = length(G.E);
+Nf = length(G.e);
 
 g = cell(Nf,1);
 
 for ii=1:Nf
-    g{ii} = @(x) k(x-G.E(ii));
+    g{ii} = @(x) k(x-G.e(ii));
 end
 
 

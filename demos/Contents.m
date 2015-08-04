@@ -6,6 +6,7 @@
 %
 %  Convex optimization on graph
 %    gsp_demo_graph_tv       -  Graph TV demonstration
+%    gsp_demo_wavelet_dn     -  Graph wavelets denoising
 %
 %  Sparse approximation
 %    gsp_demo_pyramid        -  Kron Pyramid applied to a signal
@@ -14,10 +15,10 @@
 %  gspbox 'dash' support 'at' groupes 'dot' epfl 'dot' ch
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/demos/index.php
+%   Url: http://lts2research.epfl.ch/gsp/doc/demos/Contents.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

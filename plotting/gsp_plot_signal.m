@@ -29,11 +29,11 @@ function gsp_plot_signal(G,signal,param)
 %    param.vertex_size*: Size of circle representing each signal component.
 %    param.colorbar   : Set to 0 to not show the colorbar
 %    param.climits    : Limits of the colorbar
-%    param.vertex_highlight*: highlight a vertex numbered by
-%                          vertex_highlight.
+%    param.vertex_highlight*: Vector of indices of vertices to be highlighted
 %    param.bar        : 1 Display bar for the graph. 0 Display color
-%                          points. (default 1);
+%                          points. (default 0);
 %    param.bar_width  : Width of the bar (default 1)
+%    param.clear      : Clear axes (default 1)
 %
 %   See also: gsp_plot_graph gsp_plot_signal_spectral
 %
@@ -41,7 +41,7 @@ function gsp_plot_signal(G,signal,param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/plotting/gsp_plot_signal.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -74,13 +74,14 @@ if nargin < 3
 end
 
 if sum(abs(imag(signal(:))))>1e-10
-   error('GSP_PLOT_GRAPH: can not display complex signal') 
+   error('GSP_PLOT_SIGNAL: can not display complex signal') 
 end
 
 signal = real(signal);
 
 if ~isfield(param,'show_edges'), param.show_edges = G.Ne < 10000; end
 if ~isfield(param,'bar'), param.bar = 0; end
+if ~isfield(param,'clear'), param.clear = 1; end
 if ~isfield(param,'bar_width'), param.bar_width = 1; end
 if ~isfield(param,'vertex_highlight'), param.vertex_highlight = 0; end
 if ~isfield(param,'vertex_size'), 
@@ -109,11 +110,13 @@ if ~isfield(param,'cp')
 end
 
 if ~isfield(G,'coords')
-    error('GSP_PLOT_GRAPH: Cannot plot a graph without coordinate!')
+    error('GSP_PLOT_SIGNAL: Cannot plot a graph without coordinate!')
 end
 
 % Clear axes
-cla;
+if param.clear
+    cla;
+end
 G = gsp_graph_default_plotting_parameters(G);
 
 hold on;
@@ -167,7 +170,7 @@ if size(G.coords,2) == 2
             [G.coords(ind,2)'; G.coords(ind,2)'],...
             [zeros(1,length(ind)); reshape(signal(ind),1,[])],...
             G.plotting.edge_style, 'LineWidth',param.bar_width,'color','b');
-        if param.vertex_highlight > 0
+        if any(param.vertex_highlight > 0)
             vh = param.vertex_highlight;
             plot3([G.coords(vh,1)'; G.coords(vh,1)'],...
                 [G.coords(vh,2)'; G.coords(vh,2)'],...
@@ -178,7 +181,7 @@ if size(G.coords,2) == 2
     else
         scatter(G.coords(:,1),G.coords(:,2), ...
             param.vertex_size, signal, '.');
-        if param.vertex_highlight > 0
+        if any(param.vertex_highlight > 0)
             vh = param.vertex_highlight;
             scatter(G.coords(vh,1),G.coords(vh,2), ...
                 param.vertex_size/3, 'ok');
@@ -190,7 +193,7 @@ if size(G.coords,2) == 2
 else %if size(G.coords,2) == 3
     scatter3(G.coords(:,1),G.coords(:,2),G.coords(:,3),...
                     param.vertex_size,signal,'.');
-    if param.vertex_highlight > 0
+    if any(param.vertex_highlight > 0)
         vh = param.vertex_highlight;
         scatter(G.coords(vh,1),G.coords(vh,2),G.coords(vh,3), ...
             param.vertex_size, 'ok');
@@ -200,7 +203,7 @@ else %if size(G.coords,2) == 3
 end
 
 
-axis(G.plotting.limits)
+axis(G.plotting.limits);
 
 if size(G.coords,2)==3 || param.bar
     set(gca,'CameraPosition',param.cp);
@@ -213,7 +216,7 @@ if ~param.bar
         colorbar;
     end
 end
-
+colormap(jet)
 axis off;
 hold off;
 

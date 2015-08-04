@@ -12,17 +12,34 @@ function [ G ] = gsp_create_laplacian( G,type )
 %   This function create the graph laplacian of the graph G and store it
 %   into G.
 %
-%   The variable type contains the different laplacian type.
+%   The variable type contains the different laplacian type. For
+%   undirected graph, the following type are availlable:
 %
 %    combinatorial*: Non normalized laplacian. This is the default.
-%    normalized*: Normalized laplacian
-%    none*: No laplacian
 %
+%          L =  D  - W 
+%
+%   And for directed graph, the following types are availlable.
+%
+%    combinatorial : Non normalized laplacian. This is the default
+%
+%          L =  1/2 [ D^+ + D^- - W - W^*]
+%
+%    chung*: Normalized laplacian with the Perron eigenvector
+%
+%        L_cn = I - 1/2 [Pi^0.5 P Pi^-0.5 + Pi^-0.5 P^T Pi^0.5 ]
+%
+%       
+%   References:
+%     F. Chung. Laplacians and the cheeger inequality for directed graphs.
+%     Annals of Combinatorics, 9(1):1--19, 2005.
+%     
+%     
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_create_laplacian.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -42,7 +59,6 @@ function [ G ] = gsp_create_laplacian( G,type )
 %     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
 %     ArXiv e-prints, Aug. 2014.
 % http://arxiv.org/abs/1408.5781
-
 
 
 % Author: Nathanael Perraudin
@@ -71,18 +87,60 @@ if nargin<2
 end
 
 
+if G.directed
+    D1 = sum(G.W,2);
+    D2 = sum(G.W,1);
+    
+    switch type
+        case 'combinatorial'
+            G.L=0.5 * (diag(D1) + diag(D2) - G.W - G.W');
+        case 'chung'
+            [phi,P] = compute_perron(G.W);
+            Phiup=diag(sparse(phi.^(0.5)));            
+            Phidw=diag(sparse(phi.^(-0.5)));       
+            G.L = sparse(eye(G.N)) - 0.5 * (Phiup * P  * Phidw + Phidw * P'  * Phiup );
+            % Save the results in G
+            G.P=P;
+            G.phi=phi;
+        case 'chung-non-normalized'
+            [phi,P] = compute_perron(G.W);
+            Phiup=diag(sparse(phi.^(0.5)));            
+            Phidw=diag(sparse(phi.^(-0.5))); 
+            G.L = Phiup*(sparse(eye(G.N)) - 0.5 * (Phiup * P  * Phidw + Phidw * P'  * Phiup ))*Phiup;
+            % Save the results in G
+            G.P=P;
+            G.phi=phi;
+        case 'normalized'
+            error('Not implemented yet. Ask Nathanael')
+        case 'none'
+            G.L=sparse(0);
+        otherwise
+            error(' Unknown laplacian type')
+    end    
+else
+    D = sum(G.W,2);
+    switch type
+        case 'combinatorial'
+            G.L=diag(D)-G.W;
+        case 'normalized'
+            Dn = diag(D.^(-0.5));
+            G.L=speye(G.N)-Dn*G.W*Dn;
+        case 'none'
+            G.L=sparse(0);
+        otherwise
+            error(' Unknown laplacian type')
+    end
+end
 
 
-switch type
-    case 'combinatorial'
-        G.L=diag(sum(G.W))-G.W;
-    case 'normalized'
-        D = diag(sum(G.W).^(-0.5));
-        G.L=sparse(eye(G.N))-D*G.W*D;
-    case 'none'
-        G.L=sparse(0);
-    otherwise
-        error(' Unknown laplacian type')
+% Update problematic fields
+if isfield(G,'U')
+    G = gsp_compute_fourier_basis(G);
+end
+
+if isfield(G,'Diff')
+    G = rmfield(G,'Diff');
+    G = gsp_adj2vec(G);
 end
 
 G.lap_type = type;
@@ -90,4 +148,36 @@ G.lap_type = type;
 
 end
 
+
+function [phi,P] = compute_perron(A)
+
+    N = size(A,1);
+
+    % Remove the diagonal
+    A=A-diag(diag(A));
+
+    % Compute the Probablility matrix
+    P=A./repmat(sum(A,2),1,N);
+
+    % Compute the perron vector of P
+    [phi,max_eig_P] = eigs(P',1);
+    % test if max_eig_P==1
+    if abs(max_eig_P-1)>10e3*eps;
+        fprintf(['\n  ---  Warning! The maximum eigenvalue of the probability ' ...
+            'matrix is not 1 but %f  --- \n'],max_eig_P);
+    end
+    % Test if the perron vector is positive
+    if sum(phi)<0; 
+        phi=-phi;
+    end
+
+    if sum(phi<=10e3*eps)
+        fprintf(['\n  ---  Warning! The perron vector has negative or '...
+          'null entrie(s).\n       Is the graph strongly connected?  ---\n']);
+
+    end
+    % Normalization of phi
+    phi=phi/norm(phi,1);
+
+end
 

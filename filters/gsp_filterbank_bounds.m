@@ -15,7 +15,7 @@ function [A, B] = gsp_filterbank_bounds(G,W,param)
 %
 %   param is a Matlab structure containing the following fields:
 %
-%    param.N : Number of point for the line search default (default 100)
+%    param.N : Number of point for the line search default (default 999)
 %    param.use_eigenvalues : Use eigenvalues if possible (default 1). To
 %     be used, the eigenvalues have to be computed first using
 %     GSP_COMPUTE_FOURIER_BASIS.
@@ -24,7 +24,7 @@ function [A, B] = gsp_filterbank_bounds(G,W,param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_filterbank_bounds.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -52,8 +52,18 @@ if nargin < 3
     param = struct;
 end
 
-if ~isfield(param,'N'), param.N = 100; end
+if ~isfield(param,'N'), param.N = 999; end
 if ~isfield(param,'use_eigenvalues'),  param.use_eigenvalues = 1; end
+
+if iscell(G)
+    NG = numel(G);
+    A = cell(NG,1);
+    B = cell(NG,1);
+    for ii = 1:NG
+        [A{ii}, B{ii}] = gsp_filterbank_bounds(G{ii},W{ii},param);
+    end
+    return
+end
 
 if isstruct(G)
     if ~isfield(G,'lmax')
@@ -69,8 +79,8 @@ else
 end
     
 
-if param.use_eigenvalues && isstruct(G) && isfield(G,'E')
-    lambda = G.E;
+if param.use_eigenvalues && isstruct(G) && isfield(G,'e')
+    lambda = G.e;
 else
     lambda = linspace(xmin,xmax , param.N);
 end
@@ -78,11 +88,11 @@ end
  
 Nf = numel(W);
 
-sum_filters = zeros(size(lambda));
 
-for ii=1:Nf
-    sum_filters = sum_filters + (W{ii}(lambda)).^2;
-end
+sum_filters = sum(abs(gsp_filter_evaluate(W,lambda).^2),2);
+% for ii=1:Nf
+%     sum_filters = sum_filters + (W{ii}(lambda)).^2;
+% end
 
 A = min(sum_filters);
 B = max(sum_filters);
@@ -90,3 +100,4 @@ B = max(sum_filters);
   
   
 end
+

@@ -73,7 +73,7 @@ function [sol, info] = gsp_prox_tik(x,gamma,G,param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/prox/gsp_prox_tik.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -116,7 +116,7 @@ if ~isfield(param, 'maxit'), param.maxit = 200; end
 if ~isfield(param, 'nu'), param.nu = 1; end
 if ~isfield(param, 'pcg'), param.pcg = 1; end
 if ~isfield(param, 'use_matrix'), param.use_matrix = 1; end;
-if ~isfield(param, 'cheb_order'), param.cheb_order = 30; end;
+if ~isfield(param, 'order'), param.order = 30; end;
 
 
 
@@ -132,7 +132,7 @@ if ~isfield(param,'A')
 
 
     h =@(x) 1./(1+2*gamma*x);
-    paramfilter.cheb_order = param.cheb_order;
+    paramfilter.order = param.order;
     sol = gsp_filter_analysis(G,h,x,paramfilter);
 
     obj = sum(gsp_norm_tik(G,sol)) + 0.5*norm(x-sol)^2;

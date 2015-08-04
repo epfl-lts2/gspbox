@@ -25,15 +25,13 @@ function [ Gnew ] = gsp_graph_sparsify(G,epsilon)
 %         figure(101);
 %         gsp_plot_graph(G2);
 %         title('Sparsified graph')
-%         close(100);
-%         close(101);
 %
 %   References:
 %     D. A. Spielman and N. Srivastava. Graph sparsification by effective
-%     resistances. SIAM Journal on Computing, 40(6):1913-1926, 2011.
+%     resistances. SIAM Journal on Computing, 40(6):1913--1926, 2011.
 %     
 %     M. Rudelson. Random vectors in the isotropic position. Journal of
-%     Functional Analysis, 164(1):60-72, 1999.
+%     Functional Analysis, 164(1):60--72, 1999.
 %     
 %     M. Rudelson and R. Vershynin. Sampling from large matrices: An approach
 %     through geometric functional analysis. Journal of the ACM (JACM),
@@ -43,7 +41,7 @@ function [ Gnew ] = gsp_graph_sparsify(G,epsilon)
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_graph_sparsify.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -124,15 +122,20 @@ sparserL = diag(sum(sparserW))-sparserW;
 
 
 if isstruct(G)
+    
     sparserD = diag(diag(sparserL));
     sparserW = sparserD-sparserL; 
-    
+    if ~G.directed
+        sparserW = (sparserW + sparserW')/2;
+        sparserL = (sparserL + sparserL')/2;
+
+    end
     Gnew = gsp_copy_graph_attributes(G);
     Gnew.W = sparserW;
     Gnew.L = sparserL;
     Gnew = gsp_graph_default_parameters(Gnew);
 else
-    Gnew = sparse(L);
+    Gnew = sparse(sparserL);
 end
 
 end

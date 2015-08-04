@@ -5,7 +5,7 @@ function [c] = gsp_filter_analysis(G, fi, s, param)
 %
 %   Input parameters:
 %         G         : Graph structure.
-%         fi         : Set of spectral graph filters.
+%         fi        : Set of spectral graph filters.
 %         s         : graph signal to analyze.
 %         param     : Optional parameter
 %   Output parameters:
@@ -49,10 +49,13 @@ function [c] = gsp_filter_analysis(G, fi, s, param)
 %   Additional parameters
 %   ---------------------
 %  
-%    param.exact  : To use exact graph spectral filtering instead of the
-%     Chebyshev approximation. To use this option, the graph need the
-%     Fourier basis of the graph need to be computed (default 0).
-%    param.cheb_order : Degree of the Chebyshev approximation
+%    param.method  : Select the method ot be used for the computation. 
+%      'exact'     : Exact method using the graph Fourier matrix
+%      'cheby'     : Chebyshev polynomial approximation
+%      'cheby_p'     : Chebyshev polynomial approximation
+%      'lanczos'   : Lanczos approximation
+%     Default: if the Fourier matrix is present: 'exact' otherwise 'cheby'
+%    param.order : Degree of the Chebyshev approximation
 %     (default=30). 
 %    param.verbose : Verbosity level (0 no log - 1 display warnings)
 %     (default 1).   
@@ -61,7 +64,7 @@ function [c] = gsp_filter_analysis(G, fi, s, param)
 % 
 %   References:
 %     D. K. Hammond, P. Vandergheynst, and R. Gribonval. Wavelets on graphs
-%     via spectral graph theory. Appl. Comput. Harmon. Anal., 30(2):129-150,
+%     via spectral graph theory. Appl. Comput. Harmon. Anal., 30(2):129--150,
 %     Mar. 2011.
 %     
 %
@@ -69,7 +72,7 @@ function [c] = gsp_filter_analysis(G, fi, s, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_filter_analysis.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -100,59 +103,114 @@ if nargin < 4
     param = struct;
 end
 
+if iscell(G)
+    NG = numel(G);
+    c = cell(NG,1);
+    for ii = 1:NG
+        if iscell(s)
+            c{ii} = gsp_filter_analysis(G{ii}, fi{ii}, s{ii}, param);
+        else
+            c{ii} = gsp_filter_analysis(G{ii}, fi{ii}, s, param);
+        end
+    end
+    return
+end
 
 
 Nf = length(fi);
 
-if ~isfield(param,'exact'); param.exact = isfield(G,'U'); end
-if ~isfield(param,'cheb_order'); param.cheb_order = 30; end
+
+if isfield(param, 'exact')
+    warning('param.exact is not used anymore. Please use param.method instead');
+    if param.exact
+        param.method = 'exact';
+    else
+        param.method = 'cheby';
+    end
+end
+
+if ~isfield(param,'method')
+    if isfield(G,'U')
+        param.method = 'exact';
+    else
+        param.method = 'cheby';
+    end
+end
+
+if ~isfield(param,'order'); param.order = 30; end
 if ~isfield(param,'verbose'); param.verbose = 1; end
 
+if isfield(param, 'cheb_order')
+    param.order = param.cheb_order;
+    warning('param.cheb_order is not used anymore. Please use param.order instead');
+end
 
 
-if param.exact 
-    if ( ~isfield(G,'e') || ~isfield(G,'U') )
-        if param.verbose
-            warning(['GSP_FILTER_ANALYSIS: The Fourier matrix is not ',...
-                'available. The function will compute it for you. ',...
-                'However, if you apply many time this function, you ',...
-                'should precompute it using the function: ',...
-                'gsp_compute_fourier_basis']);
+
+switch param.method
+    case 'exact' 
+        if ( ~isfield(G,'e') || ~isfield(G,'U') )
+            if param.verbose
+                warning(['GSP_FILTER_ANALYSIS: The Fourier matrix is not ',...
+                    'available. The function will compute it for you. ',...
+                    'However, if you apply many time this function, you ',...
+                    'should precompute it using the function: ',...
+                    'gsp_compute_fourier_basis']);
+            end
+            G=gsp_compute_fourier_basis(G);
         end
-        G=gsp_compute_fourier_basis(G);
-    end
-    Nv = size(s,2);
-    c = zeros(G.N*Nf,Nv);
-    
-    fie = gsp_filter_evaluate(fi,G.e);
-    
-    for ii=1:Nf
-        c((1:G.N)+G.N * (ii-1),:)= gsp_igft(G, ...
-            repmat(fie(:,ii),1,Nv) ...
-            .* gsp_gft(G, s));
-    end
+        Nv = size(s,2);
+        c = zeros(G.N*Nf,Nv);
 
+        fie = gsp_filter_evaluate(fi,G.e);
 
-else % use Chebyshev approximation method
-
-
-    
-    if ~isfield(G,'lmax');
-        G = gsp_estimate_lmax(G);
-        if param.verbose
-            warning(['GSP_FILTER_ANALYSIS: The variable lmax is not ',...
-                'available. The function will compute it for you. ',...
-                'However, if you apply many time this function, you ',...
-                'should precompute it using the function: ',...
-                'gsp_estimate_lmax']);
+        for ii=1:Nf
+            c((1:G.N)+G.N * (ii-1),:)= gsp_igft(G, ...
+                repmat(fie(:,ii),1,Nv) ...
+                .* gsp_gft(G, s));
         end
-    end
-    
 
-    cheb_coeffs = gsp_cheby_coeff(G, fi,...
-            param.cheb_order, param.cheb_order +1);      
-    c = gsp_cheby_op(G, cheb_coeffs, s);
 
+    case 'cheby'
+
+        if ~isfield(G,'lmax');
+            G = gsp_estimate_lmax(G);
+            if param.verbose
+                warning(['GSP_FILTER_ANALYSIS: The variable lmax is not ',...
+                    'available. The function will compute it for you. ',...
+                    'However, if you apply many time this function, you ',...
+                    'should precompute it using the function: ',...
+                    'gsp_estimate_lmax']);
+            end
+        end
+
+
+        cheb_coeffs = gsp_cheby_coeff(G, fi,...
+                param.order, param.order +1);      
+        c = gsp_cheby_op(G, cheb_coeffs, s);
+%     case 'cheby_p'
+% 
+%         if ~isfield(G,'lmax');
+%             G = gsp_estimate_lmax(G);
+%             if param.verbose
+%                 warning(['GSP_FILTER_ANALYSIS: The variable lmax is not ',...
+%                     'available. The function will compute it for you. ',...
+%                     'However, if you apply many time this function, you ',...
+%                     'should precompute it using the function: ',...
+%                     'gsp_estimate_lmax']);
+%             end
+%         end
+% 
+% 
+%         cheb_coeffs = gsp_cheby_coeff(G, fi,...
+%                 param.order, param.order +1);      
+%         c = gsp_cheby_op_p(G, cheb_coeffs, s);    
+    case 'lanczos'
+        c = gsp_lanczos_op(G, fi, s, param);
+   
+    otherwise
+        error('Unknown method: please select exact, cheby or lanczos');
+end
 
 end
 

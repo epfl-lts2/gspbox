@@ -17,11 +17,11 @@
 %   you have it, you can construct a graph using:
 %
 %           G = gsp_graph(W);
-%   
+%
 %   This function will create a full structure ready to be used with the
 %   toolbox. To know a bit more about what is in this structure, you can
 %   refer to the help of the function GSP_GRAPH_DEFAULT_PARAMETERS.
-%   
+%
 %   The GSPBox contains also a list of graph generators. To see a full list
 %   of these graphs, type:
 %
@@ -59,16 +59,18 @@
 %   precompute the Fourier basis of the graph. This operation could be
 %   relatively long since it involves a full diagonalization of the
 %   Laplacian. Don't worry, you do not need to perform this operation to
-%   filter signals on graph. The fourier basis is computed thanks to:
+%   filter signals on graph. The fourier basis is computed by:
 %
 %           G = gsp_compute_fourier_basis(G);
 %
 %   The function GSP_COMPUTE_FOURIER_BASIS add two new fields to the
 %   structure G*:
+%
 %    G.U*: The eigenvectors of the Fourier basis
 %    G.e*: The eigenvalues
+%
 %   The fourier eigenvectors does look like a sinusoide on the graph. Let's
-%   plot the second and the third one. (The first one is constant!):
+%   plot the second and the third ones. (The first one is constant!):
 %
 %           gsp_plot_signal(G,G.U(:,2));
 %           title('Second eigenvector')
@@ -78,17 +80,17 @@
 %
 %   Figure 2: Eigenvectors
 %
-%      
 %
-%   Now, we are going to show a basic filter operation. Filters are usually
-%   defined in the spectral domain. To defined the following filter
 %
-%        h(x) = 1/(1+tau*x), 
+%   Now, we are going to show a basic filtering operation. Filters are usually
+%   defined in the spectral domain. To define the following filter
+%
+%        h(x) = 1/(1+tau*x),
 %
 %   just write in Matlab:
 %
 %           tau = 1;
-%           flow = @(x) 1./(1+tau*x);
+%           h = @(x) 1./(1+tau*x);
 %
 %   Hint: You can define filterbank using cell array!
 %
@@ -103,13 +105,13 @@
 %      points where the continuous filter will be evaluated to create a
 %      discrete filter.
 %
-%   To apply a the filter to a given signal, you only need to run a single
+%   To apply the filter to a given signal, you only need to run a single
 %   function:
 %
 %           f2 = gsp_filter(G,h,f);
 %
 %   gsp_filter is actually a shortcut to GSP_FILTER_ANALYSIS.
-%   gsp_filter_analysis perform the analysis operator assosiated to a
+%   gsp_filter_analysis performs the analysis operator associated to a
 %   filterbank. See the GSP_DEMO_WAVELET for more information.
 %
 %   Finnaly, we display the result of this low pass filtering on the graph
@@ -119,14 +121,14 @@
 %      The noise is largely removed thanks to the filter. However, some
 %      energy is diffused between the letters. This is the typical
 %      behaviour of a low pass filter.
-% 
-%   Enjoy the GSPBOX...
+%
+%   Enjoy the GSPBOX !
 %
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/demos/gsp_demo.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -147,7 +149,7 @@
 %     ArXiv e-prints, Aug. 2014.
 % http://arxiv.org/abs/1408.5781
 
-    
+
 % Author: Nathanael Perraudin
 % Date : 14 August 2014
 
@@ -193,7 +195,7 @@ title('Filter h')
 
 %% Perform the filtering operation
 f2 = gsp_filter(G,h,f);
-% f2 = gsp_filter_analysis(G,flow,f);
+% f2 = gsp_filter_analysis(G,h,f);
 
 
 % Display the result

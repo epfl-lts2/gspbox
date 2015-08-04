@@ -1,4 +1,4 @@
-function [sol, info] = gsp_proj_b2_filterbank(x, gamma, G, W, param)
+function [sol, info] = gsp_proj_b2_filterbank(x, gamma, G, W, y, param)
 %GSP_PROJ_B2_FILTERBANK Projection on the B2 ball for a filterbank
 %   Usage:  sol = gsp_proj_b2_filterbank(x, T, G, W, param);
 %           sol = gsp_proj_b2_filterbank(x, T, G, W);
@@ -9,6 +9,7 @@ function [sol, info] = gsp_proj_b2_filterbank(x, gamma, G, W, param)
 %         gamma : Compatibility parameter
 %         G     : Graph structure
 %         W     : Filterbank (cell array of functions)
+%         y     : Measurements
 %         param : Structure of optional parameters.
 %   Output parameters
 %         sol   : Solution.
@@ -33,7 +34,7 @@ function [sol, info] = gsp_proj_b2_filterbank(x, gamma, G, W, param)
 %   
 %    param.tight : 1 if A W^ is a tight frame or 0 if not (default = 0)
 %
-%    param.y : measurements (default: 0).
+%    param.y : measurements.
 %   
 %    param.tol : is stop criterion for the loop. The algorithm stops if
 %
@@ -62,6 +63,9 @@ function [sol, info] = gsp_proj_b2_filterbank(x, gamma, G, W, param)
 %    param.type : 'coefficient' or signal 'signal' select the problem
 %     type. (default 'signal').
 %
+%    param.normalize*: normalize the frame (for testing purpose only)
+%     this is not efficient
+%
 %   info is a Matlab structure containing the following fields:
 %
 %    info.algo : Algorithm used
@@ -81,7 +85,7 @@ function [sol, info] = gsp_proj_b2_filterbank(x, gamma, G, W, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/prox/gsp_proj_b2_filterbank.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -110,15 +114,14 @@ function [sol, info] = gsp_proj_b2_filterbank(x, gamma, G, W, param)
 
 
 
-if nargin < 3
-    error('GSP_PROX_TV: You need to provide a graph!');
+if nargin < 5
+    error('GSP_PROJ_B2_FILTERBANK: Not enought input arguments');
 end
 
-if nargin < 4, param=struct; end
+if nargin < 6, param=struct; end
 
 if ~isfield(param, 'verbose'), param.verbose = 1; end
 if ~isfield(param, 'tight'), param.tight = 0; end
-if ~isfield(param, 'y'), param.nu = 0; end
 if ~isfield(param, 'tol'), param.tol = 1e-3; end
 if ~isfield(param, 'maxit'), param.maxit = 200; end
 if ~isfield(param, 'weights'), param.weights = 1; end
@@ -126,30 +129,47 @@ if ~isfield(param, 'nu'), param.nu = 1; end
 if ~isfield(param, 'A'), param.A = @(x) x; end
 if ~isfield(param, 'At'), param.At = param.A; end
 if ~isfield(param, 'epsilon'), param.epsilon = 1e-3; end
-if ~isfield(param, 'type'), param.epsilon = 'signal'; end
+if ~isfield(param, 'type'), param.type = 'signal'; end
+if ~isfield(param, 'normalize'), param.normalize = 0; end
 
+if iscell(G)
+    Gtemp = G{1};
+else
+    Gtemp = G;
+end
 
-% setting the function ftv
-
-if ~isfield(G,'lmax')
+if ~isfield(Gtemp,'lmax')
     G = gsp_estimate_lmax(G);
-    warning(['GSP_PROX_TV: To be more efficient you should run: ',...
+    warning(['GSP_PROJ_B2_FILTERBANK: To be more efficient you should run: ',...
         'G = gsp_estimate_lmax(G); before using this proximal operator.']);
 end
 
+if param.normalize
+    ntig = gsp_norm_tig(G,W);
+    ntig = gsp_mat2vec(ntig);
+    if iscell(ntig)
+        ntig = cell2mat(ntig);
+    end
+else
+    ntig = 1;
+end
+
 [~, B] = gsp_filterbank_bounds(G,W);
+if iscell(B)
+    B = sum(cell2mat(B));
+end
 param_b2.epsilon = param.epsilon;
 param_b2.tight = param.tight;
 param_b2.maxit = param.maxit;
-param_b2.nu =  B*param.nu;
-param_b2.y = param.y;
+param_b2.nu =  B*param.nu/min(ntig)*sqrt(2);
+param_b2.y = y;
 switch param.type
     case 'coefficient'
-        param_b2.A= @(x) param.A(gsp_filter_synthesis(G,W,x));
-        param_b2.At = @(x) gsp_filter_analysis(G,W,param.At(x));
+        param_b2.A= @(x) syn_c(G,W,x,ntig,param);
+        param_b2.At = @(x) ana_c(G,W,x,ntig,param);
     case 'signal'
-        param_b2.A= @(x) gsp_filter_synthesis(G,W,param.A(x));
-        param_b2.At = @(x) param.At(gsp_filter_analysis(G,W,x));
+        param_b2.A= @(x) ana_s(G,W,x,ntig,param);
+        param_b2.At = @(x) syn_s(G,W,x,ntig,param);
     otherwise
         error('GSP_PROJ_B2_FILTERBANK: Unknown type of problem!')
 end
@@ -164,8 +184,56 @@ info.algo=mfilename;
 end
 
 
+% Here I handle operator with cell array. It is a pain in the ass
+function s = syn_c(G,W,x,ntig,param)
+    fon = @(G, W, x ,ntig) param.A(gsp_filter_synthesis(G,W,x./ntig));
+    s = func(fon, G, W, x, ntig, 1);
+end
 
+function s = ana_c(G,W,x,ntig,param)
+    fon = @(G, W, x ,ntig) gsp_filter_analysis(G,W,param.At(x))./ntig;
+    s = func(fon, G, W, x, ntig, 0);
+end
 
+function s = syn_s(G,W,x,ntig,param)
+    fon = @(G, W, x ,ntig) param.At(gsp_filter_synthesis(G,W,x./ntig));
+    s = func(fon, G, W, x, ntig, 1);
+end
 
+function s = ana_s(G,W,x,ntig,param)
+    fon = @(G, W, x ,ntig) gsp_filter_analysis(G,W,param.A(x))./ntig;
+    s = func(fon, G, W, x, ntig, 0);
+end
+
+function s = func(fon, G, W, x, ntig, syn)
+if iscell(G) % Cell case
+    N = G{1}.N;
+    NF = N * length(W{1});
+    Nx = size(x,2);
+    NG = numel(G);
+    if syn
+        s = zeros(N,Nx);
+        for ii = 1:NG
+            vec = (1:NF) + (ii-1) * NF;
+            s = s + fon(G{ii},W{ii},x(vec,:),getntig(ntig, vec));
+        end
+    else
+        s = zeros(NF*NG,Nx);
+        for ii = 1:NG
+            vec = (1:N) + (ii-1) * N;
+            vec2 = (1:NF) + (ii-1) * NF;
+            s(vec2,:) = fon(G{ii},W{ii},x,getntig(ntig, vec));
+        end
+    end
+else % simple case
+    s = fon(G,W,x,ntig);
+end
+end
+
+function ntig = getntig(ntig,vec)
+    if numel(ntig)>1
+        ntig = ntig(vec);
+    end
+end
 
 

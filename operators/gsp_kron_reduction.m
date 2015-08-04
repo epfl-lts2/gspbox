@@ -38,14 +38,14 @@ function Gnew = gsp_kron_reduction( G,ind )
 %   References:
 %     F. Dorfler and F. Bullo. Kron reduction of graphs with applications to
 %     electrical networks. Circuits and Systems I: Regular Papers, IEEE
-%     Transactions on, 60(1):150-163, 2013.
+%     Transactions on, 60(1):150--163, 2013.
 %     
 %
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_kron_reduction.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

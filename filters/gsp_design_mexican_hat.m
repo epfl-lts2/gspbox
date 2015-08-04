@@ -36,6 +36,8 @@ function [ g,t ] = gsp_design_mexican_hat(G, Nf, param)
 %     lowpass gap. (default 20)
 %    param.verbose*: verbosity level. 0 no log - 1 display warnings.
 %     (default 1) 
+%    param.normalize*: normalize the wavelet by the factor sqrt{t}
+%     (default 0.)
 %
 %   This function will compute the maximum eigenvalue of the laplacian. To
 %   be more efficient, you can precompute it using:
@@ -57,7 +59,7 @@ function [ g,t ] = gsp_design_mexican_hat(G, Nf, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_design_mexican_hat.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -93,6 +95,7 @@ end
 
 if ~isfield(param,'lpfactor'), param.lpfactor = 20; end
 if ~isfield(param,'verbose'), param.verbose = 1; end
+if ~isfield(param,'normalize'), param.normalize = 0; end
 
 if isstruct(G)
     if ~isfield(G,'lmax')
@@ -132,7 +135,11 @@ lminfac=.4*lmin;
 g{1}=@(x) 1.2*exp(-1)*gl(x/lminfac);      
 
 for j=1:Nf-1
-    g{j+1}=@(x) gb(t(j)*x);
+    if param.normalize
+        g{j+1} = @(x) sqrt(t(j))*gb(t(j)*x);
+    else
+        g{j+1} = @(x) gb(t(j)*x);
+    end
 end
 
 

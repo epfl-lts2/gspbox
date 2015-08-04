@@ -13,7 +13,8 @@
 %    gsp_sensor                  -  Create a random sensor graph
 %    gsp_random_regular          -  Create a random regular graph
 %    gsp_full_connected          -  Create a fully connected graph
-%    gsp_pcl_nn_graph            -  Create a nearest neighbors graph
+%    gsp_nn_graph                -  Create a nearest neighbors graph
+%    gsp_rmse_mv_graph           -  Create a nearest neighbors graph with missing values
 %    gsp_sphere                  -  Create a spherical-shaped graph
 %    gsp_cube                    -  Create a cubical-shaped graph
 %    gsp_logo                    -  Create a GSP logo graph
@@ -23,15 +24,17 @@
 %  Utils
 %    gsp_graph_default_parameters-  Initialise all parameter for a graph
 %    gsp_graph                   -  Create a graph from a weight matrix
+%    gsp_update_weights          -  Update the weights of a graph
+%
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  gspbox 'dash' support 'at' groupes 'dot' epfl 'dot' ch
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/graphs/index.php
+%   Url: http://lts2research.epfl.ch/gsp/doc/graphs/Contents.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

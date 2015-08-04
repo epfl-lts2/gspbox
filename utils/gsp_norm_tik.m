@@ -3,7 +3,7 @@ function y = gsp_norm_tik(G,x)
 %   Usage:  y = gsp_norm_tv(G,x);
 %
 %   Input parameters:
-%         G     : Graph structure
+%         G     : Graph structure (or symetric positive matrix)
 %         x     : Signal on graph
 %   Output parameters:
 %         y     : Norm
@@ -11,12 +11,14 @@ function y = gsp_norm_tik(G,x)
 %   Compute the squared L2 norm of the gradient on graph. If x is a matrix
 %   a vector of norm is returned.
 %
+%   This function can also be used for general symetric positive matrices
+%
 %   See also: gsp_prox_tik gsp_norm_tv
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_norm_tik.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -44,6 +46,20 @@ if isa(x,'single')
    x = double(x); 
 end
 
-y = sum(x .* (G.L* x) );
+if ~isnumeric(G)
+    L = G.L;
+else
+    L = G;
+end
+
+[N,M ] = size(L);
+
+NL = M/N;
+y = 0;
+for ii = 1:NL;
+    ind = (1:N)+(ii-1)*N;
+    y = y + sum(x(ind,:) .* (L(:,ind)* x(ind,:)) );
+end
 
 end
+

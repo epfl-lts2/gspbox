@@ -10,15 +10,18 @@
 %    gsp_prox_l1_filterbank - L1 norm proximal operator
 %
 %  Wavelet based operator
+%    gsp_wavelet_dn         - Wavelets denoising
+%    gsp_solve_l1           - L1 minimization (synthesis)
+%    gsp_solve_l0           - L0 minimization (synthesis)
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  gspbox 'dash' support 'at' groupes 'dot' epfl 'dot' ch
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/prox/index.php
+%   Url: http://lts2research.epfl.ch/gsp/doc/prox/Contents.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

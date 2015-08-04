@@ -15,13 +15,13 @@ function [ G ] = gsp_bunny()
 %   References:
 %     G. Turk and M. Levoy. Zippered polygon meshes from range images. In
 %     Proceedings of the 21st annual conference on Computer graphics and
-%     interactive techniques, pages 311-318. ACM, 1994.
+%     interactive techniques, pages 311--318. ACM, 1994.
 %     
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_bunny.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ function [ G ] = gsp_bunny()
     param.epsilon = 0.2;
     
     %Compute it
-    G = gsp_pcl_nn_graph(P, param);
+    G = gsp_nn_graph(P, param);
     %Reduce vertex size for plotting
     G.plotting.vertex_size = 10;
 end

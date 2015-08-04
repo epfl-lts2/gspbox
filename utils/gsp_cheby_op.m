@@ -15,8 +15,8 @@ function r = gsp_cheby_op(G, c, signal,param)
 %   Coefficients for multiple polynomials may be passed as a matrix.
 %   This is equivalent to setting:
 %
-%       r(1) = sgwt_cheby_op(G, c(:,1), signal);
-%       r(2) = sgwt_cheby_op(G, c(:,2), signal);
+%       r(1) = gsp_cheby_op(G, c(:,1), signal);
+%       r(2) = gsp_cheby_op(G, c(:,2), signal);
 %       ...
 % 
 %   but is more efficient as the Chebyshev polynomials of G.L applied
@@ -49,7 +49,7 @@ if nargin < 4
     param = struct;
 end
 
-if isfield(param,'verbose'), param.verbose = 1; end;
+if ~isfield(param,'verbose'), param.verbose = 1; end;
 
 
 Nscales=size(c,2);
@@ -72,7 +72,7 @@ if ~isfield(G,'lmax');
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_cheby_op.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -144,3 +144,4 @@ if bsingle
 end
 
 end
+

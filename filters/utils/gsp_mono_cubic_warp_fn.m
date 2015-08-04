@@ -7,7 +7,7 @@ cut=1e-4;
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/utils/gsp_mono_cubic_warp_fn.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -71,18 +71,18 @@ end
 num_pts_to_interpolate=length(x0);
 interpolated_values=zeros(size(x0));
 
-for i=1:num_pts_to_interpolate
-    [~,closest_ind]=min(abs(x-x0(i)));
+for ii=1:num_pts_to_interpolate
+    [~,closest_ind]=min(abs(x-x0(ii)));
     %if sign(x(closest_ind)-x0(i))<0 || ( sign(x(closest_ind)-x0(i))==0 && closest_ind < num_pts)
-    if (x(closest_ind)-x0(i))<-cut || ( abs(x(closest_ind)-x0(i))<cut && closest_ind < num_pts)
+    if (x(closest_ind)-x0(ii))<-cut || ( abs(x(closest_ind)-x0(ii))<cut && closest_ind < num_pts)
         lower_ind=closest_ind;
     else
         lower_ind=closest_ind-1;
     end
     h=x(lower_ind+1)-x(lower_ind);
-    t=(x0(i)-x(lower_ind))/h;
+    t=(x0(ii)-x(lower_ind))/h;
 
-    interpolated_values(i) = y(lower_ind)*(2*t^3-3*t^2+1) + h*m(lower_ind)*(t^3-2*t^2+t) + y(lower_ind+1)*(-2*t^3+3*t^2) + h*m(lower_ind+1)*(t^3-t^2); 
+    interpolated_values(ii) = y(lower_ind)*(2*t^3-3*t^2+1) + h*m(lower_ind)*(t^3-2*t^2+t) + y(lower_ind+1)*(-2*t^3+3*t^2) + h*m(lower_ind+1)*(t^3-t^2); 
 end
 end
 

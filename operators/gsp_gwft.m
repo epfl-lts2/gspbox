@@ -1,7 +1,7 @@
 function [ C ] = gsp_gwft(G,g,f, param )
 %GSP_GWFT Graph windowed Fourier transform
-%   Usage:  G = gsp_gwft(G,g,f, param );
-%           G = gsp_gwft(G,g,f);
+%   Usage:  C = gsp_gwft(G,g,f, param );
+%           C = gsp_gwft(G,g,f);
 %
 %   Input parameters:
 %         G     : Graph
@@ -20,11 +20,12 @@ function [ C ] = gsp_gwft(G,g,f, param )
 %       By default, it is 1.
 %      param.lowmemory : use less memory. By default, it is 1.
 %
+%   Reference: shuman2013windowed
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_gwft.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

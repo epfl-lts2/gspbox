@@ -40,7 +40,7 @@ function [s] = gsp_filter_inverse(G, filter, c, param)
 %   Additional parameters
 %   ---------------------
 % 
-%    param.cheb_order : Degree of the Chebyshev approximation
+%    param.order : Degree of the Chebyshev approximation
 %     (default=30). 
 %    param.verbose : Verbosity level (0 no log - 1 display warnings)
 %     (default 1).   
@@ -52,7 +52,7 @@ function [s] = gsp_filter_inverse(G, filter, c, param)
 % 
 %   References:
 %     D. K. Hammond, P. Vandergheynst, and R. Gribonval. Wavelets on graphs
-%     via spectral graph theory. Appl. Comput. Harmon. Anal., 30(2):129-150,
+%     via spectral graph theory. Appl. Comput. Harmon. Anal., 30(2):129--150,
 %     Mar. 2011.
 %     
 %
@@ -60,7 +60,7 @@ function [s] = gsp_filter_inverse(G, filter, c, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_filter_inverse.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -85,7 +85,10 @@ function [s] = gsp_filter_inverse(G, filter, c, param)
 % Testing: test_filter
 % Date: 19 March 2014
 
-  
+
+%%% TODO: add lanczos and exact computation
+
+
 % Read input parameters
 if nargin < 4
     param = struct;
@@ -93,11 +96,16 @@ end
 
 Nf = length(filter);
 
-if ~isfield(param,'cheb_order'); param.cheb_order = 30; end
+if ~isfield(param,'order'); param.order = 30; end
 if ~isfield(param,'verbose'); param.verbose = 1; end
 if ~isfield(param,'tol'); param.tol = 1e-6; end
 if ~isfield(param,'maxit'); param.maxit = 200; end
 
+if isfield(param,'method')
+    if strcmp(param.method,'lanczos');
+        error('Not implemented yet!');
+    end
+end
 
  
 if ~isfield(G,'lmax');
@@ -113,7 +121,7 @@ end
 
 
 cheb_coeffs = gsp_cheby_coeff(G, filter,...
-        param.cheb_order, param.cheb_order +1);    
+        param.order, param.order +1);    
 
 
 % Compute the adjoint

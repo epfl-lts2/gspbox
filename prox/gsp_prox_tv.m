@@ -13,7 +13,7 @@ function [sol, info] = gsp_prox_tv(x,gamma,G,param)
 %         sol   : Solution.
 %         info : Structure summarizing informations at convergence
 %
-%   This function compute the TV proximal operator for graphs. The TV norm
+%   This function computes the TV proximal operator for graphs. The TV norm
 %   is the one norm of the gradient. The gradient is defined in the
 %   function GSP_GRAD.
 %
@@ -24,11 +24,11 @@ function [sol, info] = gsp_prox_tv(x,gamma,G,param)
 %      sol = argmin_{z} 0.5*||x - z||_2^2 + gamma * ||x||_TV
 %
 %   param is a Matlab structure containing the following fields:
-%   
+%
 %    param.tol : is stop criterion for the loop. The algorithm stops if
 %
 %         (  n(t) - n(t-1) )  / n(t) < tol,
-%      
+%
 %     where  n(t) = f(x)+ 0.5 X-Z_2^2 is the objective function at iteration t*
 %     by default, tol=10e-4.
 %
@@ -72,7 +72,7 @@ function [sol, info] = gsp_prox_tv(x,gamma,G,param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/prox/gsp_prox_tv.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

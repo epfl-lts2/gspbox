@@ -28,7 +28,7 @@ function [G]=gsp_david_sensor_network(N)
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_david_sensor_network.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -85,12 +85,11 @@ else
     d = gsp_distanz(G.coords'); 
     G.W = exp(-d.^2/(2*s^2)); 
     G.W(G.W<T) = 0; % Thresholding to have sparse matrix
+    G.W=G.W-diag(diag(G.W));
+    G.W=sparse(G.W);
 end
 
 G.plotting.limits = [0,1,0,1];
-G.W=G.W-diag(diag(G.W));
-G.W=sparse(G.W);
-
 G = gsp_graph_default_parameters(G);
 
 end

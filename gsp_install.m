@@ -12,7 +12,7 @@ function [  ] = gsp_install(  )
 %   Url: http://lts2research.epfl.ch/gsp/doc/gsp_install.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -41,12 +41,12 @@ FS=filesep;
 
 fprintf('Install the GAIMC toolbox: ')
 try
-    zipfilename = 'http://www.mathworks.com/matlabcentral/fileexchange/downloads/114153/download';
+    zipfilename = 'http://www.mathworks.com/matlabcentral/fileexchange/submissions/24134/v/1/download/zip';
     outputdir = [GLOBAL_gsppath,FS,'3rdparty',FS,'gaimc'];
     unzip(zipfilename,outputdir)
     fprintf('Installation sucessfull!\n\n')
 catch
-    warning('Could not install the UNLocBoX')
+    warning('Could not install GAIMC')
 end
 
 fprintf('Install the UNLocBoX: ')

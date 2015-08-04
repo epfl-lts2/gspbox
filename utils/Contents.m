@@ -13,10 +13,12 @@
 %   Distance
 %    gsp_resistance_distance      - Compute the resistance distance
 %    gsp_distanz                  - Compute all euclidean distances
+%    gsp_rmse_mv                  - Compute all RMSE with missing values
 %
 %   Chebysheff
 %    gsp_cheby_coeff              - Compute Chebysheff coefficients
 %    gsp_cheby_op                 - Chebysheff polynomial approximation
+%    gsp_cheby_eval               - Evaluate the Chebyshev polynomial
 %
 %   Others
 %    gsp_graph_sparsify           - Sparsify the graph
@@ -25,15 +27,16 @@
 %    gsp_reset_seed               - Set the seed for reproducibility
 %    gsp_plotfig                  - Helping function to save figures
 %    gsp_isdirected               - Check if the graph is directed
+%    gsp_point2dcdf               - Points to discrete continuous density function
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  gspbox 'dash' support 'at' groupes 'dot' epfl 'dot' ch
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/utils/index.php
+%   Url: http://lts2research.epfl.ch/gsp/doc/utils/Contents.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

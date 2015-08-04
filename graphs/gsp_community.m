@@ -5,10 +5,10 @@ function [G] = gsp_community(N, param)
 %          G = gsp_community(N, param );
 %
 %   Input parameters
-%       - N     : Number of nodes (default 256)
-%       - param : Structure of optional parameters
+%       N     : Number of nodes (default 256)
+%       param : Structure of optional parameters
 %   Output parameters
-%       - G     : Graph
+%       G     : Graph
 %
 %   This function create a 2 dimentional random sensor graph. All the
 %   coordonates are between 0 and 1.
@@ -21,9 +21,9 @@ function [G] = gsp_community(N, param)
 %    param.com_sizes : size of the communities. The sum of the sizes has
 %     to be equal to N. Leave this field empty if you want random sizes.
 %    param.min_comm : Minimum size of the community 
-%     (default round(N / param.Nc / 3) )
-%    param.min_deg: Minimum degree of each nodes 
-%     (default round(param.min_comm/2)) (NOT WORKING YET!)
+%     (default: round(N / param.Nc / 3) )
+%    param.min_deg: Minimum degree of each nodes (default:
+%     round(param.min_comm / 2)) (NOT WORKING YET!)
 %    param.size_ratio*: ratio between radius of world and radius of
 %     communities (default 1)
 %    param.world_density  probability of a random edge between any pair
@@ -39,7 +39,7 @@ function [G] = gsp_community(N, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_community.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -74,13 +74,14 @@ if nargin < 1
    N = 256; 
 end
 
-if ~isfield(param, 'Nc'), param.Nc = round(sqrt(N)/2); end
 if isfield(param, 'com_sizes')
     if sum(param.com_sizes) ~= N
         error(['GSP_COMMUNITY: The sum of the community sizes has ',...
             'to be equal to N']);
     end
+    param.Nc = numel(param.com_sizes);
 else
+    if ~isfield(param, 'Nc'), param.Nc = round(sqrt(N)/2); end
     param.com_sizes = []; 
 end
 if ~isfield(param, 'min_comm'), param.min_comm = round(N / param.Nc / 3); end
@@ -96,18 +97,20 @@ if isempty(param.com_sizes)
     com_lims = com_lims + cumsum((param.min_comm-1) * ones(size(com_lims)));
     com_lims = [0, com_lims, N];
     param.com_sizes = diff(com_lims);
+else
+    com_lims = [0, cumsum(param.com_sizes)];
 end
 
 if param.verbose > 2
     X = zeros(10000, param.Nc + 1);
     %pick randomly param.Nc-1 points to cut the rows in communtities:
-    for i=1:10000
+    for ii=1:10000
         com_lims_temp = sort(randperm(N - (param.min_comm-1) * param.Nc - 1, param.Nc-1), 'ascend');
         com_lims_temp = com_lims_temp + cumsum((param.min_comm-1) * ones(size(com_lims_temp)));
-        X(i,:) = [0, com_lims_temp, N];
+        X(ii,:) = [0, com_lims_temp, N];
     end
     dX = diff(X')';
-    for i=1:param.Nc; figure;hist(dX(:,i), 100); title('histogram of row community size'); end
+    for ii=1:param.Nc; figure;hist(dX(:,ii), 100); title('histogram of row community size'); end
     clear X com_lims_temp
 end
 
@@ -118,23 +121,23 @@ com_coords = rad_world * [-cos(2*pi*(1:param.Nc)/param.Nc)', sin(2*pi*(1:param.N
 G.coords = ones(N, 2);
 
 % create uniformly random points in the unit disc
-for i = 1:N
+for ii = 1:N
     % use rejection sampling to sample from a unit disc (probability = pi/4)
-    while norm(G.coords(i, :)) >= 1/2
+    while norm(G.coords(ii, :)) >= 1/2
         % sample from the square and reject anything outside the circle
-        G.coords(i, :) = [rand-.5, rand-.5];
+        G.coords(ii, :) = [rand-.5, rand-.5];
     end
 end
 
 % add the offset for each node depending on which community it belongs to
 info.node_com = zeros(N, 1);
-for i = 1:param.Nc
-    com_size = param.com_sizes(i);
+for ii = 1:(param.Nc-1)
+    com_size = param.com_sizes(ii);
     rad_com = sqrt(com_size);
 
-    node_ind = (com_lims(i) + 1) : com_lims(i+1);
-    G.coords(node_ind, :) = bsxfun(@plus, rad_com * G.coords(node_ind, :), com_coords(i, :));
-    info.node_com(node_ind) = i;
+    node_ind = (com_lims(ii) + 1) : com_lims(ii+1);
+    G.coords(node_ind, :) = bsxfun(@plus, rad_com * G.coords(node_ind, :), com_coords(ii, :));
+    info.node_com(node_ind) = ii;
 end
     
 

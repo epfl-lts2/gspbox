@@ -1,10 +1,10 @@
 %GSP_DEMO_GRAPH_TV Reconstruction of missing sample on a graph using TV
 %
 %   In this demo, we try to reconstruct missing sample of a piece-wise
-%   smooth signal on a graph. To do so, we will minimize the well-know TV
+%   smooth signal on a graph. To do so, we will minimize the well-known TV
 %   norm defined on the graph.
 %
-%   For this example, you need the unlocbox. You can download it:
+%   For this example, you need the unlocbox. You can download it here:
 %   http://unlocbox.sourceforge.net/download
 %
 %   We express the recovery problem as a convex optimization problem of the
@@ -12,8 +12,8 @@
 %
 %        argmin   ||grad(x)||_1   s. t. ||Mx-b||_2 < epsilon
 %
-%   Where b represent the known measurments, M an operator
-%   representing the mask and epsilon the radius of the l2 ball.
+%   Where b represents the known measurements, M is an operator
+%   representing the mask and epsilon is the radius of the l2 ball.
 %
 %   We set 
 %
@@ -50,17 +50,17 @@
 %
 %      This figure shows the reconstructed signal thanks to the algorithm.
 %
-%   Comparison with Tikonof regularization
-%   --------------------------------------
+%   Comparison with Tikhonov regularization
+%   ---------------------------------------
 %
-%   We can also use the Tikonof regularizer that will promote smoothness.
+%   We can also use the Tikhonov regularizer that will promote smoothness.
 %   In this case, we solve:
 %   
 %        argmin   ||grad(x)||_2^2   s. t. ||Mx-b||_2 < epsilon
 %
 %   The result is presented in the following figure:
 %
-%   Figure 4: Reconstructed signal on graph usign Tikonof
+%   Figure 4: Reconstructed signal on graph using Tikhonov
 %
 %      This figure shows the reconstructed signal thanks to the algorithm.
 %
@@ -68,7 +68,7 @@
 %   Url: http://lts2research.epfl.ch/gsp/doc/demos/gsp_demo_graph_tv.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -120,18 +120,18 @@ G = gsp_adj2vec(G);
 G = gsp_estimate_lmax(G);
 G = gsp_compute_fourier_basis(G);
 
-graph_value=sign(G.U(:,4));
+graph_value = sign(G.U(:,4));
 
 
 %%
-p=0.6; %probability of having no label on a vertex.
+p = 0.6; %probability of having no label on a vertex.
 %create the mask
 M = rand(G.N,1);
 M = M>p;
 
 
 %applying the Mask to the data
-depleted_graph_value=M.*(graph_value+sigma*randn(G.N,1));
+depleted_graph_value = M.*(graph_value+sigma*randn(G.N,1));
 
 % setting the function f2 (see unlocbox for help)
 % f2.grad = @(x) 2*M.*(M.*x-depleted_graph_value);
@@ -150,24 +150,24 @@ f2.eval = @(x) eps;
 % setting the function ftv
 
 param_tv.verbose = verbose-1;
-f1.prox=@(x,T) gsp_prox_tv(x,T,G,param_tv);
-f1.eval=@(x) gsp_norm_tv(G,x);   
+f1.prox = @(x,T) gsp_prox_tv(x,T,G,param_tv);
+f1.eval = @(x) gsp_norm_tv(G,x);   
 
 % 
 % %% for comparison 
 paramtik.verbose = verbose -1;
-f3.prox=@(x,T) gsp_prox_tik(x,T,G,paramtik);
-f3.eval=@(x) gsp_norm_tik(G,x);   
+f3.prox = @(x,T) gsp_prox_tik(x,T,G,paramtik);
+f3.eval = @(x) gsp_norm_tik(G,x);   
 
 %% solve the problem
 
 % setting different parameter for the simulation
-paramsolver.verbose = verbose;  % display parameter
+param_solver.verbose = verbose;  % display parameter
 param_solver.tol = 1e-7;
 param_solver.maxit = 50;
-sol=douglas_rachford(depleted_graph_value,f1,f2,paramsolver);
+sol = douglas_rachford(depleted_graph_value,f1,f2,param_solver);
 
-sol2=douglas_rachford(depleted_graph_value,f3,f2,paramsolver);
+sol2 = douglas_rachford(depleted_graph_value,f3,f2,param_solver);
 
 %% Print the result
 paramplot.show_edges = 1;
@@ -196,5 +196,5 @@ title('Solution of the algorithm: TV')
 figure(4)
 gsp_plot_signal(G,sol2,paramplot)
 caxis([-1 1])
-title('Solution of the algorithm: Tikonof')
+title('Solution of the algorithm: Tikhonov')
 

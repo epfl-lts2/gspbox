@@ -23,6 +23,13 @@ function [ G ] = gsp_graph_default_parameters( G )
 %          G.W = W - diag(diag(W));
 %          G = gsp_graph_default_parameters( G )
 %
+%   This function can be used to update the weights of your graph. It will
+%   recompute the Laplacian operator. Warning this function does not
+%   perform any change to the Fourier basis:
+%
+%          G.W =Wnew;
+%          G = gsp_graph_default_parameters( G );
+%
 %
 %   List of parameters of the graph structure
 %   -----------------------------------------
@@ -58,7 +65,7 @@ function [ G ] = gsp_graph_default_parameters( G )
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_graph_default_parameters.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -109,14 +116,14 @@ if ~isfield(G,'lap_type')
     G.lap_type='combinatorial';
 end
 
-if ~isfield(G,'L')
+% if ~isfield(G,'L')
     G = gsp_create_laplacian(G);
-end
+% end
 
-G.d = sum(G.W);
+G.d = sum(G.W,2);
 
 % Number of edges
-G.Ne = sum(G.A(:));
+G.Ne = nnz(G.W);
 
 
 if ~isfield(G,'coords') % Coordonates
@@ -124,8 +131,6 @@ if ~isfield(G,'coords') % Coordonates
 end
 
 G = gsp_graph_default_plotting_parameters(G);
-
-
 
 end
 

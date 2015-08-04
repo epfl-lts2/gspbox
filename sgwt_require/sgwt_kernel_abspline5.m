@@ -21,7 +21,7 @@
 %   Url: http://lts2research.epfl.ch/gsp/doc/sgwt_require/sgwt_kernel_abspline5.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -76,7 +76,9 @@ function r = sgwt_kernel_abspline5(x,alpha,beta,t1,t2)
      ];
   a=M\v;
   
-  r1=find(x>=0 & x<t1);
+  r1=find(x<t1);
+  %r1=find(x>=0 & x<t1);
+
   r2=find(x>=t1 & x<t2);
   r3=find(x>=t2);
   r(r1)=x(r1).^alpha*t1^(-alpha);
@@ -86,3 +88,4 @@ function r = sgwt_kernel_abspline5(x,alpha,beta,t1,t2)
   r(r2)=a(1)+a(2)*x2+a(3)*x2.^2+a(4)*x2.^3+a(5)*x2.^4+a(6)*x2.^5;
 %  tmp=polyval(flipud(a),x2);
 %  keyboard
+

@@ -22,7 +22,7 @@ function [ ] = gsp_plotfig( save_name,param )
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_plotfig.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -68,33 +68,38 @@ if param.baw
 end
 
 
-
 % set the axes
 try  %#ok<TRYNC>
     set(gcf, 'Position', param.position);
     set(gcf,'PaperPositionMode','auto');
+    set(gcf, 'PaperSize',[param.position(3)*1.02, param.position(4)*1.02]);
 end
 
-% set the title
-try %#ok<TRYNC>
-    set(gca,'FontSize',param.labelsize)
-end
-try %#ok<TRYNC>
-    h=get(gca,'Title');
-    set(h,'FontSize',param.titlesize);
-    set(h,'FontWeight',param.titleweight);
-end
-try %#ok<TRYNC>
-    h=get(gca,'xlabel');
-    set(h,'FontSize',param.labelsize);
-end
-try %#ok<TRYNC>
-    h=get(gca,'ylabel');
-    set(h,'FontSize',param.labelsize);
+
+allAxes = findall(0,'type','axes');
+for ii = 1:numel(allAxes)
+    % set the title
+    try %#ok<TRYNC>
+        set(allAxes(ii),'FontSize',param.labelsize)
+    end
+    try %#ok<TRYNC>
+        h=get(allAxes(ii),'Title');
+        set(h,'FontSize',param.titlesize);
+        set(h,'FontWeight',param.titleweight);
+    end
+    try %#ok<TRYNC>
+        h=get(allAxes(ii),'xlabel');
+        set(h,'FontSize',param.labelsize);
+    end
+    try %#ok<TRYNC>
+        h=get(allAxes(ii),'ylabel');
+        set(h,'FontSize',param.labelsize);
+    end
 end
 drawnow;
 
 % save the results
+
 
 
 if param.save
@@ -103,10 +108,13 @@ if param.save
     end
     filename=strcat(param.pathfigure,save_name);
     if param.eps
-         print('-depsc',[filename,'.eps']);
+         %print('-depsc',[filename,'.eps']);
+         print2eps([filename,'.eps']);
     else
-        print('-dpng','-zbuffer','-r300',[filename,'.png']);
+        print('-dpng','-opengl','-r300',[filename,'.png']);
         %hgsave([filename,'.fig']);
     end
 end
 end
+
+

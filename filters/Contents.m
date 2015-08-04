@@ -15,17 +15,27 @@
 %    gsp_design_simoncelli        -  Design 2 filter with the "Simoncelli" construction
 %    gsp_design_papadakis         -  Design 2 filter with the "Papadakis" construction
 %
+%  Dual filterbank
+%    gsp_design_can_dual          -  Design the conical dual filterbank
+%    gsp_evaluate_can_dual        -  Evaluate the canonical dual of a filterbank
+%    gsp_test_duality             -  Test if 2 filterbanks are dual
+%    gsp_test_duality_coefficient -  Test if 2 discrete filterbanks are dual
+%
+%  Low pass filters
+%    gsp_design_heat              -  Design a heat kernel filter
+%    gsp_design_expwin            -  Design a expwin filter
 %  Application
 %    gsp_filter                   -  Shortcut to gsp_filter_analysis
 %    gsp_filter_analysis          -  Analysis operator for filterbank
 %    gsp_filter_synthesis         -  Synthesis operator for filterbank
 %    gsp_filter_inverse           -  Inverse operator for filterbank
 %
-%   Size Handling
+%  Size Handling
 %    gsp_mat2vec                  -  Matrix to vector representation for filterbanks 
 %    gsp_vec2mat                  -  Vector to matrix representation for filterbanks 
 %
 %  Utils
+%    gsp_approx_filter            -  Create an approximation of a filterbank with Chebyshev
 %    gsp_filterbank_matrix        -  Create the analysis operator matrix associated to a filterbank 
 %    gsp_wlog_scales              -  Compute log scale vector for wavelets
 %    gsp_filter_evaluate          -  Evaluate a filterbank
@@ -36,10 +46,10 @@
 %  gspbox 'dash' support 'at' groupes 'dot' epfl 'dot' ch
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/index.php
+%   Url: http://lts2research.epfl.ch/gsp/doc/filters/Contents.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

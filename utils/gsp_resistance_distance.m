@@ -53,15 +53,15 @@ function rd = gsp_resistance_distance(G,param)
 %     (default 1)
 %   
 %   References:
-%     D. J. Klein and M. Randić. Resistance distance. Journal of Mathematical
-%     Chemistry, 12(1):81-95, 1993.
+%     D. J. Klein and M. Randic. Resistance distance. Journal of Mathematical
+%     Chemistry, 12(1):81--95, 1993.
 %     
 %     
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_resistance_distance.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.3.1
+% This file is part of GSPbox version 0.4.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
