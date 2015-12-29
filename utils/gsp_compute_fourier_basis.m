@@ -34,10 +34,10 @@ function [G] = gsp_compute_fourier_basis(G,param)
 %     
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_compute_fourier_basis.php
+%   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_compute_fourier_basis.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -93,7 +93,7 @@ if G.N > 3000
     end
 end
     
-if ( strcmp(G.type,'ring')==1 && mod(G.N,2)==0 )
+if isfield(G,'type') &&  strcmp(G.type,'ring')==1 && mod(G.N,2)==0 
     U = dftmtx(G.N)/sqrt(G.N);
     E = (2-2*cos(2*pi*(0:G.N-1)'/G.N));
     inds = gsp_classic2graph_eig_order( G.N );
@@ -117,14 +117,25 @@ if isfield(G,'Gm')
 %     G.Gm = gsp_compute_fourier_basis(G.Gm);
 %     G.Gm.Um1 = G.Gm.U^(-1);
     N = G.N;
-    w = G.Gm.W(N+1:end,1:N);
-    d = G.Gm.d(N+1:end);
+    w = -G.Gm.L(N+1:end,1:N);
+    switch lower(G.Gm.lap_type)
+        case 'combinatorial'
+            d = G.Gm.d(N+1:end);
+        case 'normalized'
+            d = ones(G.Gm.N-G.N,1);
+        otherwise
+            error('Unknown lLaplacian type')
+    end
+    
+    
     Nw = length(d);
-    c = (w*G.U)./(repmat(d,1,N)-repmat(G.e',Nw,1));
+    c = 1./(repmat(d,1,N)-repmat(G.e',Nw,1)).*(w*G.U);
+    
     
     G.Gm.U = [G.U zeros(N,Nw); c , eye(Nw)];
     
     G.Gm.Um1 = [G.U', zeros(N,Nw); -c*G.U', eye(Nw)];
+    
     G.Gm.e = [G.e;d];
     G.Gm.lmax = max(G.Gm.e);
     G.lmax = G.Gm.lmax;
@@ -142,11 +153,11 @@ function [U,E] = gsp_full_eigen(L)
 %GSP_FULL_EIGEN Compute and order the eigen decomposition of L
 
     % Compute and all eigenvalues and eigenvectors 
-    try
-        [eigenvectors,eigenvalues]=eig(full(L+L')/2);
-    catch
+%     try
+%         [eigenvectors,eigenvalues]=eig(full(L+L')/2);
+%     catch
         [eigenvectors,eigenvalues,~]=svd(full(L+L')/2);
-    end
+%     end
     
     % Sort eigenvectors and eigenvalues
     [E,inds] = sort(diag(eigenvalues),'ascend');

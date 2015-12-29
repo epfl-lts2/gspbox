@@ -7,7 +7,7 @@ cut=1e-4;
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/utils/gsp_mono_cubic_warp_fn.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

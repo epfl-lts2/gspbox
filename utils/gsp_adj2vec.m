@@ -12,10 +12,10 @@ function [G] = gsp_adj2vec(G)
 %
 %   See also: gsp_grad gsp_div
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_adj2vec.php
+%   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_adj2vec.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ else
     G.v_out = v_j;
 
     % the indices of the edges in the Adgacency matrix A:
-    G.ind_edges = sub2ind(size(G.W), G.v_in, G.v_out);
+    %G.ind_edges = sub2ind(size(G.W), G.v_in, G.v_out);
     G.weights = weights;         % |E| x 1
     G.Ne = length(G.v_in);
 

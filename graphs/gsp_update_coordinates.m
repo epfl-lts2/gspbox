@@ -1,22 +1,22 @@
-function s_pred = gsp_interpolate(Gh,Gl,coeff,param)
-%GSP_INTERPOLATE Interpolate lower coefficient
-%   Usage: s_pred = gsp_interpolate(G,K_reg,ind,g,coeff);
+function G = gsp_update_coordinates(G, coords)
+%GSP_UPDATE_COORDINATES Updates the coordinates of a graph structure
+%   Usage: G = gsp_update_coordinates(G, coords);
 %
-%   Input parameters:
-%       Gh      : Upper graph
-%       Gl      : Lower graph
-%       coeff   : Coefficients
-%       param   : Optional parameters for gsp_filter_anlysis
-%   Ouptut parameters:
-%       s_pred  : Predicted signal
+%   Input parameters
+%         G      : Graph
+%         coords : New coordinates
 %
-%   This function is for internal use only
+%   Output parameters
+%         G      : Output graph
 %
+%   Update the coordinates of a graph structure
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/operators/utils/gsp_interpolate.php
+%   See also: gsp_compute_coordinates
+%
+%   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_update_coordinates.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -37,22 +37,11 @@ function s_pred = gsp_interpolate(Gh,Gl,coeff,param)
 %     ArXiv e-prints, Aug. 2014.
 % http://arxiv.org/abs/1408.5781
 
-% Author : Nathanael Perraudin
-% Date   : 14 August 2014
-% Testing: test_pyramid
+% Authors : Dion O. E. Tzamarias
+% Date    : 20/11/2015
 
-if nargin < 4
-    param = struct;
+G.coords = coords;
+G = rmfield(G,'plotting');
+G = gsp_graph_default_plotting_parameters(G);
+
 end
-    
-if ~isfield(param,'order'), param.order = 100; end
-
-Nv = size(coeff, 2);
-
-alpha = Gl.pyramid.K_reg * coeff;
-s_pred = zeros(Gh.N, Nv);
-s_pred(Gl.pyramid.ind, :) = alpha;
-s_pred = gsp_filter_analysis(Gh,Gl.pyramid.green_kernel ,s_pred,param);
-    
-end
-

@@ -1,5 +1,5 @@
 function [ ft ] = gsp_translate(G, f, i)
-%GSP_TRANSLATE Tranlate the signal f to the node i
+%GSP_TRANSLATE Generalized translation of the signal f to the node i
 %   Usage: ft = gsp_translate(G, f, i);
 %
 %   Input parameters
@@ -16,7 +16,7 @@ function [ ft ] = gsp_translate(G, f, i)
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_translate.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -49,5 +49,3 @@ ft = sqrt(G.N)*gsp_igft(G,fhat .* ...
 
 
 end
-
-

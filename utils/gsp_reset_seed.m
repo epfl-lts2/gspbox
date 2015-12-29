@@ -1,18 +1,18 @@
-function [  ] = gsp_reset_seed( n )
-%GSP_RESET_SEED Reset the seed
-%   Usage:  gsp_reset_seed( n );
+function gsp_reset_seed(n)
+%GSP_RESET_SEED Reset the seed of the random number generator
+%   Usage:  gsp_reset_seed(n);
 %
 %   Input parameters:
 %       n   : seed
 %   Ouptut parameters:
 %       none
 %
-%   This function reset the seed
+%   This function resets the seed
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_reset_seed.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ function [  ] = gsp_reset_seed( n )
 %     ArXiv e-prints, Aug. 2014.
 % http://arxiv.org/abs/1408.5781
 
-% Author: Nathanael Perraudin
-% Date  : 21 Mai 2014
+% Authors: Nathanael Perraudin, Vassilis Kalofolias
+% Date  : 21 May 2014
 % 
 % global GLOBAL_rand
 % 
@@ -45,16 +45,11 @@ if nargin<1
     n = 0;
 end
 
-
 if verLessThan('matlab', '7.12.0')  % release 2011a has "rng"
     rand('twister',n); %#ok<RAND>
 else
     rng(n,'twister');
-
 end
-
-
-
 
 end
 

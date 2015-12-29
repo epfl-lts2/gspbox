@@ -1,35 +1,46 @@
-function [ca,pe]=gsp_pyramid_analysis(Gs,f,param)
+function [coarse_approximations,prediction_errors]=gsp_pyramid_analysis(Gs,signal,num_levels,param)
 %GSP_PYRAMID_ANALYSIS Compute the graph pyramid transform coefficients 
-%   Usage:  [ca,pe]=gsp_pyramid_analysis(Gs, f);
-%           [ca,pe]=gsp_pyramid_analysis(Gs, f, param);
+%   Usage:  [coarse_approximations,prediction_errors]=gsp_pyramid_analysis(Gs,signal,num_levels);
+%           [coarse_approximations,prediction_errors]=gsp_pyramid_analysis(Gs,signal,num_levels,param);
 %
 %   Input parameters:
-%         Gs      : A multiresolution sequence of graph structures.
-%         f       : Graph signal to analyze.
-%         param   : Structure of optional parameters
+%         Gs                      : A multiresolution sequence of graph structures, including the idx parameters tracking the subsampling pattern.
+%         signal                  : Graph signal to analyze.
+%         num_levels              : Number of levels in the pyramid transform.
 %   Output parameters:
-%         ca      : Cell array with the coarse approximation at each level
-%         pe      : Cell array with the prediction errors at each level
+%         coarse_approximations   : Cell array with the coarse approximations at each level.
+%         prediction_errors       : Cell array with the prediction errors at each level.
 %
-%   'gsp_pyramid_analysis' computes the graph pyramid transform
-%   coefficients of the signal f for the pyramid structure in Gs.
+%   'gsp_pyramid_analysis(Gs,signal,num_levels)' computes 
+%   the graph pyramid transform coefficients of a signal f.
+%   
+%   param is a structure containing optional arguments including
 %
-%   See also: gsp_kron_pyramid gsp_pyramid_synthesis gsp_pyramid_cell2coeff
+%    param.regularize_epsilon : Interpolation parameter.
+%    param.h_filters : A cell array of graph spectral filters. If just
+%     one filter is included, it is used at every level of the pyramid. 
+%     Default 
+%
+%            h(x) = 0.5 / ( 0.5 + x)
+%   
+%   Please read the documentation of GSP_FILTER_ANALYSIS for other
+%   optional arguments.
+%
+%   See also: gsp_graph_multiresolution gsp_pyramid_synthesis 
+%             gsp_pyramid_cell2coeff gsp_pyramid_analysis_single
 %
 %   Demo: gsp_demo_pyramid
 % 
 %   References:
-%     I. Pesenson. Variational splines and paley--wiener spaces on
-%     combinatorial graphs. Constructive Approximation, 29(1):1--21, 2009.
-%     
 %     D. I. Shuman, M. J. Faraji, and P. Vandergheynst. A framework for
 %     multiscale transforms on graphs. arXiv preprint arXiv:1308.4942, 2013.
+%     
 %     
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_pyramid_analysis.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -50,49 +61,49 @@ function [ca,pe]=gsp_pyramid_analysis(Gs,f,param)
 %     ArXiv e-prints, Aug. 2014.
 % http://arxiv.org/abs/1408.5781
 
-% Author: Nathanael Perraudin
-% Date: 5 August 2014
+% Author: David I Shuman, Nathanael Perraudin
+% Date: 26 November 2015
 % Testing : test_pyramid
-
-
-
   
-
-  
-  
-if nargin < 3
+% Read input parameters and check that inputs have the correct sizes
+if nargin < 4
     param = struct;
 end
 
-if length(f) ~= Gs{1}.N
+
+if length(signal) ~= Gs{1}.N
     error('The signal to analyze should have the same dimension as the first graph');
 end
 
-
-Nl = length(Gs)-1;
-
-
-
-% Initisalization
-ca = cell(Nl+1,1);
-pe = cell(Nl+1,1);
-
-ca{1} = f;
-Nv = size(f, 2);
-pe{Nl+1} = zeros(Gs{Nl+1}.N, Nv);
-
-for ii = 2 : (Nl+1)
-    % Low pass the signal
-    s_low  = gsp_filter_analysis(Gs{ii-1},Gs{ii}.pyramid.filter,ca{ii-1},param);
-    % Keep only the coefficient on the selected nodes
-    ca{ii} = s_low(Gs{ii}.pyramid.ind, :);
-    % Compute prediction
-    s_pred = gsp_interpolate(Gs{ii-1},Gs{ii},ca{ii},param);
-    % Compute errors
-    pe{ii-1} = ca{ii-1} - s_pred;
-end
-    
-
+if num_levels >= length(Gs)
+    error('Not enough graphs provided to compute that many levels of the graph Laplacian pyramid');
 end
 
+if ~isfield(param,'h_filters')
+    h_filters=cell(num_levels,1);
+    for ii=1:num_levels
+        h_filters{ii}=@(x) .5./(.5+x);
+    end
+elseif length(param.h_filters)==1
+    h_filters=cell(num_levels,1);
+    for ii=1:num_levels
+        h_filters{ii}=param.h_filters;
+    end
+elseif length(param.h_filters)==num_levels
+    h_filters=param.h_filters;
+else
+    error('param.h_filters should be a cell array of length 1 or num_levels');
+end
+        
+% Compute the pyramid transform
+coarse_approximations=cell(num_levels+1,1);
+coarse_approximations{1}=signal;
+prediction_errors = cell(num_levels,1);
 
+for ii=1:num_levels
+    [coarse_approximations{ii+1},prediction_errors{ii}] = ...
+        gsp_pyramid_analysis_single( Gs{ii}, ...
+        coarse_approximations{ii}, Gs{ii+1}.mr.idx, h_filters{ii}, param);
+end
+
+end

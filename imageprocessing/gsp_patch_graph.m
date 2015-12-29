@@ -30,7 +30,7 @@ function [G, pixels, patches] = gsp_patch_graph(img, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/imageprocessing/gsp_patch_graph.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -69,6 +69,7 @@ function [G, pixels, patches] = gsp_patch_graph(img, param)
        param.nnparam.resize = 0;
        param.nnparam.k = 10;
        param.nnparam.use_l1 = 0;
+       param.nnparam.use_flann = 1;
     end
     
     if (mod(param.patch_size, 2) == 0) 

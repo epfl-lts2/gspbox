@@ -1,6 +1,8 @@
-function [G] = gsp_graph(W,coords,limits)
+function [G] = gsp_graph(W, coords, limits)
 %GSP_GRAPH  Initialize a graph from a weight matrix
-%   Usage:  G = gsp_graph(N);
+%   Usage:  G = gsp_graph(W );
+%           G = gsp_graph(W, coords);
+%           G = gsp_graph(W, coords, limits);  
 %
 %   Input parameters:
 %         W     : Weight matrix
@@ -23,7 +25,7 @@ function [G] = gsp_graph(W,coords,limits)
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_graph.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

@@ -1,15 +1,14 @@
 % GSPBOX - Operators
 %
 %  Localisation
-%    gsp_translate      -  Translation operator
-%    gsp_modulate       -  Modulation operator
 %    gsp_localize       -  Localize a kernel
+%    gsp_modulate       -  Generalized modulation operator
+%    gsp_translate      -  Generalized translation operator
 %
 %  Differential
 %    gsp_grad_mat       -  Compute the gradient sparse matrix
 %    gsp_grad           -  Compute the gradient of a signal
 %    gsp_div            -  Compute the divergence of a signal
-%    gsp_adj2vec        -  Prepare the graph for the gradient computation
 %
 %  Transforms
 %    gsp_gft            -  Graph Fourier transform
@@ -18,17 +17,14 @@
 %    gsp_ngwft          -  Normalized windowed graph Fourier transform
 %
 %  Pyramid - Reduction
-%    gsp_kron_reduction - Kron reduction
-%    gsp_kron_pyramid   - Compute the pyramide using kron reduction
+%    gsp_kron_reduce    - Kron reduction
+%    gsp_graph_multiresolution - Compute a multiresolution of graphs
 %    gsp_pyramid_analysis - Analysis operator for graph pyramid
+%    gsp_pyramid_analysis_single - Compute a single level of the graph pyramid transform coefficients
 %    gsp_pyramid_synthesis - Sythesis operator for graph pyramid
-%    gsp_pyramid_cell2coeff - Transform cell coefficient into a vector 
-%    gsp_tree_multiresolution - Compute a tree reduction of a graph
-%   
-%
-%   Utils
-%    gsp_create_laplacian -  Create of change the laplacian of a graph
-%    gsp_compute_fourier_basis - Compute the Fourier basis of a graph
+%    gsp_pyramid_synthesis_single -Synthesize a single level of the graph pyramid transform 
+%    gsp_pyramid_cell2coeff - Keep only the necessary coefficients
+%    gsp_interpolate    - Interpolate a signal
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  gspbox 'dash' support 'at' groupes 'dot' epfl 'dot' ch
@@ -37,7 +33,7 @@
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/Contents.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

@@ -41,7 +41,7 @@ function gsp_plot_signal(G,signal,param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/plotting/gsp_plot_signal.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -73,6 +73,11 @@ if nargin < 3
    param = struct;
 end
 
+
+if ~numel(G.coords)
+    error('There is no coordinates associated to this graph!');
+end
+
 if sum(abs(imag(signal(:))))>1e-10
    error('GSP_PLOT_SIGNAL: can not display complex signal') 
 end
@@ -95,11 +100,6 @@ else
 end
 
 if ~isfield(param,'colorbar'), param.colorbar = 1; end
-if ~isfield(param,'climits')
-    cmin=1.01*min(signal)-eps;
-    cmax=1.01*max(signal)+eps;
-    param.climits=[cmin,cmax];
-end
 if ~isfield(param,'cp')
     if isfield(G.plotting, 'cp')
        param.cp = G.plotting.cp; 
@@ -123,39 +123,7 @@ hold on;
 
 
 if param.show_edges
-%         gplot23D(G.A,G.coords,G.plotting.edge_style,...
-%             'LineWidth',G.plotting.edge_width,'Color',G.plotting.edge_color); 
-    [ki,kj]=find(G.A);
-    if G.directed
-
-        if size(G.coords,2)==2
-            In  = [G.coords(ki,1),G.coords(ki,2)]; 
-            Fin = [G.coords(kj,1),G.coords(kj,2)]; 
-            V=Fin-In;
-            quiver(G.coords(ki,1),G.coords(ki,2),V(:,1),V(:,2),0,...
-                    '-r','LineWidth',G.plotting.edge_width);
-        else
-            In  = [G.coords(ki,1),G.coords(ki,2),G.coords(ki,3)]; 
-            Fin = [G.coords(kj,1),G.coords(kj,2),G.coords(kj,3)]; 
-            V=Fin-In;
-            quiver3(G.coords(ki,1),G.coords(ki,2),G.coords(ki,3),...
-                V(:,1),V(:,2),V(:,3),0,...
-                    '-r','LineWidth',G.plotting.edge_width);
-        end
-    else
-        if size(G.coords,2) == 2 
-            plot([G.coords(ki,1)';G.coords(kj,1)'],...
-                [G.coords(ki,2)';G.coords(kj,2)'],...
-                G.plotting.edge_style, 'LineWidth',G.plotting.edge_width,...
-                'Color',G.plotting.edge_color);
-        else
-                plot3([G.coords(ki,1)';G.coords(kj,1)'],...
-                [G.coords(ki,2)';G.coords(kj,2)'],...
-                [G.coords(ki,3)';G.coords(kj,3)'],...
-                G.plotting.edge_style, 'LineWidth',G.plotting.edge_width,...
-                'Color',G.plotting.edge_color);
-        end
-    end
+    gsp_plot_edges(G,param);
 end
 
 if size(G.coords,2) == 2
@@ -210,7 +178,12 @@ if size(G.coords,2)==3 || param.bar
 end
 
 if ~param.bar
-    caxis(param.climits);
+    if isfield(param, 'climits')
+        caxis(param.climits);
+    %else
+        % no need to do anything, the following happens anyway!
+        %set(gca,'CLimMode','auto');
+    end
 
     if param.colorbar
         colorbar;

@@ -7,7 +7,7 @@ function [index, params, speedup] = flann_build_index(dataset, build_params)
 %   Url: http://lts2research.epfl.ch/gsp/doc/3rdparty/flann/flann_build_index.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@ function [index, params, speedup] = flann_build_index(dataset, build_params)
 % http://arxiv.org/abs/1408.5781
 
 % Marius Muja, January 2008
-
     algos = struct( 'linear', 0, 'kdtree', 1, 'kmeans', 2, 'composite', 3, 'kdtree_single', 4, 'hierarchical', 5, 'lsh', 6, 'saved', 254, 'autotuned', 255 );
     center_algos = struct('random', 0, 'gonzales', 1, 'kmeanspp', 2 );
     log_levels = struct('none', 0, 'fatal', 1, 'error', 2, 'warning', 3, 'info', 4);

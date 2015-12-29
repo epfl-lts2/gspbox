@@ -54,7 +54,7 @@ function [] = gsp_plot_filter(G, filters, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/plotting/gsp_plot_filter.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -89,6 +89,14 @@ if ~isstruct(G)
    param.plot_eigenvalues = 0;
 end
 
+if ~isfield(G,'lmax')
+    G = gsp_estimate_lmax(G);
+    warning(['GSP_FILTER_ANALYSIS: The variable lmax is not ',...
+        'available. The function will compute it for you. ',...
+        'However, if you apply many time this function, you ',...
+        'should precompute it using the function: ',...
+        'gsp_estimate_lmax']);
+end
 
 if ~isfield(param,'verbose'), param.verbose = 1; end
 if ~isfield(param,'line_width'), param.line_width = 4; end

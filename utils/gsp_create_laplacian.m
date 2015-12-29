@@ -36,10 +36,10 @@ function [ G ] = gsp_create_laplacian( G,type )
 %     
 %     
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_create_laplacian.php
+%   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_create_laplacian.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -86,6 +86,24 @@ if nargin<2
     end
 end
 
+if isfield(G,'hypergraph') && G.hypergraph
+    G.de = sum(G.W >0,1)';
+    G.dv = sum(G.W.^2,2);
+    
+%     switch type
+%         case 'normalized'        
+            G.A = G.W*G.W' - diag(G.dv);
+            G.L = eye(G.N) - ...
+                diag(G.dv.^(-0.5)) * G.W * ...
+                diag(G.de.^(-1)) * ...
+                G.W' *diag(G.dv.^(-0.5));
+            G.lap_type = 'normalized';
+%         otherwise
+%             error('Unknown laplacian type')
+%     end
+    return
+    
+end
 
 if G.directed
     D1 = sum(G.W,2);
@@ -98,7 +116,7 @@ if G.directed
             [phi,P] = compute_perron(G.W);
             Phiup=diag(sparse(phi.^(0.5)));            
             Phidw=diag(sparse(phi.^(-0.5)));       
-            G.L = sparse(eye(G.N)) - 0.5 * (Phiup * P  * Phidw + Phidw * P'  * Phiup );
+            G.L = speye(G.N) - 0.5 * (Phiup * P  * Phidw + Phidw * P'  * Phiup );
             % Save the results in G
             G.P=P;
             G.phi=phi;
@@ -117,6 +135,8 @@ if G.directed
         otherwise
             error(' Unknown laplacian type')
     end    
+    % To avoid numerical errors of symetry
+    G.L = (G.L +G.L')/2;
 else
     D = sum(G.W,2);
     switch type
@@ -132,6 +152,10 @@ else
     end
 end
 
+
+if isfield(G,'Gm')
+    G.Gm = gsp_create_laplacian(G.Gm,type);
+end
 
 % Update problematic fields
 if isfield(G,'U')
@@ -151,13 +175,15 @@ end
 
 function [phi,P] = compute_perron(A)
 
-    N = size(A,1);
+%     N = size(A,1);
 
     % Remove the diagonal
     A=A-diag(diag(A));
 
     % Compute the Probablility matrix
-    P=A./repmat(sum(A,2),1,N);
+    %P=A./repmat(sum(A,2),1,N);
+%     P = bsxfun(@rdivide,A,sum(A,2));
+    P = diag(sparse(1./sum(A,2)))*A;
 
     % Compute the perron vector of P
     [phi,max_eig_P] = eigs(P',1);
@@ -170,7 +196,10 @@ function [phi,P] = compute_perron(A)
     if sum(phi)<0; 
         phi=-phi;
     end
-
+    
+    
+%     phi(phi<0) = -phi(phi<0);
+%     warning('Things to be done here!!')
     if sum(phi<=10e3*eps)
         fprintf(['\n  ---  Warning! The perron vector has negative or '...
           'null entrie(s).\n       Is the graph strongly connected?  ---\n']);

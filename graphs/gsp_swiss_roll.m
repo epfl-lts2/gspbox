@@ -1,12 +1,12 @@
-function [G]=gsp_swiss_roll(N,s,thresh,rand_state)
+function [G]=gsp_swiss_roll(N,rand_seed,param)
 %GSP_SWISS_ROLL Initialize a swiss roll graph
-%   Usage:  G = gsp_swiss_roll(N,s,thresh,rand_state);
+%   Usage:  G = gsp_swiss_roll(N,rand_state,param);
 %
 %   Input parameters:
 %         N          : Number of vertices.
 %         s          : sigma ( default: sqrt(2/N))
 %         thresh     : threshold (default: 1e-6)
-%         rand_state : rand seed (default: 45)
+%         rand_state : rand seed (default: 0)
 %   Output parameters:
 %         G     : Graph structure.
 %
@@ -22,7 +22,7 @@ function [G]=gsp_swiss_roll(N,s,thresh,rand_state)
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_swiss_roll.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -51,28 +51,31 @@ if nargin<1
 end
 
 if nargin<2
-   s = sqrt(2/N); 
+   rand_state = 0; 
 end
+
+gsp_reset_seed(rand_state);
+
+
+
+a = 1;   % swiss roll goes from a*pi to b*pi
+b = 4;   
+y = rand(2,N);
+% uniform distribution along the manifold (in data space)
+tt = sqrt((b*b-a*a)*y(1,:)+a*a);
+tt = pi*tt;
+% now tt should go from a*pi to b*pi
+height = y(2,:);
+x = [tt.*cos(tt)/b^2; height; tt.*sin(tt)/b^2];
 
 if nargin<3
-   thresh = 1e-6;
+    param = struct;
 end
 
-if nargin<4
-   rand_state = 45; 
-end
-
-
-dataparams=struct('n',N,'dataset',-1','noise',0,'state',rand_state); % state was 0 before - 45 now
-r=create_synthetic_dataset(dataparams);
-G.coords=rescale_center(r.x)'; % r.x is a 3 x N matrix with the rows equal to the X, Y, and, Z components
-G.plotting.limits = [-1,1,-1,1,-1,1];
-dist=gsp_distanz(G.coords');
-G.W=exp(-dist.^2/(2*s^2));
-G.W = G.W-diag(diag(G.W));
-G.W(G.W<thresh)=0;
-
-G = gsp_graph_default_parameters(G);
+if ~isfield(param,'k'), param.k = 6; end
+G = gsp_nn_graph(x',param);
+G.map_coord = y';
+G.type = 'Swiss Roll';
 
 end
 

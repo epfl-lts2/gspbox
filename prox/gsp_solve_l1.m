@@ -22,8 +22,6 @@ function  [alpha, info]  = gsp_solve_l1(G, W, s, lambda, param )
 %
 %    param.verbose : 0 no log, 1 a summary at convergence, 2 print main
 %     steps (default: 1)
-%    param.use_proj*: use hard constraint for the l2 norm term (not
-%     recomended) Default 0.
 %    param.normalize*: Use weight on the l1 norm to remove the effect of
 %     the size of the atoms of W. Default 0
 %    param.guess*: Initial guess for the starting point. (Default zeros)
@@ -35,7 +33,7 @@ function  [alpha, info]  = gsp_solve_l1(G, W, s, lambda, param )
 %   Url: http://lts2research.epfl.ch/gsp/doc/prox/gsp_solve_l1.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -61,29 +59,22 @@ function  [alpha, info]  = gsp_solve_l1(G, W, s, lambda, param )
 % Testing : test_gsp_solve_l1
 
 
+%% Todo, use primal dual solver!!!
+
 if nargin < 5
     param = struct;
 end
 
 if ~isfield(param,'verbose'), param.verbose = 1; end
-if ~isfield(param,'use_proj'), param.use_proj = 0; end
 if ~isfield(param,'normalize'), param.normalize = 0; end
 
 
 
-if iscell(G)
-    N = G{1}.N;
-    Nf = length(W{1});
-    Ns = size(s,2);
-    NG = numel(G);
-else
-    N = G.N;
-    Nf = numel(W);
-    Ns = size(s,2);
-    NG = 1;
-end
 
-% L1 minimization
+
+
+
+
 if param.normalize
     ntig = gsp_norm_tig(G,W);
     ntig = gsp_mat2vec(ntig);
@@ -96,86 +87,58 @@ end
 paraml1.weight = ntig;
 
 paraml1.verbose = param.verbose -1;
-fl1.prox = @(x,T) prox_l1(x,lambda *T,paraml1);
-if param.normalize
-    fl1.eval = @(x) lambda*sum(sum(abs(ntig.*x)));
+paramsolver = param;
+
+if lambda
+    fl1.prox = @(x,T) prox_l1(x,lambda *T,paraml1);
+    if param.normalize
+        fl1.eval = @(x) lambda*sum(sum(abs(ntig.*x)));
+    else
+        fl1.eval = @(x) lambda*sum(sum(abs(x)));
+    end
 else
-    fl1.eval = @(x) lambda*sum(sum(abs(x)));
+    fl1.prox = @(x,T) prox_l1(x,T,paraml1);
+    if param.normalize
+        fl1.eval = @(x) sum(sum(abs(ntig.*x)));
+    else
+        fl1.eval = @(x) sum(sum(abs(x)));
+    end
+    paramsolver = param;
+    if ~isfield(paramsolver,'gamma'), paramsolver.gamma = 1/sqrt(G.N); end
+    
 end
 
-if param.use_proj
-    % Projection
-    paramproj.type = 'coefficient';
-    paramproj.verbose = param.verbose -1;
-    paramproj.epsilon = 1e-12;
-    paramproj.tight = 0;
-    paramproj.maxit = 20;
-    %paramproj.normalize = 1;
-    ffid.prox = @(x,T) gsp_proj_b2_filterbank(x, T, G, W, s, paramproj);
-    ffid.eval = @(x) eps;
-else
-    
-    A = @(x) funcA(G,W,x,param);
-    At = @(x) funcAt(G,W,x,param);
 
+
+
+if lambda
+    A = @(x) gsp_filter_synthesis(G,W,x,param);
+    At = @(x) gsp_filter_analysis(G,W,x,param);
     [~, bound] = gsp_filterbank_bounds(G,W);
-    if iscell(bound)
-        bound = sum(cell2mat(bound));
-    end
     ffid.grad = @(x) 2* At(A(x)-s);
     ffid.eval = @(x) norm(A(x)-s,'fro')^2;
     ffid.beta = 2*bound;
-    
+
+else
+
+    % Projection
+    ffid.prox = @(x,T) gsp_proj_filterbank(x, T, G, W, s);
+	ffid.eval = @(x) eps;
+
 end
 
 % Starting point
-if ~isfield(param,'guess'), param.guess = zeros(N*Nf*NG,Ns); end
+if ~isfield(param,'guess')
+    N = G.N;
+    Nf = numel(W);
+    Ns = size(s,2);
+    param.guess = zeros(N*Nf,Ns); 
+end
 
 % Solver
-paramsolver = param;
-
-if param.use_proj
-    paramsolver.gamma = mean(abs(s))/G.N;
-    [alpha, info] = douglas_rachford(param.guess,fl1,ffid,paramsolver);
-else
-    [alpha, info] = forward_backward(param.guess,fl1,ffid,paramsolver);
-end
+[alpha, info] = solvep(param.guess,{fl1,ffid},paramsolver);
 
 end
-
-
-function s = funcA(G,W,x,param)
-    if ~iscell(G)
-        s = gsp_filter_synthesis(G,W,x,param);
-    else
-        NG = numel(G);
-        N = G{1}.N;
-        Nf = numel(W{1});
-        Nx = size(x,2);
-        s = zeros(N,Nx);
-        for ii = 1:NG
-            vec = (1 : Nf*N) + (ii-1) * Nf * N;
-            s = s + gsp_filter_synthesis(G{ii},W{ii},x(vec,:),param);
-        end
-    end
-end
-
-function s = funcAt(G,W,x,param)
-    if ~iscell(G)
-        s = gsp_filter_analysis(G,W,x,param);
-    else
-                NG = numel(G);
-        N = G{1}.N;
-        Nf = numel(W{1});
-        Nx = size(x,2);
-        s = zeros(N*Nf*NG,Nx);
-        for ii = 1:NG
-            vec = (1 : Nf*N) + (ii-1) * Nf * N;
-            s(vec,:) = gsp_filter_analysis(G{ii},W{ii},x,param);
-        end
-    end
-end
-
 
 
 

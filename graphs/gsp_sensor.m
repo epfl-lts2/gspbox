@@ -1,8 +1,8 @@
-function [ G ] = gsp_sensor( N,param)
+function G = gsp_sensor(N, param)
 %GSP_SENSOR Create a random sensor graph
-%   Usage: G = gsp_sensor( N );
+%   Usage: G = gsp_sensor(N);
 %          G = gsp_sensor( );
-%          G = gsp_sensor( N,param );
+%          G = gsp_sensor(N, param);
 %
 %   Input parameters
 %       - N     : Number of nodes (default 128)
@@ -15,12 +15,11 @@ function [ G ] = gsp_sensor( N,param)
 %
 %   param is an optional structure with the following field
 %
-%    param.Nc : Minimum number of connection (default 2)
-%    param.regular*: Flag to fix the number of connections to Nc (default 0)
 %    param.verbose*: display parameter - 0 no log - 1 display the errors (default 1)
-%    param.N_try*: Number of attempts to create the graph (default 50)
+%    param.N_try*: Number of attempts to create the graph (default 10)
 %    param.distribute*: To distribute the points more evenly (default 0)
 %    param.connected*: To force the graph to be connected (default 1)
+%    param.nnparam*: optional parameter for the gsp_nn_graph
 %
 %
 %   Example:
@@ -33,7 +32,7 @@ function [ G ] = gsp_sensor( N,param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_sensor.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -60,119 +59,77 @@ function [ G ] = gsp_sensor( N,param)
 % Author: Nathanael Perraudin
 
 
-if nargin< 2
-   param=struct;
+if nargin < 2
+    param = struct;
 end
-if nargin<1
-   N=64; 
+if nargin < 1
+    N = 64;
 end
 
-if ~isfield(param, 'Nc'), param.Nc = 2; end
-if ~isfield(param, 'regular'), param.regular = 0; end
+if N<6
+    error('N needs to be greater than 6')
+end
+
 if ~isfield(param, 'verbose'), param.verbose = 1; end
-if ~isfield(param, 'N_try'), param.N_try = 50; end
+if ~isfield(param, 'N_try'), param.N_try = 10; end
 if ~isfield(param, 'distribute'), param.distribute = 0; end
 if ~isfield(param, 'connected'), param.connected = 1; end
+if ~isfield(param, 'nnparam'), param.nnparam = {}; end
+if ~isfield(param.nnparam, 'k'), param.nnparam.k = 6; end
+
 
 
 if param.connected
     for n=1:param.N_try
-
-
-        [W, XCoords, YCoords] = create_weight_matrix(N,param);
-
-
-        if gsp_check_connectivity_undirected(W)
+        [ XCoords, YCoords] = create_coords(N,param.distribute);
+        % sort rows for plotting reasons
+        G = gsp_nn_graph(sortrows([XCoords, YCoords]),param.nnparam);
+        if gsp_check_connectivity(G)
             break;
-        elseif n==param.N_try
-            fprintf(' Warning! Graph is not connected\n');
+        elseif n == param.N_try
+            fprintf('Warning! Graph is not connected\n');
         end
-
     end
 else
-    [W, XCoords, YCoords] = create_weight_matrix(N,param);
+    [ XCoords, YCoords] = create_coords(N,param.distribute);
+    % sort rows for plotting reasons
+    G = gsp_nn_graph(sortrows([XCoords, YCoords]),param.nnparam);
 end
-
 
 % Return the values
-G.W=sparse(W);
-G.W = gsp_symetrize(G.W);
 
-G.plotting.limits=[0,1,0,1];
-G.N=N;
-G.coords=[XCoords,YCoords];
-if param.regular
-    G.type='regular sensor';
-else
-    G.type='sensor';
-end
+G.type = 'sensor';
 
-G.directed=0;
-        
-G = gsp_graph_default_parameters( G );
+
+G = gsp_graph_default_parameters(G);
 end
 
 
 
-function [W, XCoords, YCoords] = create_weight_matrix(N,param)
+function [ XCoords, YCoords] = create_coords(N,distribute)
 
 
-    XCoords = zeros(N,1);
-    YCoords = zeros(N,1);
-    if param.distribute
-        mdim=ceil(sqrt(N));
-        ind=1;
-        for ii=0:mdim-1
-           for jj=0:mdim-1
-              if ind<=N
-                XCoords(ind) = 1/mdim*rand(1)+ii*1/mdim;           
+XCoords = zeros(N,1);
+YCoords = zeros(N,1);
+if distribute
+    mdim=ceil(sqrt(N));
+    ind=1;
+    for ii=0:mdim-1
+        for jj=0:mdim-1
+            if ind<=N
+                XCoords(ind) = 1/mdim*rand(1)+ii*1/mdim;
                 YCoords(ind) = 1/mdim*rand(1)+jj*1/mdim;
-              end
-              ind = ind+1;
-           end
+            end
+            ind = ind+1;
         end
-    else
-        % take random coordinates in a 1 by 1 square
-        XCoords = rand(N,1);
-        YCoords = rand(N,1);
     end
-
-
-    % Compute the distanz between all the points
-
-
-    target_dist_cutoff = 2*N^(-0.5);
-    T = .6; 
-    s = sqrt(-target_dist_cutoff^2/(2*log(T)));
-    d = gsp_distanz([XCoords,YCoords]'); 
-    W = exp(-d.^2/(2*s^2)); 
-
-    W=W-diag(diag(W));  
-    
-    if param.regular
-        W = get_nc_connection(W,param);
-    else
-        W2 = get_nc_connection(W,param);
-        W(W<T) = 0; % Thresholding to have sparse matrix 
-        W(W2>0) = W2((W2>0));
-    end
-    
+else
+    % take random coordinates in a 1 by 1 square
+    XCoords = rand(N,1);
+    YCoords = rand(N,1);
 end
 
 
-function W = get_nc_connection(W,param)
-    N = size(W,1);
-    Wtemp = W;
-    W = zeros(size(W)); % Start with an empty matrix
-    for ii=1:N
-        l=Wtemp(ii,:);
-       for jj=1:param.Nc
-          [val,ind] = max(l);
-          W(ii,ind) = val;
-          l(ind)=0;
-       end
-    end
-    W=(W+W')/2;
-        
 end
+
 

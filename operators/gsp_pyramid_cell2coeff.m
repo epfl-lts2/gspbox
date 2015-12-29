@@ -17,7 +17,8 @@ function coeff = gsp_pyramid_cell2coeff(ca,pe)
 %           [ca,pe] = gsp_pyramid_analysis(Gs, f);
 %           coeff = gsp_pyramid_cell2coeff(ca,pe);
 %
-%   See also: gsp_pyramid_analysis gsp_pyramid_synthesis gsp_kron_pyramid
+%   See also: gsp_pyramid_analysis gsp_pyramid_synthesis
+%             gsp_graph_multiresolution
 %
 %   Demo: gsp_demo_pyramid
 %
@@ -25,7 +26,7 @@ function coeff = gsp_pyramid_cell2coeff(ca,pe)
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_pyramid_cell2coeff.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

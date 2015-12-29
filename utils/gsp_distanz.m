@@ -1,19 +1,19 @@
-function d = gsp_distanz(x,y,P)
-%GSP_DISTANZ calculates the distances between all vectors in x and y
-%   Usage: d = gsp_distanz(x,y);
+function D = gsp_distanz(X, Y, P)
+%GSP_DISTANZ calculates the distances between all vectors in X and Y
+%   Usage: D = gsp_distanz(X, Y);
 %
 %   Input parameters:
-%       x   : matrix with col vectors
-%       y   : matrix with col vectors (default == x)
+%       X   : matrix with col vectors
+%       Y   : matrix with col vectors (default == x)
 %       P   : distance matrix (default Identity)
 %   Output parameters:
-%       d   : distance matrix, not squared
+%       D   : distance matrix, not squared
 %
-%   This code compute the following
+%   This code computes the following
 %
-%      d = ( (x-y)^T P (x-y) )^(0.5)
+%      D = ( (X-Y)^T P (X-Y) )^(0.5)
 %
-%   for all vectors in x an y!
+%   for all vectors in X an Y!
 %   
 %   This code is not optimized for memory, but for speed because it uses no
 %   loops.
@@ -22,7 +22,7 @@ function d = gsp_distanz(x,y,P)
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_distanz.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -43,45 +43,53 @@ function d = gsp_distanz(x,y,P)
 %     ArXiv e-prints, Aug. 2014.
 % http://arxiv.org/abs/1408.5781
 
+% Testing: test_gsp_distanz
+
 
 
 
 % Handle Input parameters
 if nargin<1, error('Not enought inputs parameters!'); end
-if nargin<2,  y=x; end
+if nargin<2,  Y=X; end
 
 % Get the size
-[rx,cx] = size(x);
-[ry,cy] = size(y);
+[rx, cx] = size(X);
+[ry, cy] = size(Y);
 
 % Verify the size
 if rx~=ry, error('The sizes of x and y do not fit!'), end
 
 if nargin < 3 
-    xx = sum(x.*x,1); % ||x||^2
-    yy = sum(y.*y,1); % ||y||^2 
-    xy = x'*y;        % <y,x>
+    xx = sum(X.*X,1); % ||x||^2
+    yy = sum(Y.*Y,1); % ||y||^2 
+    xy = X'*Y;        % <y,x>
     % \|x-y\|^2 = ||x||^2 +||y||^2 - 2 <y,x> 
-    d = abs(repmat(xx',[1 cy]) + repmat(yy,[cx 1]) - 2*xy);
+    D = abs(repmat(xx',[1 cy]) + repmat(yy,[cx 1]) - 2*xy);
 else
     
     [rp,rp2] = size(P);
     if rx~=rp, error('The sizes of x and P do not fit!'), end
     if rp2~=rp, error('P must be square!'), end
     
-    xx = sum(x .* (P* x),1 ); % x^T P x
-    yy = sum(y .* (P* y),1 ); % y^T P y 
-    xy = x'*(P*y);        % x^T P y
-    yx = y'*(P*x);        % x^T P y
+    xx = sum(X .* (P* X),1 ); % x^T P x
+    yy = sum(Y .* (P* Y),1 ); % y^T P y 
+    xy = X'*(P*Y);        % x^T P y
+    yx = Y'*(P*X);        % x^T P y
 
-    d = abs(repmat(xx',[1 cy]) + repmat(yy,[cx 1]) - xy-yx);
+    D = abs(repmat(xx',[1 cy]) + repmat(yy,[cx 1]) - xy-yx);
 end
 
-if sum(d(:)<0)
+if sum(D(:)<0)
     warning('gsp_distanz: P is not semipositive or x is not real!')
 end
     
 % Take the square root
-d = sqrt(d);
+D = sqrt(D);
+
+if nargin < 2   % if Y == X
+    % The diagonal has to be zero!
+    D(1:cx+1:end) = 0;
+end
+
 
 

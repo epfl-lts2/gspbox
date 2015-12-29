@@ -1,24 +1,21 @@
-function W = gsp_symetrize(W, type)
-%GSP_SYMETRIZE symetrize a matrix
-%   Usage:  W = gsp_symetrize(W)
-%           W = gsp_symetrize(W, type)
+function gw = gsp_warp_filter(g,w)
+%GSP_WARP_FILTER Warp the filterbank g with the filter w
+%   Usage: gw = gsp_warp_filter(g,w);
 %
 %   Input parameters:
-%       W       : square matrix
-%       type    : type of symetrization (default 'average')
+%       g   : filterbank
+%       w   : warping filter
+%
 %   Output parameters:
-%       W       : symetrized matrix
+%       gw  : warped filterbank
 %
-%   The availlable symetrization types are:
-%    'average' : average of W and W^T (default)
-%    'full'    : copy the missing entries
-%    'none'    : nothing is done (the matrix might stay unsymetric!)
+%   The resulting filter gw is gw(x)=w(g(x)).
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_symetrize.php
+%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_warp_filter.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -40,26 +37,19 @@ function W = gsp_symetrize(W, type)
 % http://arxiv.org/abs/1408.5781
 
 % Author: Nathanael Perraudin
-% Date  : 17 Janvier 2015
+% Date  : 30 September 2015
 
-if nargin < 2
-    type = 'average';
+Nf = numel(g);
+
+if ~iscell(g)
+    g = {g};
 end
 
-switch type
-    case 'average'
-        W = (W+W.')/2;
-    case 'full'
-        A = W>0;
-        M = logical(A - (A' & A));
-        Wt = W';
-        W(M') = Wt(M');
-        
-    case 'none'
-        return
-    otherwise
-        error('GSP_SYMETRIZE: Unknown type')
+gw = cell(Nf,1);
+
+for ii = 1:Nf
+    gw{ii} = @(x) w(g{ii}(x));
 end
 
-end
 
+end

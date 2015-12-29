@@ -52,7 +52,6 @@ function [c] = gsp_filter_analysis(G, fi, s, param)
 %    param.method  : Select the method ot be used for the computation. 
 %      'exact'     : Exact method using the graph Fourier matrix
 %      'cheby'     : Chebyshev polynomial approximation
-%      'cheby_p'     : Chebyshev polynomial approximation
 %      'lanczos'   : Lanczos approximation
 %     Default: if the Fourier matrix is present: 'exact' otherwise 'cheby'
 %    param.order : Degree of the Chebyshev approximation
@@ -72,7 +71,7 @@ function [c] = gsp_filter_analysis(G, fi, s, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_filter_analysis.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -116,9 +115,11 @@ if iscell(G)
     return
 end
 
-
-Nf = length(fi);
-
+if isnumeric(fi)
+    Nf = size(fi,2);
+else    
+    Nf = numel(fi);
+end
 
 if isfield(param, 'exact')
     warning('param.exact is not used anymore. Please use param.method instead');
@@ -161,9 +162,11 @@ switch param.method
         end
         Nv = size(s,2);
         c = zeros(G.N*Nf,Nv);
-
-        fie = gsp_filter_evaluate(fi,G.e);
-
+        if isnumeric(fi)
+            fie = fi;
+        else
+            fie = gsp_filter_evaluate(fi,G.e);
+        end
         for ii=1:Nf
             c((1:G.N)+G.N * (ii-1),:)= gsp_igft(G, ...
                 repmat(fie(:,ii),1,Nv) ...

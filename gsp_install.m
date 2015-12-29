@@ -12,7 +12,7 @@ function [  ] = gsp_install(  )
 %   Url: http://lts2research.epfl.ch/gsp/doc/gsp_install.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -49,20 +49,21 @@ catch
     warning('Could not install GAIMC')
 end
 
-fprintf('Install the UNLocBoX: ')
-try
-    outputdir = [GLOBAL_gsppath,FS,'3rdparty'];
-    if isunix
-        tarfilename = 'http://unlocbox.sourceforge.net/unlocbox.tar.gz';
-        untar(tarfilename,outputdir)        
-    else
-        zipfilename = 'http://unlocbox.sourceforge.net/unlocbox.zip';
-        unzip(zipfilename,outputdir)
-    end
-    fprintf('Installation sucessfull!\n\n')
-catch
-    warning('Could not install the UNLocBox')
-end
+%% To be fixed !
+% fprintf('Install the UNLocBoX: ')
+% try
+%     outputdir = [GLOBAL_gsppath,FS,'3rdparty'];
+%     if isunix
+%         tarfilename = 'http://unlocbox.sourceforge.net/unlocbox.tar.gz';
+%         untar(tarfilename,outputdir)        
+%     else
+%         zipfilename = 'http://unlocbox.sourceforge.net/unlocbox.zip';
+%         unzip(zipfilename,outputdir)
+%     end
+%     fprintf('Installation sucessfull!\n\n')
+% catch
+%     warning('Could not install the UNLocBox')
+% end
 
 gsp_make;
 

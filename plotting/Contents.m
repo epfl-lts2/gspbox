@@ -8,7 +8,6 @@
 %    gsp_plot_signal_spectral   -  Plot a signal in the specral domain
 %    gsp_plot_sgram             -  Plot a spectrogram
 %    gsp_plot_filter            -  Plot a cell array of filters
-%    gsp_graph_default_plotting_parameters - Plotting helping function
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  gspbox 'dash' support 'at' groupes 'dot' epfl 'dot' ch
@@ -17,7 +16,7 @@
 %   Url: http://lts2research.epfl.ch/gsp/doc/plotting/Contents.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

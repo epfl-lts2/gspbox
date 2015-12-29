@@ -33,7 +33,7 @@ function gsp_plot_graph(G,param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/plotting/gsp_plot_graph.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -64,11 +64,17 @@ if nargin<2
    param = struct;
 end
 
+if ~numel(G.coords)
+    error('There is no coordinates associated to this graph!');
+end
+
 
 if ~isfield(param,'show_edges')  
 	param.show_edges=G.Ne<10000;
 end
 
+if ~isfield(param,'clear'), param.clear = 1; end
+if ~isfield(param,'edge_size'), param.edge_size = 0; end
 
 
   
@@ -84,7 +90,9 @@ else
     end
     
     % Clear axes
-    cla;
+    if param.clear
+        cla;
+    end
     G = gsp_graph_default_plotting_parameters(G);
     
     % TODO: To be changed
@@ -107,38 +115,7 @@ else
     
     
     if param.show_edges
-        [ki,kj]=find(G.A);
-        if G.directed
-            
-            if size(G.coords,2)==2
-                In  = [G.coords(ki,1),G.coords(ki,2)]; 
-                Fin = [G.coords(kj,1),G.coords(kj,2)]; 
-                V=Fin-In;
-                quiver(G.coords(ki,1),G.coords(ki,2),V(:,1),V(:,2),0,...
-                        '-r','LineWidth',G.plotting.edge_width);
-            else
-                In  = [G.coords(ki,1),G.coords(ki,2),G.coords(ki,3)]; 
-                Fin = [G.coords(kj,1),G.coords(kj,2),G.coords(kj,3)]; 
-                V=Fin-In;
-                quiver3(G.coords(ki,1),G.coords(ki,2),G.coords(ki,3),...
-                    V(:,1),V(:,2),V(:,3),0,...
-                        '-r','LineWidth',G.plotting.edge_width);
-            end
-        else
-            %gplot23D(G.A,G.coords,G.plotting.edge_style,'LineWidth',G.plotting.edge_width,'Color',G.plotting.edge_color); 
-            if size(G.coords,2) == 2
-                plot([G.coords(ki,1)';G.coords(kj,1)'],...
-                    [G.coords(ki,2)';G.coords(kj,2)'],...
-                    G.plotting.edge_style, 'LineWidth',G.plotting.edge_width,...
-                    'Color',G.plotting.edge_color);
-            else
-                    plot3([G.coords(ki,1)';G.coords(kj,1)'],...
-                    [G.coords(ki,2)';G.coords(kj,2)'],...
-                    [G.coords(ki,3)';G.coords(kj,3)'],...
-                    G.plotting.edge_style, 'LineWidth',G.plotting.edge_width,...
-                    'Color',G.plotting.edge_color);
-            end
-        end
+        gsp_plot_edges(G,param);
     end
 
     for i=1:num_clusters

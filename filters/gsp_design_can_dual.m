@@ -1,9 +1,10 @@
-function [ gd ] = gsp_design_can_dual( g )
+function [ gd ] = gsp_design_can_dual( g ,tol)
 %GSP_DESIGN_CAN_DUAL This function return the canonical dual filters of g
 %   Usage:  gd = gsp_design_can_dual( g );
 %
 %   Inputs parameters:
 %       g       : cell array of filters
+%       tol     : tolerance for the pseudo-inverse
 %
 %   Ouputs parameters:
 %       g       : cell array of filters
@@ -37,7 +38,7 @@ function [ gd ] = gsp_design_can_dual( g )
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_design_can_dual.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -62,20 +63,24 @@ function [ gd ] = gsp_design_can_dual( g )
 % Date  : 30 December 2014
 % Testing: test_dual
 
+if nargin<2
+    tol = 1e-8;
+end
+
 Nf = length(g);
 gd = cell(Nf,1);
 
 for ii = 1:Nf
-    gd{ii} = @(x) can_dual(g,ii,x);
+    gd{ii} = @(x) can_dual(g,ii,x,tol);
 end
     
 end
 
 
-function ret = can_dual(g,n,x)
+function ret = can_dual(g,n,x,tol)
     [N1, N2] = size(x);
     x = x(:);
-    sol = gsp_evaluate_can_dual( g,x );
+    sol = gsp_evaluate_can_dual( g,x,tol );
     ret = sol(:,n);
     ret = reshape(ret,N1,N2);
 end

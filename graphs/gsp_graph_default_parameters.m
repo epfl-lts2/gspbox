@@ -1,6 +1,6 @@
-function [ G ] = gsp_graph_default_parameters( G )
+function G = gsp_graph_default_parameters(G)
 %GSP_GRAPH_DEFAULT_PARAMETERS load default parameters for graphs
-%   Usage: G = gsp_graph_default_parameters( G );
+%   Usage: G = gsp_graph_default_parameters(G);
 %          G = gsp_graph_default_parameters();
 %
 %   Input parameters
@@ -21,14 +21,14 @@ function [ G ] = gsp_graph_default_parameters( G )
 %          W = rand(30);
 %          W = (W + W')/2;
 %          G.W = W - diag(diag(W));
-%          G = gsp_graph_default_parameters( G )
+%          G = gsp_graph_default_parameters(G)
 %
 %   This function can be used to update the weights of your graph. It will
 %   recompute the Laplacian operator. Warning this function does not
 %   perform any change to the Fourier basis:
 %
-%          G.W =Wnew;
-%          G = gsp_graph_default_parameters( G );
+%          G.W = Wnew;
+%          G = gsp_graph_default_parameters(G);
 %
 %
 %   List of parameters of the graph structure
@@ -44,7 +44,7 @@ function [ G ] = gsp_graph_default_parameters( G )
 %    G.directed*: 1 if the graph is directed, 0 if not
 %    G.lap_type*: Laplacian type (default 'combinatorial') See the
 %     function GSP_CREATE_LAPLACIAN for a exhaustive list of the
-%     availlable laplacians.
+%     available laplacians.
 %    G.d*: Degree vector (Computed with G.W*)
 %    G.Ne*: Number of edges
 %    G.coords*: Coordinates of the vertices (default (0,0) )
@@ -65,7 +65,7 @@ function [ G ] = gsp_graph_default_parameters( G )
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_graph_default_parameters.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -111,6 +111,10 @@ if ~isfield(G,'directed')
     G.directed = gsp_isdirected(G); 
 end; 
 
+if ~isfield(G,'hypergraph')
+    G.hypergraph = 0; 
+end; 
+
 % Create the graph Laplacian
 if ~isfield(G,'lap_type')
     G.lap_type='combinatorial';
@@ -123,15 +127,16 @@ end
 G.d = sum(G.W,2);
 
 % Number of edges
-G.Ne = nnz(G.W);
-
+if G.directed
+    G.Ne = nnz(G.W);
+else
+    G.Ne = nnz(G.W)/2;
+end
 
 if ~isfield(G,'coords') % Coordonates
-    G.coords = zeros(G.N,2); 
+    G.coords = []; 
 end
 
 G = gsp_graph_default_plotting_parameters(G);
 
 end
-
-

@@ -1,4 +1,4 @@
-% GSPBOX - Proximal operators
+% GSPBOX - Proximal operators and other solvers
 %
 %  Gradient based proximal operators
 %    gsp_prox_tv       - Prox TV on graphs
@@ -8,6 +8,7 @@
 %    gsp_proj_b2_filterbank - Projection on the B2 ball
 %    gsp_prox_l2_filterbank - L2 norm proximal operator
 %    gsp_prox_l1_filterbank - L1 norm proximal operator
+%    gsp_proj_filterbank    - Projection onto the synthesis coefficients
 %
 %  Wavelet based operator
 %    gsp_wavelet_dn         - Wavelets denoising
@@ -21,7 +22,7 @@
 %   Url: http://lts2research.epfl.ch/gsp/doc/prox/Contents.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

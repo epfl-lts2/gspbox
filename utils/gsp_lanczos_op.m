@@ -4,7 +4,7 @@ function c = gsp_lanczos_op(G,fi,s,param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_lanczos_op.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -34,19 +34,24 @@ Nv = size(s,2);
 c = zeros(G.N*Nf,Nv);
 
 for jj = 1:Nv
-    [V,H] = lanczos(G.L, param.order, s(:,jj));
+    
+    if sum(abs(s(:,jj)))>eps
+        [V,H] = lanczos(G.L, param.order, s(:,jj));
 
-    [Uh, Eh] = eig(H);
-
-
-    Eh = diag(Eh);
-    Eh(Eh<0) = 0;
-    fie = gsp_filter_evaluate(fi,Eh);
-    V = V*Uh;
+        [Uh, Eh] = eig(H);
 
 
-    for ii=1:Nf
-       c((1:G.N) + G.N*(ii-1),jj) = V * (fie(:, ii) .* (V'*s(:,jj)));
+        Eh = diag(Eh);
+        Eh(Eh<0) = 0;
+        fie = gsp_filter_evaluate(fi,Eh);
+        V = V*Uh;
+
+
+        for ii=1:Nf
+           c((1:G.N) + G.N*(ii-1),jj) = V * (fie(:, ii) .* (V'*s(:,jj)));
+        end
+    else
+        c(:,jj) = 0;
     end
 end
 

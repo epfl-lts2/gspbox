@@ -1,10 +1,11 @@
-function [ s ] = gsp_evaluate_can_dual( g,val )
+function [ s ] = gsp_evaluate_can_dual( g,val,tol )
 %GSP_EVALUATE_CAN_DUAL Evaluate the canonical dual filterbank
 %   Usage: hcoeff = gsp_evaluate_can_dual( g,val )
 %
 %   Inputs parameters:
 %       g       : cell array of filters
 %       val     : column vectors of values
+%       tol     : tolerance
 %
 %   Ouputs parameters:
 %       s       : Matrix of value
@@ -18,7 +19,7 @@ function [ s ] = gsp_evaluate_can_dual( g,val )
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_evaluate_can_dual.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -43,6 +44,11 @@ function [ s ] = gsp_evaluate_can_dual( g,val )
 % Date  : 14 June 2014
 % Testing: test_dual
 
+if nargin<3
+    tol = 1e-10;
+end
+
+
 % TODO: size should be improved
 N = length(val);
 
@@ -55,7 +61,7 @@ gcoeff = gsp_filter_evaluate(g,val)';
 %     s(ii,:) =  pinv(gcoeff(ii,:)'); 
 % end
 
-s = arrayfun(@(x) pinv(gcoeff(:, x)), 1 : N, 'UniformOutput', false);
+s = arrayfun(@(x) pinv(gcoeff(:, x),tol), 1 : N, 'UniformOutput', false);
 s = cell2mat(s');
 end
 

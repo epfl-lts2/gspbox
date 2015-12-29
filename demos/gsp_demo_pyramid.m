@@ -3,12 +3,10 @@
 %   In this demonstration file, we show how to reduce a graph using the
 %   GSPBox. Then we apply the pyramid to simple signal.
 %
-%   The function GSP_KRON_PYRAMID computes the graph pyramid for you:
+%   The function GSP_GRAPH_MULTIRESOLUTION computes the graph pyramid for you:
 %
 %             param.sparsify = 1;
-%             param.epsilon = 0.1;
-%             param.filters = @(x) 5 ./ ( 5 + x ); 
-%             Gs = gsp_kron_pyramid(G, Nlevel,param);
+%             Gs = gsp_graph_multiresolution(G, Nlevel,param);
 %
 %   Gs is a cell array of graph representing the pyramid of graphs. Here
 %   all optional parameter are important:
@@ -18,7 +16,7 @@
 %     sparsify the graph for each sublevel. The function
 %     GSP_GRAPH_SPARSIFY is used to perform this operation. However, this
 %     could lead to bad graphs (disconnected for instance).
-%    param.epsilon*: is the level of sparsification. 
+%    sparsify_epsilon*: Parameter epsilon used in the sparsification
 %    param.filters*: is a cell array of filters (or a single filter).
 %     Thoses filter will be used in the analysis and synthesis operator.
 %
@@ -74,7 +72,7 @@
 %
 %
 %   Finnaly, you can perform a synthesis operation using the function
-%   GSP_PYRAMID_SYNTHESIS:
+%   GSP_PYRAMID_SYNTHESIS :
 %   
 %             coeff = gsp_pyramid_cell2coeff(ca,pe);
 %             f_pred = gsp_pyramid_synthesis(Gs,coeff);
@@ -87,7 +85,7 @@
 %   Url: http://lts2research.epfl.ch/gsp/doc/demos/gsp_demo_pyramid.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -128,9 +126,7 @@ Nlevel = 5;
 %% Compute the graph decomposition
 
 param.sparsify = 1;
-param.epsilon = 0.1;
-param.filters = @(x) 5 ./ ( 5 + x ); 
-Gs = gsp_kron_pyramid(G, Nlevel,param);
+Gs = gsp_graph_multiresolution(G, Nlevel,param);
 Gs = gsp_compute_fourier_basis(Gs);
 % % Compute lmax for each subgraph
 %  Gs = gsp_estimate_lmax(Gs);
@@ -154,18 +150,18 @@ figure
 gsp_plot_signal(G,f)
 
 
-[ca,pe]=gsp_pyramid_analysis(Gs,f);
+[ca,pe]=gsp_pyramid_analysis(Gs,f,Nlevel);
 
 figure
-paramplot.show_edges = 0;
-for ii = 1:numel(Gs)
+paramplot.show_edges = 1;
+for ii = 1:Nlevel
     subplot(2,3,ii)
     gsp_plot_signal(Gs{ii},pe{ii},paramplot);
     title(['P. E. level: ', num2str(ii-1)]);
 end
 
 figure
-for ii = 1:numel(Gs)
+for ii = 1:Nlevel+1
     subplot(2,3,ii)
     gsp_plot_signal(Gs{ii},ca{ii},paramplot)
     title(['C. A. level: ', num2str(ii-1)]);
@@ -175,8 +171,7 @@ end
 
 %% Perform sythesis
 
-coeff = gsp_pyramid_cell2coeff(ca,pe);
-f_pred = gsp_pyramid_synthesis(Gs,coeff);
+f_pred = gsp_pyramid_synthesis(Gs,ca{end},pe);
 
 err = norm(f_pred-f)/norm(f);
 

@@ -71,7 +71,7 @@ function [sol, info] = gsp_prox_l2_filterbank(x, gamma, G, W, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/prox/gsp_prox_l2_filterbank.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -99,10 +99,8 @@ function [sol, info] = gsp_prox_l2_filterbank(x, gamma, G, W, param)
 %
 
 
-
-
 if nargin < 3
-    error('GSP_PROX_TV: You need to provide a graph!');
+    error('GSP_PROX_L2_FILTERBANK: You need to provide a graph!');
 end
 
 if nargin < 4, param=struct; end
@@ -122,7 +120,7 @@ if ~isfield(param, 'ntig'), param.ntig = 1; end
 
 if ~isfield(G,'lmax')
     G = gsp_estimate_lmax(G);
-    warning(['GSP_PROX_TV: To be more efficient you should run: ',...
+    warning(['GSP_PROX_L2_FILTERBANK: To be more efficient you should run: ',...
         'G = gsp_estimate_lmax(G); before using this proximal operator.']);
 end
 

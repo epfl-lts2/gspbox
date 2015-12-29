@@ -22,14 +22,14 @@ function G = gsp_rmse_mv_graph(X,param)
 %    param.sigma     : float               the variance of the distance kernel
 %    param.k         : int                 number of neighbors for knn
 %    param.epsilon   : float               the radius for the range search
-%    param.symetrize_type*: ['average','full'] symetrization type (default 'full')
+%    param.symmetrize_type*: ['average','full'] symmetrization type (default 'full')
 %    param.center    : [0, 1]              center the data
 %    param.rescale   : [0, 1]              rescale the data (in a 1-ball)
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_rmse_mv_graph.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -58,11 +58,10 @@ if nargin<2
     param = struct;
 end
 
-if ~isfield(param, 'sigma'), param.sigma = 1; end
 if ~isfield(param, 'epsilon'), param.epsilon = 0.01; end
 if ~isfield(param, 'verbose'), param.verbose = 1; end
 if ~isfield(param, 'k'), param.k = 10; end
-if ~isfield(param, 'symetrize_type'), param.symetrize_type = 'average'; end
+if ~isfield(param, 'symmetrize_type'), param.symmetrize_type = 'average'; end
 if ~isfield(param, 'type'), param.type = 'knn'; end
 if ~isfield(param, 'center'), param.center = 1; end
 if ~isfield(param, 'rescale'), param.rescale = 1; end
@@ -103,25 +102,30 @@ end
 
 
 p.verbose = param.verbose;
-C = gsp_rmse_mv(Xout',p);
+C = gsp_rmse_mv(transpose(Xout),p);
 C = C*sqrt(d);
-sigma = param.sigma;
+
 
 
 % sparsification
 switch param.type
     case 'knn'
-        W = exp(-C.^2/sigma);
-        W = W-diag(diag(W));
-        for ii=1:size(W,1)
-            [~,sortIndex] = sort(W(ii,:),'descend');  %# Sort the values in
-                                                      %#   descending order
-            W(ii,sortIndex(param.k+1:end)) = 0;
+        for ii=1:size(C,1)
+            [~,sortIndex] = sort(C(ii,:),'ascend');  %# Sort the values in
+                                                     %#   descending order
+            C(ii,sortIndex(param.k+2:end)) = 0;
         end
-        W = gsp_symetrize(W,param.symetrize_type);
+        if ~isfield(param, 'sigma'), param.sigma = mean(C(C>0))^2; end
+        
+        W = spfun(@(x) exp(-x.^2/param.sigma),sparse(C));
+        W = W-diag(diag(W));
+
+        W = gsp_symmetrize(W,param.symmetrize_type);
     case 'radius'
+        if ~isfield(param, 'sigma'), param.sigma = param.epsilon.^2/2; end
+
         C(C>param.epsilon) = 0;
-        W = exp(-C.^2/sigma);
+        W = spfun(@(x) exp(-x.^2/param.sigma),sparse(C));
         W = W-diag(diag(W));
     otherwise
        error('Unknown type : allowed values are knn, radius');
@@ -129,7 +133,9 @@ end
 
 
 % Create the graph
-G = gsp_graph(sparse(W));
+G = gsp_graph(W,Xout);
+G.type = 'RMSE MV';
+G.sigma = param.sigma;
 
 
         

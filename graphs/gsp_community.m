@@ -22,12 +22,13 @@ function [G] = gsp_community(N, param)
 %     to be equal to N. Leave this field empty if you want random sizes.
 %    param.min_comm : Minimum size of the community 
 %     (default: round(N / param.Nc / 3) )
-%    param.min_deg: Minimum degree of each nodes (default:
+%    param.min_deg*: Minimum degree of each nodes (default:
 %     round(param.min_comm / 2)) (NOT WORKING YET!)
 %    param.size_ratio*: ratio between radius of world and radius of
 %     communities (default 1)
 %    param.world_density  probability of a random edge between any pair
 %     of nodes (default 1/N)
+%
 %
 %   Example:
 %
@@ -36,10 +37,11 @@ function [G] = gsp_community(N, param)
 %          gsp_plot_graph(G,paramplot);
 %
 %
+%
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_community.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -60,7 +62,7 @@ function [G] = gsp_community(N, param)
 %     ArXiv e-prints, Aug. 2014.
 % http://arxiv.org/abs/1408.5781
 
-% Author: Vassilis Kalofolias, Nathanael Perraudin
+% Author: Vassilis Kalofolias, Nathanael Perraudin, Johan Paratte
 % Date: March 2014
 % Testing: test_graphs
 
@@ -131,7 +133,7 @@ end
 
 % add the offset for each node depending on which community it belongs to
 info.node_com = zeros(N, 1);
-for ii = 1:(param.Nc-1)
+for ii = 1:(param.Nc)
     com_size = param.com_sizes(ii);
     rad_com = sqrt(com_size);
 
@@ -141,21 +143,55 @@ for ii = 1:(param.Nc-1)
 end
     
 
-% TODO: this can (and should to prevent overlap) be done for each community separately!
-D = gsp_distanz(G.coords');
-%R = rmse_mv(G.coords')*sqrt(2);
-%W = graph_k_NN(exp(-D.^2), param.min_deg);
-W = exp(-D.^2);
-W(W<1e-3) = 0;
 
+% TODO: this can (and should to prevent overlap) be done for each community separately!
+% D = gsp_distanz(G.coords');
+% %R = rmse_mv(G.coords')*sqrt(2);
+% %W = graph_k_NN(exp(-D.^2), param.min_deg);
+% W = exp(-D.^2);
+% W(W<1e-3) = 0;
 
 %TODO: this could be more sophisticated (e.g. one sigma for communities,
 %one sigma for inter-community connections, exp(-d^2/sigma) weights!
+% W = W + abs(sprandsym(N, param.world_density));
+% W = double(abs(W) > 0);
+% G.W = sparse(W);
+
+% Fast (and scalable) implementation of the above
+kdt = KDTreeSearcher(G.coords, 'distance', 'euclidean');
+epsilon = sqrt(-log(1e-3));
+[NN, D] = rangesearch(kdt, G.coords, epsilon, 'distance', 'euclidean' );
+
+%Counting non-zero elements
+count = 0;
+for ii = 1:N
+   count = count + length(NN{ii}) - 1; 
+end
+
+spi = zeros(count,1);
+spj = zeros(count,1);
+spv = ones(count,1);
+start = 1;
+
+
+% Fill the 3-col values with [i, j, exp(-d(i,j)^2 / sigma)]
+for ii = 1:N
+    len = length(NN{ii}) - 1;
+    spi(start:start+len-1) = repmat(ii, len, 1);
+    spj(start:start+len-1) = NN{ii}(2:end)';
+%     spv(start:start+len-1) = exp(-D{ii}(2:end).^2);
+    start = start + len;
+end
+
+W = sparse(spi, spj, spv, N, N);
+
+% Adding the sparse rand connections
 W = W + abs(sprandsym(N, param.world_density));
 W = double(abs(W) > 0);
 
-G.W = sparse(W);
-G.type = 'Community';
+G.W = W;
+
+G.type = 'community';
 
 % return additional info about the communities
 info.com_lims = com_lims;

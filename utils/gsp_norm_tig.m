@@ -2,6 +2,7 @@ function [ ntig ] = gsp_norm_tig( G,g, exact,M,param )
 %GSP_NORM_TIG Compute the norm of the tig of a frame
 %   Usage:  gsp_norm_tig( G,g );
 %           gsp_norm_tig( G,g, exact );
+%
 %   Input parameters:
 %       G       : Graph
 %       g       : filterbank
@@ -13,13 +14,14 @@ function [ ntig ] = gsp_norm_tig( G,g, exact,M,param )
 %   This function compute the norm of all atoms of the filterbank g.
 % 
 %   If exact is set to one, you can compute the norm chunk by chunk by
-%   setting M to the size of the desired chunk. If M*=-1, then parpool
-%   is used.
+%   setting M to the size of the desired chunk. If M is -1, then
+%   parpool is used.
+%
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_norm_tig.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

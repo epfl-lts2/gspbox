@@ -24,7 +24,7 @@ function G = gsp_estimate_lmax(G)
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_estimate_lmax.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -57,14 +57,9 @@ if numel(G)>1
     return;
 end
 
-if isfield(G,'Gm')
-    G.Gm = gsp_estimate_lmax(G.Gm);
-    G.lmax = G.Gm.lmax;
-    return;
-end
 
 try
-    opts=struct('tol',5e-3,'p',10,'disp',0);
+    opts=struct('tol',5e-3,'p',min(G.N,10),'disp',0);
     lmax=eigs(G.L,1,'lm',opts);
 
     G.lmax=lmax*1.01; % just increase by 1 percent to be robust to error
@@ -72,5 +67,10 @@ try
 catch
     warning('GSP_ESTIMATE_LMAX: Cannot use the default method')
     G.lmax = 2*max(G.d);
+end
+
+if isfield(G,'Gm')
+    G.lmax = max(G.lmax,max(G.Gm.d));
+    G.Gm.lmax = G.lmax;
 end
 

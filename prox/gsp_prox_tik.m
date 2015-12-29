@@ -73,7 +73,7 @@ function [sol, info] = gsp_prox_tik(x,gamma,G,param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/prox/gsp_prox_tik.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -169,14 +169,14 @@ else
     param_l2.tol = param.tol;
     param_l2.nu = 2*G.lmax*param.nu;
 
-if param.use_matrix
-    D = gsp_grad_mat(G);
-    param_l2.A = @(x) D*param.A(x);
-    param_l2.At = @(x) param.At(D'*x);
-else
-    param_l2.A = @(x) gsp_grad(G,param.A(x));
-    param_l2.At = @(x) param.At(gsp_div(G,x));
-end
+    if param.use_matrix
+        D = gsp_grad_mat(G);
+        param_l2.A = @(x) D*param.A(x);
+        param_l2.At = @(x) param.At(D'*x);
+    else
+        param_l2.A = @(x) gsp_grad(G,param.A(x));
+        param_l2.At = @(x) param.At(gsp_div(G,x));
+    end
     param_l2.verbose = param.verbose;
     param_l2.pcg = param.pcg;
 

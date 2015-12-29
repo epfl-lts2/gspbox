@@ -20,7 +20,7 @@ function [ a ] = gsp_check_weights( W )
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_check_weights.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ function [ a ] = gsp_check_weights( W )
 a = 0;
 
 
-if sum(isinf(W(:)))
+if sum(sum(isinf(W)))
     warning(['GSP_TEST_WEIGHTS: There is infinite value',...
              ' in the weight matrix']);
     a = 1;
@@ -64,7 +64,7 @@ if size(W,1) ~= size(W,2)
     a = 3;
 end
 
-if sum(isnan(W(:)))
+if sum(sum(isnan(W)))
     warning(['GSP_TEST_WEIGHTS: There is infinite value',...
              ' in the weight matrix']);
     a = 4;

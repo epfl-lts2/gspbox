@@ -24,6 +24,8 @@
 %  Low pass filters
 %    gsp_design_heat              -  Design a heat kernel filter
 %    gsp_design_expwin            -  Design a expwin filter
+%    gsp_design_smooth_indicator  -  Design a smooth indicator function
+%
 %  Application
 %    gsp_filter                   -  Shortcut to gsp_filter_analysis
 %    gsp_filter_analysis          -  Analysis operator for filterbank
@@ -36,11 +38,13 @@
 %
 %  Utils
 %    gsp_approx_filter            -  Create an approximation of a filterbank with Chebyshev
-%    gsp_filterbank_matrix        -  Create the analysis operator matrix associated to a filterbank 
 %    gsp_wlog_scales              -  Compute log scale vector for wavelets
 %    gsp_filter_evaluate          -  Evaluate a filterbank
 %    gsp_filterbank_bounds        -  Bound for the filterbank
 %    gsp_tighten_filter           -  Create a filter that tighten the filterbank
+%    gsp_warp_filter              -  Warp a filter
+%    gsp_multiply_filters         -  Multiply two filters
+%    gsp_filterbank_matrix        -  Return the matrix operator associated to a filterbank
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  gspbox 'dash' support 'at' groupes 'dot' epfl 'dot' ch
@@ -49,7 +53,7 @@
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/Contents.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

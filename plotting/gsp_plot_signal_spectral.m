@@ -39,7 +39,7 @@ function gsp_plot_signal_spectral(G,f_hat,param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/plotting/gsp_plot_signal_spectral.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -69,8 +69,8 @@ if nargin < 3
     param = struct;
 end
 
-if ~isfield(param, 'spectral_highlight'), param.highlight = 0; end
-if ~isfield(param, 'spectral_plot_abs'), param.plot_abs = 0; end
+if ~isfield(param, 'highlight'), param.highlight = 0; end
+if ~isfield(param, 'plot_abs'), param.plot_abs = 1; end
 
 if param.plot_abs
     f_hat=abs(f_hat);
@@ -98,7 +98,7 @@ end
 aymax = max(1.1*max(f_hat),1.1*min(f_hat)+eps);
 
 axis([-.1 ceil(max(E)) aymin aymax]);
-set(gca,'fontsize',18)
+% set(gca,'fontsize',18)
 box on;
 hold off;
 end

@@ -39,7 +39,7 @@ function [ g,t ] = gsp_design_meyer(G, Nf, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_design_meyer.php
 
 % Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.4.0
+% This file is part of GSPbox version 0.5.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -98,11 +98,53 @@ end
 t = param.t;
 g = cell(Nf,1);
 
-g{1}= @(x) sgwt_kernel_meyer(t(1)*x,'sf');
+g{1}= @(x) kernel_meyer(t(1)*x,'sf');
 for j=1:Nf-1
-    g{j+1}= @(x) sgwt_kernel_meyer(t(j)*x,'wavelet');
+    g{j+1}= @(x) kernel_meyer(t(j)*x,'wavelet');
 end
 
+
+
+end
+
+
+
+
+function r=kernel_meyer(x,kerneltype)
+% sgwt_kernel_meyer : evaluates meyer wavelet kernel and scaling function
+% function r=sgwt_kernel_meyer(x,kerneltype)
+%
+% Inputs
+% x : array of independent variable values
+% kerneltype : string, either 'sf' or 'wavelet' 
+%
+% Ouputs
+% r : array of function values, same size as x.
+%
+% meyer wavelet kernel : supported on [2/3,8/3]
+% meyer scaling function kernel : supported on [0,4/3]
+%
+% Use of this kernel for SGWT proposed by Nora Leonardi and Dimitri Van De Ville,
+% "Wavelet Frames on Graphs Defined by fMRI Functional Connectivity"
+% International Symposium on Biomedical Imaging, 2011
+l1=2/3;
+l2=4/3;%2*l1;
+l3=8/3;%4*l1;
+v=@(x) x.^4.*(35-84*x+70*x.^2-20*x.^3) ; 
+
+% as we initialize r with zero, computed function will implicitly be zero for
+% all x not in one of the three regions defined above
+r=zeros(size(x));
+switch kerneltype
+  case 'sf'
+    r(x<l1)=1;
+    r(x>=l1 & x<l2)=cos((pi/2)*v(abs(x(x>=l1 & x<l2))/l1-1));
+  case 'wavelet'
+    r(x>=l1 & x<l2)=sin((pi/2)*v(abs(x(x>=l1 & x<l2))/l1-1));
+    r(x>=l2 & x<l3)=cos((pi/2)*v(abs(x(x>=l2 & x<l3))/l2-1));
+  otherwise
+    error(sprintf('unknown kernel type %s',kerneltype));
+end
 
 
 end
