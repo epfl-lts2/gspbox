@@ -1,9 +1,10 @@
-% GSPBOX - Startup
-%
+% GSPBOX - Startup   
+%    
 %  Start
 %    gsp_start         -  Lauch the toolbox
 %    gsp_make          -  Compile the toolbox
 %    gsp_install       -  Install the 3rdparty software and try to compile souces
+%    gsp_install_unlocbox -  Install the UNLocBoX
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  gspbox 'dash' support 'at' groupes 'dot' epfl 'dot' ch
@@ -11,8 +12,8 @@
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/Contents.php
 
-% Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.0
+% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
+% This file is part of GSPbox version 0.5.1
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

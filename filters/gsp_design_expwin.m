@@ -35,8 +35,8 @@ function [g]=gsp_design_expwin(G, bmax, a)
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_design_expwin.php
 
-% Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.0
+% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
+% This file is part of GSPbox version 0.5.1
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -83,7 +83,7 @@ end
 if isstruct(G)
     if ~isfield(G,'lmax')
 %         if param.verbose
-            fprintf('GSP_DESIGN_HEAT has to compute lmax \n')
+            fprintf('GSP_DESIGN_EXPWIN has to compute lmax \n')
 %         end
         G = gsp_estimate_lmax(G);
     end

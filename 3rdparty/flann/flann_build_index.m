@@ -3,30 +3,6 @@ function [index, params, speedup] = flann_build_index(dataset, build_params)
 %
 % [index, params, speedup] = flann_build_index(dataset, build_params) - Constructs the
 % index from the provided 'dataset' and (optionally) computes the optimal parameters.
-%
-%   Url: http://lts2research.epfl.ch/gsp/doc/3rdparty/flann/flann_build_index.php
-
-% Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.0
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Marius Muja, January 2008
     algos = struct( 'linear', 0, 'kdtree', 1, 'kmeans', 2, 'composite', 3, 'kdtree_single', 4, 'hierarchical', 5, 'lsh', 6, 'saved', 254, 'autotuned', 255 );
@@ -77,4 +53,3 @@ function [index, params, speedup] = flann_build_index(dataset, build_params)
         params.centers_init = id2value(center_algos,params.centers_init);
     end
 end
-

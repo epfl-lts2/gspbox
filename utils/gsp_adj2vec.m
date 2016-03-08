@@ -8,14 +8,14 @@ function [G] = gsp_adj2vec(G)
 %       G   : Graph structure
 %
 %   This function converts adjacency matrix to edge vector form. It also
-%   add the field G.D that is the sparse gradient matrix
+%   add the field G.Diff that is the sparse gradient matrix
 %
 %   See also: gsp_grad gsp_div
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_adj2vec.php
 
-% Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.0
+% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
+% This file is part of GSPbox version 0.5.1
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -48,7 +48,9 @@ if G.directed
     error('GSP_ADJ2VEC: Not implemented yet');
 else
     % Keep each edge only once (they are duplicated!). Keep also loops.
-    
+    if G.directed
+        error('Not implemented now!')
+    end
     [v_i, v_j, weights] = find(tril(G.W));
     G.v_in = v_i;
     G.v_out = v_j;

@@ -29,11 +29,12 @@
 %  For help, bug reports, suggestions etc. please send email to
 %  gspbox 'dash' support 'at' groupes 'dot' epfl 'dot' ch
 %
+% see also: prox
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/Contents.php
 
-% Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.0
+% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
+% This file is part of GSPbox version 0.5.1
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -53,6 +54,5 @@
 %     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
 %     ArXiv e-prints, Aug. 2014.
 % http://arxiv.org/abs/1408.5781
-
 
 

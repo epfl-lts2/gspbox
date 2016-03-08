@@ -32,8 +32,8 @@ function [f_hat]=gsp_gft(G,f)
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_gft.php
 
-% Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.0
+% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
+% This file is part of GSPbox version 0.5.1
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -63,10 +63,12 @@ if ~isnumeric(G);
        error(['GSP_GFT: You need first to compute the Fourier basis\n',...
            'You can do it with the function gsp_compute_fourier_basis']);
     end
-    U = G.U;
+    %U = G.U;
+    f_hat=G.U'*f;
 else
-    U = G;
+    %U = G;
+    f_hat=G'*f;
 end
 
-f_hat=U'*f;
+
 

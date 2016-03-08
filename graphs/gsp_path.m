@@ -1,6 +1,7 @@
-function [G]=gsp_path(N)
+function G = gsp_path(N)
 %GSP_PATH  Initialize a path graph
-%   Usage:  G=gsp_path(N);
+%   Usage:  G = gsp_path(N);
+%           G = gsp_path();
 %
 %   Input parameters:
 %         N     : Number of vertices (default 32).
@@ -28,8 +29,8 @@ function [G]=gsp_path(N)
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_path.php
 
-% Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.0
+% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
+% This file is part of GSPbox version 0.5.1
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -53,15 +54,15 @@ function [G]=gsp_path(N)
 % Author David I Shuman, Nathanael Perraudin
 % Date: 15 March 2014
 
-if nargin<1
-    N = 16
+if nargin < 1
+    N = 16;
 end
 
 
 % Create weighted adjancency matrix
-i_inds = [1:N-1,2:N];
-j_inds = [2:N,1:N-1];
-G.W = sparse(i_inds,j_inds,ones(1,2*(N-1)),N,N);
+i_inds = [1:N-1, 2:N];
+j_inds = [2:N, 1:N-1];
+G.W = sparse(i_inds, j_inds, ones(1,2*(N-1)), N, N);
 
 % Create coordinates
 G.coords = [(1:N)', zeros(N,1)];

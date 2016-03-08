@@ -24,7 +24,7 @@ function gsp_plot_graph(G,param)
 %
 %   Example:
 %
-%          G = gsp_swiss_roll(200,0.1,1e-8,45);
+%          G = gsp_swiss_roll(200);
 %          gsp_plot_graph(G);
 %
 %   See also: gsp_plot_signal gsp_plot_signal_spectral
@@ -32,8 +32,8 @@ function gsp_plot_graph(G,param)
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/plotting/gsp_plot_graph.php
 
-% Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.0
+% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
+% This file is part of GSPbox version 0.5.1
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -148,6 +148,16 @@ else
 
     axis off;
     hold off;
+end
+
+% TODO: use special presets of the following style for more graphs:
+if isfield(G, 'type')
+    if strcmp(G.type, 'non_uniform') ||...
+       strcmp(G.type, 'sub-non_uniform') ||...
+       strcmp(G.type, 'non_uniform_patch') ||...
+       strcmp(G.type, 'sub-non_uniform_patch')
+        axis equal; axis tight;% axis on;
+    end
 end
 
 end

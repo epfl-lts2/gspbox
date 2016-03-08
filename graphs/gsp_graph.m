@@ -1,17 +1,17 @@
-function [G] = gsp_graph(W, coords, limits)
-%GSP_GRAPH  Initialize a graph from a weight matrix
-%   Usage:  G = gsp_graph(W );
+function G = gsp_graph(W, coords, limits)
+%GSP_GRAPH  Create a graph given weighted adjacency matrix
+%   Usage:  G = gsp_graph(W);
 %           G = gsp_graph(W, coords);
 %           G = gsp_graph(W, coords, limits);  
 %
 %   Input parameters:
-%         W     : Weight matrix
-%         coords: Coordonates of the points (optional)
-%         limits: limits for the coordonates (optional)
+%         W     : (n by n) Weighted adjacency matrix
+%         coords: (n by 2) or (n by 3) Coordinates of the points (optional)
+%         limits: limits for the coordinates (optional)
 %   Output parameters:
 %         G     : Graph structure.
 %
-%   'gsp_graph(W,coords,limits)' initializes a graph structure with W as
+%   'gsp_graph(W, coords, limits)' initializes a graph structure with W as
 %   weight matrix.
 %
 %   Example:
@@ -24,8 +24,8 @@ function [G] = gsp_graph(W, coords, limits)
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_graph.php
 
-% Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.0
+% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
+% This file is part of GSPbox version 0.5.1
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

@@ -40,8 +40,8 @@ function gsp_plot_signal(G,signal,param)
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/plotting/gsp_plot_signal.php
 
-% Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.0
+% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
+% This file is part of GSPbox version 0.5.1
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -163,8 +163,8 @@ else %if size(G.coords,2) == 3
                     param.vertex_size,signal,'.');
     if any(param.vertex_highlight > 0)
         vh = param.vertex_highlight;
-        scatter(G.coords(vh,1),G.coords(vh,2),G.coords(vh,3), ...
-            param.vertex_size, 'ok');
+        scatter3(G.coords(vh,1),G.coords(vh,2),G.coords(vh,3), ...
+            param.vertex_size/3, 'ok');
 
     end             
 
@@ -193,6 +193,14 @@ colormap(jet)
 axis off;
 hold off;
 
-
+% TODO: use special presets of the following style for more graphs:
+if isfield(G, 'type')
+    if strcmp(G.type, 'non_uniform') ||...
+       strcmp(G.type, 'sub-non_uniform') ||...
+       strcmp(G.type, 'non_uniform_patch') ||...
+       strcmp(G.type, 'sub-non_uniform_patch')
+        axis equal; axis tight;% axis on;
+    end
+end
 end
 

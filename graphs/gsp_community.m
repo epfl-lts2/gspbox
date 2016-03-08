@@ -40,8 +40,8 @@ function [G] = gsp_community(N, param)
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_community.php
 
-% Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.0
+% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
+% This file is part of GSPbox version 0.5.1
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -157,34 +157,43 @@ end
 % W = double(abs(W) > 0);
 % G.W = sparse(W);
 
-% Fast (and scalable) implementation of the above
-kdt = KDTreeSearcher(G.coords, 'distance', 'euclidean');
+% % Fast (and scalable) implementation of the above
+% kdt = KDTreeSearcher(G.coords, 'distance', 'euclidean');
+% epsilon = sqrt(-log(1e-3));
+% [NN, D] = rangesearch(kdt, G.coords, epsilon, 'distance', 'euclidean' );
+% 
+% %Counting non-zero elements
+% count = 0;
+% for ii = 1:N
+%    count = count + length(NN{ii}) - 1; 
+% end
+% 
+% spi = zeros(count,1);
+% spj = zeros(count,1);
+% spv = ones(count,1);
+% start = 1;
+% 
+% 
+% % Fill the 3-col values with [i, j, exp(-d(i,j)^2 / sigma)]
+% for ii = 1:N
+%     len = length(NN{ii}) - 1;
+%     spi(start:start+len-1) = repmat(ii, len, 1);
+%     spj(start:start+len-1) = NN{ii}(2:end)';
+% %     spv(start:start+len-1) = exp(-D{ii}(2:end).^2);
+%     start = start + len;
+% end
+% 
+% W = sparse(spi, spj, spv, N, N);
+
+paramnn.rescale = 0;
+paramnn.center = 0;
+paramnn.type = 'radius';
 epsilon = sqrt(-log(1e-3));
-[NN, D] = rangesearch(kdt, G.coords, epsilon, 'distance', 'euclidean' );
+paramnn.epsilon = epsilon;
 
-%Counting non-zero elements
-count = 0;
-for ii = 1:N
-   count = count + length(NN{ii}) - 1; 
-end
-
-spi = zeros(count,1);
-spj = zeros(count,1);
-spv = ones(count,1);
-start = 1;
-
-
-% Fill the 3-col values with [i, j, exp(-d(i,j)^2 / sigma)]
-for ii = 1:N
-    len = length(NN{ii}) - 1;
-    spi(start:start+len-1) = repmat(ii, len, 1);
-    spj(start:start+len-1) = NN{ii}(2:end)';
-%     spv(start:start+len-1) = exp(-D{ii}(2:end).^2);
-    start = start + len;
-end
-
-W = sparse(spi, spj, spv, N, N);
-
+[spi, spj] = gsp_nn_distanz(G.coords',G.coords',paramnn);
+W = sparse(spi, spj, ones(size(spi)), N, N);
+W = (W+W')/2;
 % Adding the sparse rand connections
 W = W + abs(sprandsym(N, param.world_density));
 W = double(abs(W) > 0);

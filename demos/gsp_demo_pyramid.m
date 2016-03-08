@@ -1,7 +1,7 @@
 %GSP_DEMO_PYRAMID Demonstration of the use of the graph pyramid
 %
 %   In this demonstration file, we show how to reduce a graph using the
-%   GSPBox. Then we apply the pyramid to simple signal.
+%   GSPBox. Then we apply the pyramid to a simple signal.
 %
 %   The function GSP_GRAPH_MULTIRESOLUTION computes the graph pyramid for you:
 %
@@ -20,7 +20,7 @@
 %    param.filters*: is a cell array of filters (or a single filter).
 %     Thoses filter will be used in the analysis and synthesis operator.
 %
-%   Let display the results:
+%   Let's display the results:
 %
 %             figure;
 %             for ii = 1:numel(Gs)
@@ -33,7 +33,7 @@
 %
 %      
 %
-%   Now, that we have precomputed the pyramid of graphs, we can apply it to
+%   Now that we have precomputed the pyramid of graphs, we can apply it to
 %   a signal. Here we create a signal that is smooth over the graph but
 %   with a big discontinuity in the middle
 %
@@ -71,7 +71,7 @@
 %   Figure 4: Coarse approximations
 %
 %
-%   Finnaly, you can perform a synthesis operation using the function
+%   Finally, you can perform a synthesis operation using the function
 %   GSP_PYRAMID_SYNTHESIS :
 %   
 %             coeff = gsp_pyramid_cell2coeff(ca,pe);
@@ -84,8 +84,8 @@
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/demos/gsp_demo_pyramid.php
 
-% Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.0
+% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
+% This file is part of GSPbox version 0.5.1
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -139,7 +139,7 @@ for ii = 1:numel(Gs)
     title(['Reduction level: ', num2str(ii-1)]);
 end
 
-%% Apply the piramid to a signal
+%% Apply the pyramid to a signal
 
 % create a signal
 f = ones(N,1);
@@ -169,7 +169,7 @@ end
 
 
 
-%% Perform sythesis
+%% Perform synthesis
 
 f_pred = gsp_pyramid_synthesis(Gs,ca{end},pe);
 

@@ -1,18 +1,24 @@
-function [  ] = gsp_install(  )
+function [  ] = gsp_install( install_unlcobox  )
 %GSP_INSTALL Install third party software
 %   Usage: gsp_install();
 %  
-%   This function install third party software. It require an internet
+%   Input parameters
+%       install_unlcobox    : bool (1 to install the UNLocBoX)
+%
+%   This function installs third party software. It require an internet
 %   connection.
 %
-%   It will install the gaimc toolbox, the UNLocBoX and compile some
-%   functions.
+%   You should install the UNLocBoX only if you are not using the
+%   developement version.
 %
+%   It will install the gaimc toolbox and compile some functions.
+%
+%   See also: gsp_install_unlocbox
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/gsp_install.php
 
-% Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.0
+% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
+% This file is part of GSPbox version 0.5.1
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -37,6 +43,10 @@ function [  ] = gsp_install(  )
 global GLOBAL_gsppath;
 gsp_start;
 
+if nargin<1
+    install_unlcobox = 0;
+end
+
 FS=filesep;
 
 fprintf('Install the GAIMC toolbox: ')
@@ -49,21 +59,11 @@ catch
     warning('Could not install GAIMC')
 end
 
-%% To be fixed !
-% fprintf('Install the UNLocBoX: ')
-% try
-%     outputdir = [GLOBAL_gsppath,FS,'3rdparty'];
-%     if isunix
-%         tarfilename = 'http://unlocbox.sourceforge.net/unlocbox.tar.gz';
-%         untar(tarfilename,outputdir)        
-%     else
-%         zipfilename = 'http://unlocbox.sourceforge.net/unlocbox.zip';
-%         unzip(zipfilename,outputdir)
-%     end
-%     fprintf('Installation sucessfull!\n\n')
-% catch
-%     warning('Could not install the UNLocBox')
-% end
+if install_unlcobox
+    gsp_install_unlocbox
+else
+    fprintf('The function did not install the UNLocBoX. To do it, run: gsp_install_unlcobox')
+end
 
 gsp_make;
 

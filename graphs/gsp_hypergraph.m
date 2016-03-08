@@ -1,7 +1,6 @@
 function [G] = gsp_hypergraph(N,E, w, coords, limits)
 %GSP_HYPERGRAPH  Initialize a hypergraph from a set of edges and weights
-%   Usage:  G = gsp_hypergraph(W );
-%           G = gsp_hypergraph(N,E);
+%   Usage:  G = gsp_hypergraph(N,E);
 %           G = gsp_hypergraph(N,E, w);
 %           G = gsp_hypergraph(N,E, w, coords);
 %           G = gsp_hypergraph(N, E, w, coords, limits);  
@@ -39,8 +38,8 @@ function [G] = gsp_hypergraph(N,E, w, coords, limits)
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_hypergraph.php
 
-% Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.0
+% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
+% This file is part of GSPbox version 0.5.1
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

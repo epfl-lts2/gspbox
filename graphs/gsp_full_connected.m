@@ -21,8 +21,8 @@ function [ G ] = gsp_full_connected( N )
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_full_connected.php
 
-% Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.0
+% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
+% This file is part of GSPbox version 0.5.1
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

@@ -28,7 +28,7 @@ function [f_interpolated]=gsp_interpolate(G,f_subsampled,keep_inds,param)
 %     lead to better regularization, but will also require a higher order 
 %     Chebyshev approximation. 
 %
-%   See also: gsp_filter_analysis
+%   See also: gsp_filter_analysis 
 % 
 %   References:
 %     I. Pesenson. Variational splines and paley--wiener spaces on
@@ -38,8 +38,8 @@ function [f_interpolated]=gsp_interpolate(G,f_subsampled,keep_inds,param)
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_interpolate.php
 
-% Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.0
+% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
+% This file is part of GSPbox version 0.5.1
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -60,7 +60,9 @@ function [f_interpolated]=gsp_interpolate(G,f_subsampled,keep_inds,param)
 %     ArXiv e-prints, Aug. 2014.
 % http://arxiv.org/abs/1408.5781
 
-%   Author : David I Shuman, Nathanael Perraudin.
+%   See also: gsp_resgression_tik
+
+%   Author : David I Shuman, Nathanael Perraudin
 %   Date   : 26 November 2015
 %   Testing: test_pyramid
   

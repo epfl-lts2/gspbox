@@ -27,9 +27,14 @@ if ~isfield(param,'edge_size'), param.edge_size = 0; end
     else
         %gplot23D(G.A,G.coords,G.plotting.edge_style,'LineWidth',G.plotting.edge_width,'Color',G.plotting.edge_color); 
         if param.edge_size
-
-            disp('Plotting edges with different sizes. It may take some time.');
+            if numel(ki) > 1000
+                disp('Plotting edges with different sizes. It may take some time.');
+            end
             if size(G.coords,2) == 2
+                already_hold = ishold;
+                if not(already_hold)
+                    hold on
+                end
                 for ii = 1:numel(ki)
                     plot([G.coords(ki(ii),1)';G.coords(kj(ii),1)'],...
                         [G.coords(ki(ii),2)';G.coords(kj(ii),2)'],...
@@ -40,8 +45,8 @@ if ~isfield(param,'edge_size'), param.edge_size = 0; end
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/plotting/gsp_plot_edges.php
 
-% Copyright (C) 2013-2014 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.0
+% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
+% This file is part of GSPbox version 0.5.1
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -61,7 +66,10 @@ if ~isfield(param,'edge_size'), param.edge_size = 0; end
 %     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
 %     ArXiv e-prints, Aug. 2014.
 % http://arxiv.org/abs/1408.5781
-                end            
+                end
+                if not(already_hold)
+                    hold off;
+                end
             else
                     plot3([G.coords(ki,1)';G.coords(kj,1)'],...
                     [G.coords(ki,2)';G.coords(kj,2)'],...
