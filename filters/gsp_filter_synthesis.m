@@ -70,7 +70,7 @@ function [s] = gsp_filter_synthesis(G, filter, c, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_filter_synthesis.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.1
+% This file is part of GSPbox version 0.5.2
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -161,9 +161,9 @@ switch param.method
         s=zeros(G.N,size(c,2));
 
         for ii=1:Nf
-            s = s + gsp_igft(conj(G.U), ...
-                repmat(fie(:,ii),1,Nv) ...
-                .* gsp_gft(G, c((1:G.N)+G.N * (ii-1),:)));
+            s = s + G.U * ...
+                (repmat(fie(:,ii),1,Nv) ...
+                .* (G.U' * c((1:G.N)+G.N * (ii-1),:)));
         end
 
 

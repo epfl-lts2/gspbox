@@ -14,15 +14,16 @@ function [ Gnew] = gsp_graph_sparsify(G,epsilon)
 %
 %   Example:
 %
-%         epsilon = 0.4;
+%         epsilon = 0.5;
 %         param.distribute = 1;
-%         param.Nc = 20;
+%         nnparam.k = 20;
+%         param.nnparam = nnparam;
 %         G = gsp_sensor(256,param);
 %         G2 = gsp_graph_sparsify(G,epsilon);
-%         figure(100);
+%         figure(1)
 %         gsp_plot_graph(G);
 %         title('Original graph')
-%         figure(101);
+%         figure(2)
 %         gsp_plot_graph(G2);
 %         title('Sparsified graph')
 %
@@ -41,7 +42,7 @@ function [ Gnew] = gsp_graph_sparsify(G,epsilon)
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_graph_sparsify.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.1
+% This file is part of GSPbox version 0.5.2
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

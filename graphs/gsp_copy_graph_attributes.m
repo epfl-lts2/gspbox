@@ -30,7 +30,7 @@ function Gn = gsp_copy_graph_attributes(G,type,Gn)
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_copy_graph_attributes.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.1
+% This file is part of GSPbox version 0.5.2
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

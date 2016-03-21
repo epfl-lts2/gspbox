@@ -26,12 +26,13 @@
 %             subplot(2,2,4); scatter(xc, yc, 700, X(:,4), '.'); 
 %             title('4th smooth signal'); axis off; colorbar;
 %
-%   Figure 1: caption
+%   Figure 1: Different signals
 %
 %      
 %
 %   We can compute the pairwise distances of the features and learn a graph
 %   using them:
+%
 %             Z1 = gsp_distanz(X(:, 1)').^2;
 %             W1 = gsp_learn_graph_log_degrees(Z1, 1.5, 1, params);
 %
@@ -58,7 +59,7 @@
 %             subplot(2,2,4); gsp_plot_edges(G4, params_plot);
 %             title('graph learned from 4th smooth signal');
 %
-%   Figure 2: caption
+%   Figure 2: Different graphs learned
 %
 %      
 %
@@ -77,14 +78,14 @@
 %             figure; gsp_plot_graph(G, params_plot);
 %             title('Graph with edges learned from above 4 signals');
 %             
-%   Figure 3: caption
+%   Figure 3: Graph with edges learned from above 4 signals
 %
 %      
 %
 %   This is close to the graph that we would learn using the acutal
 %   coordinates as features. So why does it work so well? We can see that
-%   the pattern of the pairwise distances using these features is similar to
-%   the one of the pairwise geometric distances between nodes:
+%   the pattern of the pairwise distances using these features is similar
+%   to the one of the pairwise geometric distances between nodes:
 %
 %             figure;
 %             subplot(1, 2, 1); 
@@ -94,13 +95,16 @@
 %             imagesc(gsp_distanz([xc, yc]'));
 %             title('Pairwise distances computed from features');
 %
-%   Figure 4: caption
+%   Figure 4: Geometric pairwise distances between nodes
 %
 %      
 %
+%   Figure 5: Pairwise distances computed from features
 %
-%    The functions available for learning a graph are
-%    GSP_LEARN_GRAPH_LOG_DEGREES and GSP_LEARN_GRAPH_L2_DEGREES.
+%      
+%
+%   The functions available for learning a graph are
+%   GSP_LEARN_GRAPH_LOG_DEGREES and GSP_LEARN_GRAPH_L2_DEGREES.
 %
 %
 %   References:
@@ -114,7 +118,7 @@
 %   Url: http://lts2research.epfl.ch/gsp/doc/demos/gsp_demo_learn_graph.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.1
+% This file is part of GSPbox version 0.5.2
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

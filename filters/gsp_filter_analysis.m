@@ -71,7 +71,7 @@ function [c] = gsp_filter_analysis(G, fi, s, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_filter_analysis.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.1
+% This file is part of GSPbox version 0.5.2
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -169,7 +169,7 @@ switch param.method
         end
         for ii=1:Nf
             c((1:G.N)+G.N * (ii-1),:)= gsp_igft(G, ...
-                repmat(fie(:,ii),1,Nv) ...
+                repmat(conj(fie(:,ii)),1,Nv) ...
                 .* gsp_gft(G, s));
         end
 
