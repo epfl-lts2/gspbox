@@ -37,7 +37,7 @@ function [G] = gsp_compute_fourier_basis(G,param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_compute_fourier_basis.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -114,32 +114,7 @@ end
 G.lmax=max(G.e);
 
 if isfield(G,'Gm')
-%     G.Gm = gsp_compute_fourier_basis(G.Gm);
-%     G.Gm.Um1 = G.Gm.U^(-1);
-    N = G.N;
-    w = -G.Gm.L(N+1:end,1:N);
-    switch lower(G.Gm.lap_type)
-        case 'combinatorial'
-            d = G.Gm.d(N+1:end);
-        case 'normalized'
-            d = ones(G.Gm.N-G.N,1);
-        otherwise
-            error('Unknown lLaplacian type')
-    end
-    
-    
-    Nw = length(d);
-    c = 1./(repmat(d,1,N)-repmat(G.e',Nw,1)).*(w*G.U);
-    
-    
-    G.Gm.U = [G.U zeros(N,Nw); c , eye(Nw)];
-    
-    G.Gm.Um1 = [G.U', zeros(N,Nw); -c*G.U', eye(Nw)];
-    
-    G.Gm.e = [G.e;d];
-    G.Gm.lmax = max(G.Gm.e);
-    G.lmax = G.Gm.lmax;
-    
+    G = gsp_compute_oose_fourier_basis(G);
 end
 
 

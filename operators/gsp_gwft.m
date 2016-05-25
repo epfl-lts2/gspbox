@@ -25,7 +25,7 @@ function [ C ] = gsp_gwft(G,g,f, param )
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_gwft.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -58,6 +58,11 @@ if ~isfield(param, 'lowmemory'), param.lowmemory=1 ; end
 if ~isfield(G,'U')
    error(['GSP_GWFT: You need first to compute the Fourier basis. ',...
        'You can do it with the function gsp_compute_fourier_basis']);
+end
+
+if sum(G.U(:,1)<eps(2))
+    error(['GSP_GWFT: The current implementation of this function is ',...
+       'not working for disconnected graphs'])
 end
 
 Nf = size(f,2);

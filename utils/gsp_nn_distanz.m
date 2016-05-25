@@ -45,7 +45,7 @@ function [indx, indy, dist, Xo1, Xo2, epsilon] = gsp_nn_distanz(X1, X2, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_nn_distanz.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

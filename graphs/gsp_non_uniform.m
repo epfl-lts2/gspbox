@@ -26,7 +26,7 @@ function [ G ] = gsp_non_uniform(N, r)
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_non_uniform.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

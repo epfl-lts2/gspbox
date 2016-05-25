@@ -14,7 +14,13 @@ function [g]=gsp_design_expwin(G, bmax, a)
 %
 %   This function design the following filter:
 %
-%       g(x) = 
+%      g(x) = s( (1-x) / bmax /lmax )
+%
+%   where  s(x) is the step function
+%
+%               /   0                                      if x < -1
+%       s(x) = | exp(-a/x) / ( exp(-a/x) + exp(-a/(1-x)) ) if x in [-1, 1]
+%               \   1                                      if x > 1
 %
 %   It use a clever exponential construction to obtain a infinitely
 %   differentiable function that is band limited!
@@ -36,7 +42,7 @@ function [g]=gsp_design_expwin(G, bmax, a)
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_design_expwin.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -92,25 +98,11 @@ else
    lmax = G;
 end
 
-
-g = @(x) ffin(x/bmax/lmax,a);
+g = @(x) gsp_smooth_downstep(x/bmax/lmax, a , 1);
     
 
     
 end
 
 
-function y=fx(x,a)
-    y = exp(-a./x);
-    y(x<0)=0;
-end
-
-function y =gx(x,a)
-    y=fx(x,a);
-    y = y./(y+fx(1-x,a));
-end
-
-function y = ffin(x,a)
-        y = gx(1-x,a);
-end
 

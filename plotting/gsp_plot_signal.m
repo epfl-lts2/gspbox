@@ -41,7 +41,7 @@ function gsp_plot_signal(G,signal,param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/plotting/gsp_plot_signal.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -84,7 +84,7 @@ end
 
 signal = real(signal);
 
-if ~isfield(param,'show_edges'), param.show_edges = G.Ne < 10000; end
+if ~isfield(param,'show_edges'), param.show_edges = G.Ne < 5000; end
 if ~isfield(param,'bar'), param.bar = 0; end
 if ~isfield(param,'clear'), param.clear = 1; end
 if ~isfield(param,'bar_width'), param.bar_width = 1; end

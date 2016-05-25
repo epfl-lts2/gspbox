@@ -38,7 +38,7 @@ function [x,y] = gsp_twospirals(N, degrees, start, noise)
 %   Url: http://lts2research.epfl.ch/gsp/doc/pointsclouds/gsp_twospirals.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -71,7 +71,7 @@ function [x,y] = gsp_twospirals(N, degrees, start, noise)
     if nargin < 3
         start = 90;
     end
-    if nargin < 5
+    if nargin < 4
         noise = 0.2;
     end  
     

@@ -70,7 +70,7 @@ function [s] = gsp_filter_synthesis(G, filter, c, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_filter_synthesis.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -106,13 +106,23 @@ if iscell(G)
     NG = numel(G);
     s = cell(NG,1);
     for ii = 1:NG
+        warning('Check what happen here')
        s{ii} = gsp_filter_synthesis(G{ii}, filter{ii}, c{ii}, param);
+%         if iscell(s)
+%             c{ii} = gsp_filter_analysis(G{ii}, fi{ii}, s{ii}, param);
+%         else
+%             c{ii} = gsp_filter_analysis(G{ii}, fi{ii}, s, param);
+%         end
     end
     return
 end
 
 
-Nf = length(filter);
+if isnumeric(filter)
+    Nf = size(filter,2);
+else    
+    Nf = numel(filter);
+end
 
 if isfield(param, 'exact')
     warning('param.exact is not used anymore. Please use param.method instead');
@@ -124,7 +134,7 @@ if isfield(param, 'exact')
 end
 
 if ~isfield(param,'method')
-    if isfield(G,'U')
+    if gsp_check_fourier(G)
         param.method = 'exact';
     else
         param.method = 'cheby';
@@ -144,7 +154,7 @@ end
 switch param.method
     case 'exact' 
 
-        if ( ~isfield(G,'e') || ~isfield(G,'U') )
+        if ~gsp_check_fourier(G)
             if param.verbose
                 warning(['GSP_FILTER_SYNTHESIS: The Fourier matrix is not ',...
                     'available. The function will compute it for you. ',...
@@ -154,8 +164,11 @@ switch param.method
             end
             G=gsp_compute_fourier_basis(G);
         end
-
-        fie = gsp_filter_evaluate(filter,G.e);
+        if isnumeric(filter)
+            fie = filter;
+        else
+            fie = gsp_filter_evaluate(filter,G.e);
+        end
         Nv = size(c,2);
 
         s=zeros(G.N,size(c,2));
@@ -194,7 +207,9 @@ switch param.method
     
     case 'lanczos'
         s=zeros(G.N,size(c,2));
-        
+        if ~iscell(filter)
+            filter = {filter};
+        end
         for ii=1:Nf
             s = s + gsp_lanczos_op(G, filter{ii}, c((1:G.N)+G.N * (ii-1),:), param);
         end

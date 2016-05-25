@@ -1,20 +1,29 @@
-function G = gsp_stochastic_block_graph(N,k)
+function G = gsp_stochastic_block_graph(N, k, params)
 %GSP_STOCHASTIC_BLOCK_GRAPH  Create a stochastic block graph
 %   Usage:  G = gsp_stochastic_block_graph( N );
 %           G = gsp_stochastic_block_graph(N , k);
 %
 %   Input parameters:
-%         N     : Number of nodes (default 5)
-%         k     : Number of clusters (default 1024)
+%         N     : Number of nodes (default 1024)
+%         k     : Number of clusters (default 5)
+%         params: Structure of optional parameters
 %   Output parameters:
 %         G     : Graph structure.
+%
+%   param is an optional structure with the following fields
+%
+%    params.p        : Intra-cluster edge probability (default 0.7)
+%    params.q        : Inter-cluster edge probability (default 0.3/k)
+%    params.z        : Assignment vector of nodes (default uniform random)
+%    params.M        : Link probability matrix between clusters (default uses p and q)
+%    params.directed : Flag the graph as directed or not (default false)
 %
 %   Use the stochastic block model to create a graph.
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_stochastic_block_graph.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -47,11 +56,27 @@ end
 if nargin<2
     k = 5; % number of clusters
 end
+if nargin < 3
+    params = struct;
+end
 
-%% partition with clusters of uniform random sizes
-%  will generate clusters of similar sizes
-z = randi(k,1,N); % partition vector
- 
+if ~isfield(params, 'p')
+    params.p = 0.7;
+end
+if ~isfield(params, 'q')
+    params.q = (1-params.p) / k;
+end
+if (~isfield(params, 'z') || length(params.z) ~= N || max(params.z) > k || min(params.z) < 1)
+    params.z = randi(k, 1, N);
+end
+if (~isfield(params, 'M') || size(params.M) ~= [k, k])
+    params.M = params.q * ones(k);
+    params.M(1:k+1:end) = params.p;
+end
+if ~isfield(params, 'directed')
+    params.directed = false;
+end
+
 %% partition with clusters of homogenous sizes
 %
 % THIS PART IS NOT NECESSARY BECAUSE SLOW AND REPLACED
@@ -63,25 +88,44 @@ z = randi(k,1,N); % partition vector
 % end
 % z((k-1)*L + 1:end) = k;
  
-%% Link probability matrix
-M = ones(k,k); % block probability matrix
-p = 0.7; % proba link in cluster
-q = 1-p; % proba link out of cluster
- 
-M = M * q/k;
-M = M - diag(diag(M)) + diag(p*ones(1,k));
- 
 %% Generate adjacency
-W = rand(N,N);
- 
+M = params.M;
+z = params.z;
+W = sparse(N, N);
+
 for i=1:N
-    for j=1:N
-        W(i,j) = ( W(i,j) <= M(z(i),z(j)) );
+    for j=i+1:N
+        W(i, j) = ( rand <= M(z(i), z(j)) );
+        if params.directed
+            W(j, i) = ( rand <= M(z(j), z(i)) );
+        else
+            W(j, i) = W(i, j);
+        end
     end
 end
  
- 
- 
-[ G ] = gsp_graph_default_parameters( W );
+G.W = W;
+G = gsp_graph_default_parameters(G);
+G.info.node_com = z;
+
+G.coords = ones(N, 2);
+com_coords = sqrt(N) * [-cos(2*pi*(1:k)/k)', sin(2*pi*(1:k)/k)'];
+
+% create uniformly random points in the unit disc
+for ii = 1:N
+    % use rejection sampling to sample from a unit disc (probability = pi/4)
+    while norm(G.coords(ii, :)) >= 1/2
+        % sample from the square and reject anything outside the circle
+        G.coords(ii, :) = [rand-.5, rand-.5];
+    end
+end
+
+% add the offset for each node depending on which community it belongs to
+for ii = 1:k
+    idx_ii = find(z==ii);
+    rad_com = sqrt(numel(idx_ii));
+    G.coords(idx_ii, :) = bsxfun(@plus, rad_com * G.coords(idx_ii, :), com_coords(ii, :));
+end
 
 end
+

@@ -22,7 +22,7 @@ function [ ] = gsp_plotfig( save_name,param )
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_plotfig.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -107,7 +107,8 @@ if param.save
          %print('-depsc',[filename,'.eps']);
          print2eps([filename,'.eps']);
     else
-        print('-dpng','-opengl','-r300',[filename,'.png']);
+        %print('-dpng','-opengl','-r300',[filename,'.png']);
+        print('-dpng','-r300',[filename,'.png']);
         %hgsave([filename,'.fig']);
     end
 end

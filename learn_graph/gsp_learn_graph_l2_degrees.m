@@ -91,7 +91,7 @@ function [W, stat] = gsp_learn_graph_l2_degrees(Z, a, params)
 %   Url: http://lts2research.epfl.ch/gsp/doc/learn_graph/gsp_learn_graph_l2_degrees.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

@@ -35,7 +35,7 @@ function [f] = gsp_igft(G,f_hat)
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_igft.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@ function [f] = gsp_igft(G,f_hat)
 
 
 if ~isnumeric(G);
-    if ~isfield(G,'U')
+    if ~gsp_check_fourier(G)
        error(['GSP_IGFT: You need first to compute the Fourier basis\n',...
            'You can do it with the function gsp_compute_fourier_basis']);
     end

@@ -25,24 +25,25 @@ function [ G ] = gsp_nn_graph(Xin, param)
 %   ---------------------
 %
 %    param.type      : ['knn', 'radius']   the type of graph (default 'knn')
-%    param.use_flann : [0, 1]              use the FLANN library
+%    param.use_flann : [0, 1]              use the FLANN library (default 0)
 %    param.use_full  : [0, 1] - Compute the full distance matrix and then
 %     sparsify it (default 0) 
-%    param.center    : [0, 1]              center the data
-%    param.rescale   : [0, 1]              rescale the data (in a 1-ball)
+%    param.center    : [0, 1]              center the data (default 0)
+%    param.rescale   : [0, 1]              rescale the data on a 1-ball (def 0)
 %    param.sigma     : float               the variance of the distance kernel
-%    param.k         : int                 number of neighbors for knn
+%    param.k         : int                 number of neighbors for knn (def 10)
 %    param.epsilon   : float               the radius for the range search
-%    param.use_l1    : [0, 1]              use the l1 distance
+%    param.use_l1    : [0, 1]              use the l1 distance (def 1)
 %    param.symmetrize_type*: ['average','full'] symmetrization type (default 'full')
+%    param.zero_diagonal*: [0, 1]           zero out the diagonal (default 1)
 %
-%   See also: gsp_pointcloud
+%   See also: gsp_nn_distanz gsp_pointcloud
 %
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_nn_graph.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -76,6 +77,7 @@ function [ G ] = gsp_nn_graph(Xin, param)
     if ~isfield(param, 'type'), param.type = 'knn'; end
     if ~isfield(param, 'use_flann'), param.use_flann = 0; end
     if ~isfield(param, 'center'), param.center = 0; end
+    if ~isfield(param, 'zero_diagonal'), param.zero_diagonal = 1; end
     if ~isfield(param, 'rescale'), param.rescale = 0; end
     if ~isfield(param, 'k'), param.k = 10; end
     if ~isfield(param, 'epsilon'), param.epsilon = 0.01; end
@@ -83,9 +85,11 @@ function [ G ] = gsp_nn_graph(Xin, param)
     if ~isfield(param, 'target_degree'), param.target_degree = 0; end;
     if ~isfield(param, 'symmetrize_type'), param.symmetrize_type = 'average'; end
     if ~isfield(param, 'light'); param.light = 0; end
+    
     paramnn = param;
     paramnn.k = param.k +1;
-    [indx, indy, dist, Xout, ~, epsilon] = gsp_nn_distanz(Xin',Xin',paramnn);
+    kdist = @(x1,x2) gsp_nn_distanz(x1',x2',paramnn);
+    [indx, indy, dist, Xout, ~, epsilon] = kdist(Xin,Xin);
     Xout = transpose(Xout);
     switch param.type
         case 'knn'
@@ -104,16 +108,22 @@ function [ G ] = gsp_nn_graph(Xin, param)
             error('Unknown graph type')
     end
     
-    n = size(Xin,1);
     
     if param.use_l1
-        W = sparse(indx, indy, double(exp(-dist/param.sigma)), n, n);
+        Wmat = @(indx,indy,dist,n,m) sparse(indx, indy, double(exp(-dist/param.sigma)), n, m);
     else
-        W = sparse(indx, indy, double(exp(-dist.^2/param.sigma)), n, n);
+        Wmat = @(indx,indy,dist,n,m) sparse(indx, indy, double(exp(-dist.^2/param.sigma)), n, m);
     end
     
-    % We need zero diagonal
-    W(1:(n+1):end) = 0;     % W = W-diag(diag(W));
+    n = size(Xin,1);
+    W = Wmat(indx,indy,dist,n,n);
+    
+    Wkernel = @(x) create_kernel(Xin,x,kdist,Wmat);
+    
+    if param.zero_diagonal
+        % We need zero diagonal
+        W(1:(n+1):end) = 0;     % W = W-diag(diag(W));
+    end
     
     % Computes the average degree when using the epsilon-based neighborhood
     if (strcmp(param.type,'radius'))
@@ -136,6 +146,7 @@ function [ G ] = gsp_nn_graph(Xin, param)
     G.N = n;
     G.W = W;
     G.coords = Xout;
+    G.Wkernel = Wkernel;
     %G.limits=[-1e-4,1.01*max(x),-1e-4,1.01*max(y)];
     if param.use_l1
         G.type = 'nearest neighbors l1';
@@ -151,4 +162,11 @@ function [ G ] = gsp_nn_graph(Xin, param)
     end
 end
 
+function W = create_kernel(Xin,x,kdist,Wmat)
+[indx, indy, dist] = kdist(Xin,x);
+n = size(Xin,1);
+m = size(x,1);
+W = Wmat(indx,indy,dist,n,m)';
+
+end
 

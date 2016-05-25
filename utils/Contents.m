@@ -5,6 +5,7 @@
 %    gsp_check_connectivity_undirected - Check the connectivity for undirected graph
 %    gsp_isdirected               - Check if the graph is directed
 %    gsp_check_weights            - Check the weight matrix
+%    gsp_check_fourier            - Check if the Fourier bais is computed
 %
 %   Norms
 %    gsp_norm_tv                  - TV norm on graphs
@@ -48,7 +49,7 @@
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/Contents.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

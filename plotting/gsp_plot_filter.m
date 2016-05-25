@@ -44,6 +44,7 @@ function [] = gsp_plot_filter(G, filters, param)
 %     squared magnitudes of the filters (default 1 if there is multiple
 %     filters). 
 %    param.colors_rgb : To specify the line colors.
+%    param.cla : Clear axis (default 1).
 %    param.yrange : To specify a range for the y axis.
 %    param.verbose : Verbosity level (1 display the warning - 0 no log)
 %     (default 1).
@@ -54,7 +55,7 @@ function [] = gsp_plot_filter(G, filters, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/plotting/gsp_plot_filter.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -106,6 +107,7 @@ if ~isfield(param,'show_sum'), param.show_sum = length(filters)>1; end
 if ~isfield(param,'y_tic'), param.y_tic = 0.25; end
 if ~isfield(param,'minor_tick'), param.minor_tick = 1; end
 if ~isfield(param,'npoints'), param.npoints = 1000; end
+if ~isfield(param,'cla'), param.cla = 1; end
 if ~isfield(param,'x_tic')
     param.x_tic=max(1,ceil(G.lmax/10));
 end
@@ -123,8 +125,9 @@ end
 lambdas = linspace(0,G.lmax,param.npoints);
 
 
-
-cla;
+if param.cla
+    cla;
+end
 hold on;
 % apply the filter
 fd = gsp_filter_evaluate(filters,lambdas);

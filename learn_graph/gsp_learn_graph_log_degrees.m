@@ -51,8 +51,10 @@ function [W, stat] = gsp_learn_graph_log_degrees(Z, a, b, params)
 %         subplot(2,2,3); gsp_plot_signal(G, X(:,3)); title('3rd smooth signal');
 %         subplot(2,2,4); gsp_plot_signal(G, X(:,4)); title('4th smooth signal');
 %         Z = gsp_distanz(X').^2;
-%         W = gsp_learn_graph_log_degrees(Z*25, 1, 1);
-%         W(W < 1e-5) = 0;
+%         % we can multiply the pairwise distances with a number to control sparsity
+%         [W] = gsp_learn_graph_log_degrees(Z*25, 1, 1);
+%         % clean up zeros
+%         W(W<1e-5) = 0;
 %         G2 = gsp_update_weights(G, W);
 %         figure; gsp_plot_graph(G2); title('Graph with edges learned from above 4 signals');
 %       
@@ -91,7 +93,7 @@ function [W, stat] = gsp_learn_graph_log_degrees(Z, a, b, params)
 %   Url: http://lts2research.epfl.ch/gsp/doc/learn_graph/gsp_learn_graph_log_degrees.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

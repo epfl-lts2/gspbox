@@ -71,7 +71,7 @@ function [c] = gsp_filter_analysis(G, fi, s, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_filter_analysis.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -106,6 +106,7 @@ if iscell(G)
     NG = numel(G);
     c = cell(NG,1);
     for ii = 1:NG
+        warning('Check what happen here')
         if iscell(s)
             c{ii} = gsp_filter_analysis(G{ii}, fi{ii}, s{ii}, param);
         else
@@ -131,7 +132,7 @@ if isfield(param, 'exact')
 end
 
 if ~isfield(param,'method')
-    if isfield(G,'U')
+    if gsp_check_fourier(G)
         param.method = 'exact';
     else
         param.method = 'cheby';
@@ -150,7 +151,7 @@ end
 
 switch param.method
     case 'exact' 
-        if ( ~isfield(G,'e') || ~isfield(G,'U') )
+        if ~gsp_check_fourier(G)
             if param.verbose
                 warning(['GSP_FILTER_ANALYSIS: The Fourier matrix is not ',...
                     'available. The function will compute it for you. ',...

@@ -1,4 +1,4 @@
-function [sol, infos] = gsp_proj_filterbank(x, ~ , G, W, y, param)
+function [sol, info] = gsp_proj_filterbank(x, ~ , G, W, y, param)
 %GSP_PROJ_FILTERBANK Projection onto the synthesis coefficients
 %   Usage:  sol = gsp_proj_filterbank(x, 0, G, W, y, param);
 %           sol = gsp_proj_filterbank(x, 0, G, W, y);
@@ -21,19 +21,33 @@ function [sol, infos] = gsp_proj_filterbank(x, ~ , G, W, y, param)
 %   Where W is the linear analysis operator associated with the
 %   filterbank. 
 %
+%   The function can use different techniques
+%   
+%    'exact' : if the Fourier basis is computed, go for this one
+%    'cheby' : use the pseudo-inverse filters of the filterbank with
+%     chebyshev approximation. It works well for well-conditionned
+%     filterbanks.
+%    'lanczos' : use the pseudo-inverse filters of the filterbank with
+%     lanczos approximation. It works well for well-conditionned
+%     filterbanks.
+%    'proj_b2': scallable and robust way to do it. However, the
+%     convergence maybe slow and might require a lot of filtering
+%     operations.
+%
 %   param is a Matlab structure containing the following fields:
 %
 %    param.verbose : 0 no log, 1 a summary at convergence, 2 print main
 %     steps (default: 1)
-%    param.weights : weights for a weighted L2-norm (default = 1)
+%    param.eps : tolerance for the pseudo inverse method
+%    param.proj_method*: selected method
 %
 %   info is a Matlab structure containing the following fields:
 %
-%    infos.algo : Algorithm used
-%    infos.iter : Number of iteration
-%    infos.time : Time of exectution of the function in sec.
-%    infos.final_eval : Final evaluation of the function
-%    infos.crit : Stopping critterion used 
+%    info.algo : Algorithm used
+%    info.iter : Number of iteration
+%    info.time : Time of exectution of the function in sec.
+%    info.final_eval : Final evaluation of the function
+%    info.crit : Stopping critterion used 
 %
 %
 %   See also:  gsp_solve_l1 gsp_proj_b2_filterbank 
@@ -42,7 +56,7 @@ function [sol, infos] = gsp_proj_filterbank(x, ~ , G, W, y, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/prox/gsp_proj_filterbank.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -78,28 +92,63 @@ end
 if nargin < 6, param=struct; end
 
 if ~isfield(param, 'eps'), param.eps = 1e-8; end
-
-
-if ~isfield(G,'lmax')
-    G = gsp_estimate_lmax(G);
-    warning(['GSP_PROJ_FILTERBANK: To be more efficient you should run: ',...
-        'G = gsp_estimate_lmax(G); before using this proximal operator.']);
+if ~isfield(param, 'proj_method'), 
+    if gsp_check_fourier(G)
+        param.proj_method = 'exact';
+    else
+        [A,B] = gsp_filterbank_bounds(G,W);
+        if B/A > 20
+            warning('Filterbank ill-conditioned, going for a slow method');
+            param.proj_method = 'primal_dual';
+        else
+            param.proj_method = 'cheby';
+        end
+    end
 end
+
+
+
 
 t = tic;
 
 if size(y,2)==1 && size(x,2)>1
     y = repmat(y,1,size(x,2));
 end
-Wd = gsp_design_can_dual(W,param.eps);
-sol =  x - gsp_filter_analysis(G,Wd,(gsp_filter_synthesis(G,W,x)-y));
+if isfield(param,'method')
+    param2 = rmfield(param,'method');
+else 
+    param2 = param;
+end
+if strcmp(param.proj_method, 'proj_b2') || strcmp(param.proj_method, 'primal_dual')
+    [~,B] = gsp_filterbank_bounds(G,W);
+    if ~isfield(param,'paramproj'), param.paramproj = struct; end
+    paramproj = param.paramproj;
+    paramproj.A = @(x) gsp_filter_synthesis(G,W,x,param2);
+    paramproj.At = @(x) gsp_filter_analysis(G,W,x,param2);
+    paramproj.nu = B^2;
+    paramproj.epsilon = sqrt(G.N)*param.eps;
+    paramproj.y = y;
+    paramproj.method  = param.proj_method;
 
+    [sol,info] = proj_linear_eq(x,0,paramproj);
+    
+else
+    if strcmp(param.proj_method, 'cheby')  || strcmp(param.proj_method, 'lanczos')
+        [A,B] = gsp_filterbank_bounds(G,W);
+        if B/A > 20
+            warning('Filterbank ill-conditioned, check your solution!');
+        end
+    end
+    Wd = gsp_design_can_dual(W,param.eps);
+    sol =  x - gsp_filter_analysis(G,Wd,(gsp_filter_synthesis(G,W,x,param2)-y),param2);
+    
+    info.iter = 1;
+    info.final_eval = 0;
+    info.crit = 'Direct computation';
+end
 
-infos.iter = 1;
-infos.time = toc(t);
-infos.algo = mfilename;
-infos.final_eval = 0;
-infos.crit = 'exact';
+    info.time = toc(t);
+    info.algo = param.proj_method;
 
 
 end

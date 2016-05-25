@@ -33,7 +33,7 @@ function  [alpha, info]  = gsp_solve_l1(G, W, s, lambda, param )
 %   Url: http://lts2research.epfl.ch/gsp/doc/prox/gsp_solve_l1.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -134,6 +134,8 @@ if ~isfield(param,'guess')
     Ns = size(s,2);
     param.guess = zeros(N*Nf,Ns); 
 end
+
+paramsolver.stopping_criterion = 'rel_norm_primal';
 
 % Solver
 [alpha, info] = solvep(param.guess,{fl1,ffid},paramsolver);

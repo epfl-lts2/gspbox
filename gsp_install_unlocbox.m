@@ -8,7 +8,7 @@ function [  ] = gsp_install_unlocbox(  )
 %   Url: http://lts2research.epfl.ch/gsp/doc/gsp_install_unlocbox.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -28,16 +28,18 @@ function [  ] = gsp_install_unlocbox(  )
 %     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
 %     ArXiv e-prints, Aug. 2014.
 % http://arxiv.org/abs/1408.5781
+global GLOBAL_gsppath;
 
+FS=filesep;
 
 fprintf('Install the UNLocBoX: ')
 try
     outputdir = [GLOBAL_gsppath,FS,'3rdparty'];
     if isunix
-        tarfilename = 'https://github.com/epfl-lts2/unlocbox/releases/download/1.7.2/unlocbox-1.7.2.tar.gz';
+        tarfilename = webread('http://lts2.epfl.ch/unlocbox/download_unix.php');
         untar(tarfilename,outputdir)        
     else
-        zipfilename = 'https://github.com/epfl-lts2/unlocbox/releases/download/1.7.2/unlocbox-1.7.2.zip';
+        zipfilename = webread('https://lts2.epfl.ch/unlocbox/download_win.php');
         unzip(zipfilename,outputdir)
     end
     fprintf('Installation sucessfull!\n\n')
@@ -47,3 +49,4 @@ end
 
 
 end
+

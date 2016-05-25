@@ -28,7 +28,7 @@ function [G]=gsp_david_sensor_network(N)
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_david_sensor_network.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.5.2
+% This file is part of GSPbox version 0.6.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -73,20 +73,21 @@ elseif N==500
     G.N = N;
     G.coords = coords;
 else
-    % Generate sensor locations
-    Xcoords = rand(N,1);
-    Ycoords = rand(N,1);
-    G.coords = [Xcoords,Ycoords];
-
-    % Create weighted adjancency matrix
-    target_dist_cutoff = -.125*N/436.075+.2183;
-    T = .6; 
-    s = sqrt(-target_dist_cutoff^2/(2*log(T)));
-    d = gsp_distanz(G.coords'); 
-    G.W = exp(-d.^2/(2*s^2)); 
-    G.W(G.W<T) = 0; % Thresholding to have sparse matrix
-    G.W=G.W-diag(diag(G.W));
-    G.W=sparse(G.W);
+    error('Use 64 / 500 nodes  or use the function gsp_sensor')
+%     % Generate sensor locations
+%     Xcoords = rand(N,1);
+%     Ycoords = rand(N,1);
+%     G.coords = [Xcoords,Ycoords];
+% 
+%     % Create weighted adjancency matrix
+%     target_dist_cutoff = -.125*N/436.075+.2183;
+%     T = .6; 
+%     s = sqrt(-target_dist_cutoff^2/(2*log(T)));
+%     d = gsp_distanz(G.coords'); 
+%     G.W = exp(-d.^2/(2*s^2)); 
+%     G.W(G.W<T) = 0; % Thresholding to have sparse matrix
+%     G.W=G.W-diag(diag(G.W));
+%     G.W=sparse(G.W);
 end
 
 G.plotting.limits = [0,1,0,1];
