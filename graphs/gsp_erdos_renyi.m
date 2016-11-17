@@ -36,7 +36,7 @@ function [ G ] = gsp_erdos_renyi( N,p,param )
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_erdos_renyi.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -103,8 +103,9 @@ if param.connected
     end
     while ~bool
         
-        G.W=sparse(triu(rand(N)<p,1));
-        G.W=G.W+G.W';
+        G.W = sprandsym(N, p)>0;
+        G.W(1:N+1:end) = 0;
+
         bool=gsp_check_connectivity(G.W);
         if iter==param.maxit
             warning('The graph is not strongly connected.');
@@ -124,8 +125,8 @@ if param.connected
         end
     end
 else
-   G.W = sprand(N,N,p)>0;
-   G.W = (G.W+G.W')/2;
+   G.W = sprandsym(N,p)>0;
+   G.W(1:N+1:end) = 0;
 end
     
 

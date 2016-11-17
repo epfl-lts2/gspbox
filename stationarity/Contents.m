@@ -3,8 +3,8 @@
 %  Vertex stationarity
 %      gsp_experimental_psd - Experimental power density function
 %      gsp_design_translates - Create a filterbank by uniformly translating a window
-%      gsp_stationary_cov - Covariance matrix from graph stationary data
-%      gsp_staionarity_ratio - Assert the stationarity level of some data
+%      gsp_stationarity_cov - Covariance matrix from graph stationary data
+%      gsp_stationarity_ratio - Assert the stationarity level of some data
 %      gsp_estimate_psd - Estimation of the Power spectrum density
 %      gsp_wiener_optimization - Solve wiener optimization problem
 %      gsp_wiener_l2 - Solve wiener optimization problem with l2 fidelity term
@@ -17,7 +17,7 @@
 %   Url: http://lts2research.epfl.ch/gsp/doc/stationarity/Contents.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

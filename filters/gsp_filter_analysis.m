@@ -49,7 +49,7 @@ function [c] = gsp_filter_analysis(G, fi, s, param)
 %   Additional parameters
 %   ---------------------
 %  
-%    param.method  : Select the method ot be used for the computation. 
+%    param.method  : Select the method to be used for the computation. 
 %      'exact'     : Exact method using the graph Fourier matrix
 %      'cheby'     : Chebyshev polynomial approximation
 %      'lanczos'   : Lanczos approximation
@@ -71,7 +71,7 @@ function [c] = gsp_filter_analysis(G, fi, s, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_filter_analysis.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -159,7 +159,7 @@ switch param.method
                     'should precompute it using the function: ',...
                     'gsp_compute_fourier_basis']);
             end
-            G=gsp_compute_fourier_basis(G);
+            G = gsp_compute_fourier_basis(G);
         end
         Nv = size(s,2);
         c = zeros(G.N*Nf,Nv);
@@ -168,12 +168,22 @@ switch param.method
         else
             fie = gsp_filter_evaluate(fi,G.e);
         end
-        for ii=1:Nf
-            c((1:G.N)+G.N * (ii-1),:)= gsp_igft(G, ...
-                repmat(conj(fie(:,ii)),1,Nv) ...
-                .* gsp_gft(G, s));
-        end
+%         for ii=1:Nf
+%             c((1:G.N)+G.N * (ii-1),:)= gsp_igft(G, ...
+%                 repmat(conj(fie(:,ii)),1,Nv) ...
+%                 .* gsp_gft(G, s));
+%         end
 
+%         c = gsp_mat2vec(gsp_igft(G, ...
+%     repmat(conj(fie),[1,1,Nv]) ...
+%     .* repmat(reshape(gsp_gft(G, s),G.N,1,[]),[1, Nf,1]) ));
+
+shat = gsp_gft(G, s);
+%chat = repmat(conj(fie),[1,1,Nv]) .* repmat(reshape(shat,G.N,1,[]),[1, Nf,1]);
+chat = bsxfun(@times, conj(fie), permute(shat,[1 3 2]));
+
+c = gsp_mat2vec(gsp_igft(G, chat));
+        
 
     case 'cheby'
 

@@ -37,7 +37,7 @@ function [G] = gsp_compute_fourier_basis(G,param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_compute_fourier_basis.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -79,10 +79,16 @@ if ~isfield(param,'verbose'), param.verbose = 1; end
 
 
 
-if ( isfield(G,'e') || isfield(G,'U') )
+if gsp_check_fourier(G)
     if param.verbose
         warning(['Laplacian eigenvalues or eigenvectors ',...
             'are already associated with this graph']);
+    end
+end
+
+if G.N > 15000
+    if param.verbose
+        error('Too big matrix to perform full eigenvalue decomposition.'); 
     end
 end
 
@@ -93,7 +99,7 @@ if G.N > 3000
     end
 end
     
-if isfield(G,'type') &&  strcmp(G.type,'ring')==1 && mod(G.N,2)==0 
+if isfield(G,'type') &&  strcmp(G.type,'ring')==1 % && mod(G.N,2)==0 
     U = dftmtx(G.N)/sqrt(G.N);
     E = (2-2*cos(2*pi*(0:G.N-1)'/G.N));
     inds = gsp_classic2graph_eig_order( G.N );
@@ -142,5 +148,14 @@ function [U,E] = gsp_full_eigen(L)
     signs=sign(eigenvectors(1,:));
     signs(signs==0)=1;
     U = eigenvectors*diag(signs);
+end
+
+function D = dftmtx(n)
+
+n = signal.internal.sigcasttofloat(n,'double','dftmtx','N',...
+  'allownumeric');
+
+D = fft(eye(n));
+
 end
 

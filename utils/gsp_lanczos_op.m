@@ -4,7 +4,7 @@ function c = gsp_lanczos_op(G,fi,s,param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_lanczos_op.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ function c = gsp_lanczos_op(G,fi,s,param)
 %     ArXiv e-prints, Aug. 2014.
 % http://arxiv.org/abs/1408.5781
 
+if nargin < 4, param = struct; end
 if ~isfield(param,'verbose'), param.verbose = 1; end;
 if ~isfield(param,'order'), param.order = 30; end
 

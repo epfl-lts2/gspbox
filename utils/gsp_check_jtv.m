@@ -1,22 +1,20 @@
-function [ ft ] = gsp_translate(G, f, i)
-%GSP_TRANSLATE Generalized translation of the signal f to the node i
-%   Usage: ft = gsp_translate(G, f, i);
+function bool = gsp_check_jtv(G)
+%GSP_CHECK_JTV Check if G is a JTV graph
+%   Usage:  bool = gsp_check_jtv(G):
 %
-%   Input parameters
-%       G   : Graph
-%       f   : Signal (column)
-%       i   : Indices of vertex (int)
-%   Output parameters
-%       ft  : translate signal
+%   Input parameters:
+%       G           : Graph structure
+%   Output parameters:
+%       bool        : boolean
 %
-%   This function translate the column vector f onto the node i. If f*
-%   is a matrix, the translation will be done to each column.
+%   This function check if the structure G is a valid Joint Time-Vertex
+%   Graph structure
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_translate.php
+%   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_check_jtv.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -37,15 +35,18 @@ function [ ft ] = gsp_translate(G, f, i)
 %     ArXiv e-prints, Aug. 2014.
 % http://arxiv.org/abs/1408.5781
 
-% Author: Nathanael Perraudin
-% Date  : 09.12.2013
+bool = 0;
 
-
-fhat=gsp_gft(G,f);
-nt = size(f,2);
-
-ft = sqrt(G.N)*gsp_igft(G,fhat .* ...
-    repmat(transpose(G.U(i,:)),1,nt));
-
-
+if ~isstruct(G)
+    error('Input is not a valid Graph structure')
 end
+
+if ~isfield(G.jtv,'T')
+    return
+end
+
+if or(~isfield(G.jtv,'T'),~isfield(G.jtv,'fs'))
+    return
+end
+
+bool = 1;

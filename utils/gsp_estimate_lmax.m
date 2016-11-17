@@ -24,7 +24,7 @@ function G = gsp_estimate_lmax(G)
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_estimate_lmax.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ try
     opts=struct('tol',5e-3,'p',min(G.N,10),'disp',0);
     lmax=eigs(G.L,1,'lm',opts);
 
-    G.lmax=lmax*1.01; % just increase by 1 percent to be robust to error
+    G.lmax=abs(lmax)*1.01; % just increase by 1 percent to be robust to error
     
 catch
     warning('GSP_ESTIMATE_LMAX: Cannot use the default method')

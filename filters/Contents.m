@@ -16,7 +16,7 @@
 %    gsp_design_papadakis         -  Design 2 filter with the "Papadakis" construction
 %
 %  Dual filterbank
-%    gsp_design_can_dual          -  Design the conical dual filterbank
+%    gsp_design_can_dual          -  Design the canonical dual filterbank
 %    gsp_evaluate_can_dual        -  Evaluate the canonical dual of a filterbank
 %    gsp_test_duality             -  Test if 2 filterbanks are dual
 %    gsp_test_duality_coefficient -  Test if 2 discrete filterbanks are dual
@@ -31,6 +31,22 @@
 %    gsp_filter_analysis          -  Analysis operator for filterbank
 %    gsp_filter_synthesis         -  Synthesis operator for filterbank
 %    gsp_filter_inverse           -  Inverse operator for filterbank
+%
+%  Joint Time-Vertex Filter Design
+%    gsp_jtv_design_diffusion         -  Design a diffusion filterbank
+%    gsp_jtv_design_wave              -  Design a wave filterbank
+%    gsp_jtv_design_damped_wave       -  Design a damped wave filterbank
+%    gsp_jtv_design_dgw               -  Design a generic dynamic graph wavelet
+%
+%  Joint Time-Vertex Filter Application
+%    gsp_jtv_filter_analysis      -  Analysis operator for time-vertex filterbank
+%    gsp_jtv_filter_synthesis     -  Synthesis operator for time-vertex filterbank
+%    gsp_jtv_filter_evaluate      -  Evaluate a time-vertex filterbank
+%    gsp_jtv_filter_array         -  Convert a ts/js time-vertex filter to a ts/js-array time-vertex filterbank
+%    gsp_jtv_compute_frame        -  Return the matrix operator associated to a time-vertex filterbank
+%    gsp_jtv_evaluate_can_dual    -  Evaluate the canonical dual of a time-vertex filterbank
+%    gsp_jtv_design_can_dual      -  Design the canonical dual of a time-vertex filterbank
+%    gsp_filter_inverse           -  Inverse operator for a time-vertex filterbank
 %
 %  Size Handling
 %    gsp_mat2vec                  -  Matrix to vector representation for filterbanks 
@@ -53,7 +69,7 @@
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/Contents.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -76,4 +92,6 @@
 
 % To be done
 %   - add function in doc from meyer and simple_tf
+
+
 

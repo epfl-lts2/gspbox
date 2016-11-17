@@ -1,4 +1,4 @@
-function [ G ] = gsp_sphere( param )
+function G = gsp_sphere(N, param)
 %GSP_SPHERE Create a spherical-shaped graph
 %   Usage :  G = gsp_sphere();
 %            G = gsp_sphere( param );
@@ -33,7 +33,7 @@ function [ G ] = gsp_sphere( param )
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_sphere.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -56,17 +56,20 @@ function [ G ] = gsp_sphere( param )
 
 % Author : Johan Paratte
 
-    if nargin < 1
+if nargin < 1
+    N = 300;
+end
+    
+
+    if nargin < 2
        param = {};
     end
     
     %Parameters
     if ~isfield(param, 'radius'), param.radius = 1; end
-    if ~isfield(param, 'nb_pts'), param.nb_pts = 300; end
     if ~isfield(param, 'nb_dim'), param.nb_dim = 3; end
     if ~isfield(param, 'sampling'), param.sampling = 'random'; end
 
-    N = param.nb_pts;
     K = param.nb_dim;
     
     switch param.sampling

@@ -1,5 +1,5 @@
 function y = gsp_smooth_step(x, a)
-%GSP_SMOOTH_STEP Smooth step function from 0 to 1 arround 0
+%GSP_SMOOTH_STEP Smooth step function from 0 to 1 arround 0.5
 %   Usage: y = gsp_smooth_step(x);
 %          y = gsp_smooth_step(x, a)
 %   
@@ -12,15 +12,15 @@ function y = gsp_smooth_step(x, a)
 %   This function is a smooth step from 0 to 1 arround 0 using the
 %   following function:
 %
-%               /   0                                      if x < -1
-%       s(x) = | exp(-a/x) / ( exp(-a/x) + exp(-a/(1-x)) ) if x in [-1, 1]
+%               /   0                                      if x < 0
+%       s(x) = | exp(-a/x) / ( exp(-a/x) + exp(-a/(1-x)) ) if x in [0, 1]
 %               \   1                                      if x > 1
 %
 %
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_smooth_step.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

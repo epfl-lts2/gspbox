@@ -34,7 +34,7 @@ function psd = gsp_estimate_psd(G, x, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/stationarity/gsp_estimate_psd.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -77,7 +77,7 @@ end
 if ~isfield(param,'Nfilt'), param.Nfilt = 50; end
 if ~isfield(param,'Nrandom'), param.Nrandom = max(10,size(x,2)); end
 if ~isfield(param,'g0'), 
-    sigma = sqrt(G.lmax/param.Nfilt^2 * (param.Nfilt + 1));
+    sigma = sqrt(2*G.lmax/param.Nfilt^2 * (param.Nfilt + 1));
     param.g0 = @(x) exp(-x.^2/sigma^2); 
 
 end
@@ -89,14 +89,21 @@ end
 %% Perform the filtering
 
 x_filt = gsp_vec2mat( gsp_filter(G,g,x,param), param.Nfilt);
-w = randn(size(x,1),param.Nrandom);
-x_filt2 = gsp_vec2mat( gsp_filter(G,g,w,param), param.Nfilt);
-
 %% estimate the points
 n2_x_filt = sum(abs(x_filt).^2,1);
-n2_x_filt2 = sum(abs(x_filt2).^2,1);
 mu_y = reshape(mean(n2_x_filt,3),[],1);
-mu_y2 = reshape(mean(n2_x_filt2,3),[],1);
+
+%% Estimate the energy of the window
+
+if gsp_check_fourier(G)
+   mu_y2 = sum(abs(gsp_filter_evaluate(g,G.e)).^2,1)';
+else
+    w = randn(size(x,1),param.Nrandom);
+    x_filt2 = gsp_vec2mat( gsp_filter(G,g,w,param), param.Nfilt);
+    n2_x_filt2 = sum(abs(x_filt2).^2,1);
+    mu_y2 = reshape(mean(n2_x_filt2,3),[],1);
+end
+
 
 %% Interpolate to obtain a nice filter.
 

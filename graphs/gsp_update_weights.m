@@ -26,7 +26,7 @@ function [ G ] = gsp_update_weights( G, W )
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_update_weights.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -55,14 +55,6 @@ function [ G ] = gsp_update_weights( G, W )
 
 G.W = W;
 
-G = gsp_graph_default_parameters(G);
-
-if isfield(G,'lmax')
-    G = rmfield(G,'lmax');
-    G = gsp_estimate_lmax(G);
-end
-
-
 if isfield(G,'U')
     G = rmfield(G,'U');
 end
@@ -75,9 +67,12 @@ if isfield(G,'mu')
     G =rmfield(G,'mu');
 end
 
+G = gsp_graph_default_parameters(G);
 
-
-
+if isfield(G,'lmax')
+    G = rmfield(G,'lmax');
+    G = gsp_estimate_lmax(G);
+end
 
 
 end

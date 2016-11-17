@@ -1,7 +1,7 @@
-function [ G ] = gsp_create_laplacian( G,type )
+function G = gsp_create_laplacian(G, lap_type)
 %GSP_CREATE_LAPLACIAN create the graph laplacian of the graph G
-%   Usage: G = gsp_create_laplacian( G,type );
-%          G = gsp_create_laplacian( G );
+%   Usage: G = gsp_create_laplacian(G, type);
+%          G = gsp_create_laplacian(G);
 %
 %   Input parameters:
 %       G   : Graph structure (or cell array of graph structure) 
@@ -29,6 +29,8 @@ function [ G ] = gsp_create_laplacian( G,type )
 %
 %        L_cn = I - 1/2 [Pi^0.5 P Pi^-0.5 + Pi^-0.5 P^T Pi^0.5 ]
 %
+%
+%   see also: gsp_laplacian
 %       
 %   References:
 %     F. Chung. Laplacians and the cheeger inequality for directed graphs.
@@ -39,7 +41,7 @@ function [ G ] = gsp_create_laplacian( G,type )
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_create_laplacian.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -62,7 +64,7 @@ function [ G ] = gsp_create_laplacian( G,type )
 
 
 % Author: Nathanael Perraudin
-% Date  : 09.12.2013
+% Date  : 09.12.2013, revised jun 2016
 
 if numel(G)>1
     Ng = numel(G);
@@ -70,7 +72,7 @@ if numel(G)>1
         if nargin<2
             G{ii} = gsp_create_laplacian(G{ii});
         else
-            G{ii} = gsp_create_laplacian(G{ii}, type);
+            G{ii} = gsp_create_laplacian(G{ii}, lap_type);
         end
     end     
     return;
@@ -79,10 +81,10 @@ end
 
 if nargin<2
     if ~isfield(G,'lap_type')
-        type='combinatorial';
-        G.lap_type = type;
+        lap_type='combinatorial';
+        G.lap_type = lap_type;
     else
-        type = G.lap_type;
+        lap_type = G.lap_type;
     end
 end
 
@@ -109,9 +111,9 @@ if G.directed
     D1 = sum(G.W,2);
     D2 = sum(G.W,1);
     
-    switch type
+    switch lap_type
         case 'combinatorial'
-            G.L=0.5 * (diag(D1) + diag(D2) - G.W - G.W');
+            G.L=(diag(D1) + diag(D2) - G.W - G.W');
         case 'chung'
             [phi,P] = compute_perron(G.W);
             Phiup=diag(sparse(phi.^(0.5)));            
@@ -135,39 +137,37 @@ if G.directed
         otherwise
             error(' Unknown laplacian type')
     end    
-    % To avoid numerical errors of symetry
+    % To avoid numerical errors of symmetry
     G.L = (G.L +G.L')/2;
 else
-    D = sum(G.W,2);
-    switch type
-        case 'combinatorial'
-            G.L=diag(D)-G.W;
-        case 'normalized'
-            Dn = diag(D.^(-0.5));
-            G.L=speye(G.N)-Dn*G.W*Dn;
-        case 'none'
-            G.L=sparse(0);
-        otherwise
-            error(' Unknown laplacian type')
-    end
+    G.L = gsp_laplacian(G.W, lap_type);
 end
 
 
 if isfield(G,'Gm')
-    G.Gm = gsp_create_laplacian(G.Gm,type);
+    G.Gm = gsp_create_laplacian(G.Gm,lap_type);
 end
 
 % Update problematic fields
-if isfield(G,'U')
+if gsp_check_fourier(G)
+    disp('Recomputing the Fourier matrix')
+    G = rmfield(G,'U');
+    G = rmfield(G,'e');
+    G = rmfield(G,'lmax');
     G = gsp_compute_fourier_basis(G);
+elseif isfield(G,'lmax')
+    disp('Recomputing the maximum eigenvalue')
+    G = gsp_estimate_lmax(G);
 end
+
+
 
 if isfield(G,'Diff')
     G = rmfield(G,'Diff');
     G = gsp_adj2vec(G);
 end
 
-G.lap_type = type;
+G.lap_type = lap_type;
 
 
 end
@@ -178,7 +178,7 @@ function [phi,P] = compute_perron(A)
 %     N = size(A,1);
 
     % Remove the diagonal
-    A=A-diag(diag(A));
+    A = zero_diag(A);
 
     % Compute the Probablility matrix
     %P=A./repmat(sum(A,2),1,N);

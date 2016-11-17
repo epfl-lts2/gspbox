@@ -1,4 +1,4 @@
-function [indx, indy, dist, Xo1, Xo2, epsilon] = gsp_nn_distanz(X1, X2, param)
+function [indx, indy, dist, Xo1, Xo2, epsilon, NN, Dist] = gsp_nn_distanz(X1, X2, param)
 %GSP_NN_DISTANZ Compute the nearest neighboor distances
 %   Usage : [indx, indy, dist] = gsp_nn_distanz( X1 );
 %           [indx, indy, dist] = gsp_nn_distanz( X1, X2 );
@@ -17,6 +17,8 @@ function [indx, indy, dist, Xo1, Xo2, epsilon] = gsp_nn_distanz(X1, X2, param)
 %       Xo1         : Points 1 after rescaling
 %       Xo2         : Points 2 after rescaling
 %       epsilon     : Radius of the ball (if the ball is used!)
+%       NN          : Indices of closest neighbours of each node
+%       Dist        : Sorted distances for each node
 %
 %   This function computes the nearest neighboors of Xin.
 %
@@ -26,7 +28,7 @@ function [indx, indy, dist, Xo1, Xo2, epsilon] = gsp_nn_distanz(X1, X2, param)
 %    param.type      : ['knn', 'radius'] - the type of graph (default 'knn')
 %    param.use_flann : [0, 1] - use the FLANN library (default 0)
 %    param.use_full  : [0, 1] - Compute the full distance matrix and then
-%     sparsify it (default 0) 
+%     sparsify it (default 0)
 %    param.flan_checks*: int - Number of checks for FLANN (default 256)
 %     the higher the more precise, but the slower. Please consider the
 %     following values: a) 32 not precise and fast, b) precise enought and
@@ -45,7 +47,7 @@ function [indx, indy, dist, Xo1, Xo2, epsilon] = gsp_nn_distanz(X1, X2, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_nn_distanz.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -88,6 +90,7 @@ if ~isfield(param, 'rescale'), param.rescale = 0; end
 if ~isfield(param, 'k'), param.k = 10; end
 if ~isfield(param, 'epsilon'), param.epsilon = 0.01; end
 if ~isfield(param, 'use_l1'), param.use_l1 = 0; end
+if ~isfield(param, 'use_cosine'), param.use_cosine = 0;
 if ~isfield(param, 'target_degree'), param.target_degree = 0; end
 if ~isfield(param, 'flann_nbcores'), param.flann_nbcores = 1; end
 if ~isfield(param, 'flann_checks'), param.flann_checks = 256; end
@@ -138,14 +141,18 @@ Xo2 = Xo((n1+1) : (n1+n2), :);
 if ~(exist('KDTreeSearcher.m','file')==2) && ~param.use_flann
     param.use_full = 1;
     warning(['The Statistics and Machine Learning Toolbox is not availlable.',...
-    'This function will not scale.'])
+        'This function will not scale.'])
+end
+
+if param.use_cosine 
+   warning(['Cosine distance nn graph uses an exhaustive search']);
 end
 
 if param.use_full
     
     D = gsp_distanz(transpose(Xo1),transpose(Xo2));
     switch param.type
-        case 'knn'  
+        case 'knn'
             [Ds,ind] = sort(D,1,'ascend');
             indy = reshape(repmat(1:n2,param.k,1),[],1);
             indx = reshape(ind(1:param.k,:),[],1);
@@ -159,39 +166,49 @@ if param.use_full
             error('Unknown type : allowed values are knn, radius');
     end
 else
-
+    
     switch param.type
         %Connect the k NN
         case 'knn'
             k = param.k;
-
-
-
-
+            
+            
+            
+            
             %Find kNN for each point in X (Using a kdtree)
             if param.use_flann
                 if param.use_l1
-                    error('Not implemented yet')
+                    flann_set_distance_type('manhattan');
+                    paramsflann.checks = param.flann_checks;
+                    paramsflann.cores = param.flann_nbcores;
+                    paramsflann.algorithm = 'kdtree';
+                    paramsflann.trees = 1;
+                    [NN, Dist] = flann_search(transpose(Xo1), transpose(Xo2),...
+                        k, paramsflann);
+                    NN = transpose(NN);
+                    Dist = transpose(Dist);
+                else
+                    flann_set_distance_type('euclidean');
+                    %TODO : optimize parameters in function of the number of
+                    %points
+                    
+                    %  paramsflann.target_precision = 0.9;
+                    paramsflann.checks = param.flann_checks;
+                    %  paramsflann.iterations = 5;
+                    
+                    paramsflann.cores = param.flann_nbcores;
+                    % Use flann library
+                    %             idx = flann_build_index(transpose(Xo1),struct('algorithm','kdtree','trees',1));
+                    %             [NN, Dist] = flann_search(idx, transpose(Xo2),...
+                    %                 k, paramsflann);
+                    paramsflann.algorithm = 'kdtree';
+                    paramsflann.trees = 1;
+                    [NN, Dist] = flann_search(transpose(Xo1), transpose(Xo2),...
+                        k, paramsflann);
+                    NN = transpose(NN);
+                    % Flann search return the distance squared. I do not know why
+                    Dist = transpose(sqrt(Dist));
                 end
-                %TODO : optimize parameters in function of the number of
-                %points
-
-                %  paramsflann.target_precision = 0.9;
-                paramsflann.checks = param.flann_checks;
-                %  paramsflann.iterations = 5;
-
-                paramsflann.cores = param.flann_nbcores;
-                % Use flann library
-    %             idx = flann_build_index(transpose(Xo1),struct('algorithm','kdtree','trees',1));
-    %             [NN, Dist] = flann_search(idx, transpose(Xo2),...
-    %                 k, paramsflann);            
-                paramsflann.algorithm = 'kdtree';
-                paramsflann.trees = 1;
-                [NN, Dist] = flann_search(transpose(Xo1), transpose(Xo2),...
-                    k, paramsflann);
-                NN = transpose(NN);
-                % Flann search return the distance squared. I do not know why
-                Dist = transpose(sqrt(Dist));
             else
                 %Built in matlab knn search
                 if ~isreal(Xo)
@@ -216,8 +233,8 @@ else
                     end
                 end
             end
-
-
+            
+            
             % OLD CODE:
             % Create index matrices for the sparse W
             %         for ii = 1:n2
@@ -226,29 +243,29 @@ else
             %             dist((ii-1)*k+1:ii*k) = Dist(ii,1:end);
             %         end
             %
-
+            
             % VAS: got rid of the for-loop.
             % Create index matrices for the sparse W
             indy = kron((1:n2)', ones(k, 1));
             indx = reshape(NN', k*n2, 1);
             dist = reshape(Dist', k*n2, 1);
-
+            
             epsilon = nan;
-
+            
             %Connect all the epsilon-closest NN
         case 'radius'
             %Create KDTree for fast NN computation
-
+            
             if param.use_l1
                 kdt = KDTreeSearcher(Xo1, 'distance', 'cityblock');
             else
                 kdt = KDTreeSearcher(Xo1, 'distance', 'euclidean');
             end
-
+            
             if param.use_flann
                 warning('Flann is only used for k-NN search, not for radius search.');
             end
-
+            
             if (param.target_degree == 0)
                 epsilon = param.epsilon;
             else
@@ -265,15 +282,15 @@ else
                 [NN, Dist] = rangesearch(kdt, Xo2, epsilon, ...
                     'distance', 'euclidean' );
             end
-
+            
             % Create index matrices for the sparse W
             % VAS: got rid of the for-loop.
             indx = double(cell2mat(NN(:)')');
             dist = double(cell2mat(Dist(:)')');
-
+            
             % number of NN for each node        EXAMPLE: [2 3 2]
             nNN = cellfun('length', NN);
-
+            
             indy = zeros(length(indx) + 1, 1);
             % positions where indy changes value  EXAMPLE: [1 3 6 8]
             pos_y = cumsum([1; nNN]);
@@ -281,13 +298,13 @@ else
             indy(pos_y(1:end)) = 1;
             % [1 0 1 0 0 1 0 1]  ->   [1 1 2 2 2 3 3 4]
             indy = cumsum(indy(1:end-1));
-
-
+            
+            
         otherwise
             error('Unknown type : allowed values are knn, radius');
     end
-
-
+    
+    
 end
 
 Xo1 = transpose(Xo1);

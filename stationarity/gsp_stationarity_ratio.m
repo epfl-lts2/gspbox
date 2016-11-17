@@ -1,5 +1,11 @@
-function r = gsp_stationarity_ratio(G, C)
-%GSP_STATIONARITY_RATIO Assert the stationarity level of some data
+function r = gsp_stationarity_ratio(G, C, param)
+%GSP_STATIONARITY_RATIO This is a number from [0 to 1] depicting how close to the PCA basis the graph basis is
+%
+%   The method examines the percentage of the data variance that is not in
+%   the diagonal of the covariance of the GFT of X. The index can be used to
+%   describe how well a graph fits a given data matrix X, or distribution. 
+%   An index of 0 means that the data are graph stationary on G.
+%
 %   Usage:  r = gsp_stationarity_ratio(G, C)
 %
 %   Input parameters:
@@ -8,6 +14,9 @@ function r = gsp_stationarity_ratio(G, C)
 %   Output parameters:
 %         r          : Ratio
 %
+%   Optional parameters: 
+%   params.verbose   :0 = nothing, 1 = plot the covariance of GFT(x) (default 0)
+% 
 %   This function compute the ratio of energy contained into the diagonal
 %   of the Fourier covariance matrix:
 %
@@ -22,7 +31,7 @@ function r = gsp_stationarity_ratio(G, C)
 %   Url: http://lts2research.epfl.ch/gsp/doc/stationarity/gsp_stationarity_ratio.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -44,14 +53,25 @@ function r = gsp_stationarity_ratio(G, C)
 % http://arxiv.org/abs/1408.5781
 
 
-% Author : Nathanael Perraudin
-% Date: 6 January 2016
+% Authors : Nathanael Perraudin, Andreas Loukas
+% Date    : 6 January 2016
+
+if nargin < 3, param = struct(); end
+
+if not(isfield(G, 'U'))
+    G = gsp_compute_fourier_basis(G);
+end
+
 
 CF = G.U' * C * G.U;
 
 r = gsp_diagonal_ratio(CF);
 
 
+if param.verbose > 0
+    figure; imagesc(abs(CF)); 
+    title('G.U^*  * (X * X^*) * G.U')
+end
 
 end
 

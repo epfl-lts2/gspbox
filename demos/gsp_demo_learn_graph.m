@@ -118,7 +118,7 @@
 %   Url: http://lts2research.epfl.ch/gsp/doc/demos/gsp_demo_learn_graph.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -188,7 +188,8 @@ end
 
 Z1 = gsp_distanz(X(:, 1)').^2;
 if method == 1
-    W1 = gsp_learn_graph_log_degrees(s*Z1, s*1.5, s*1, params);
+     W1 = gsp_learn_graph_log_degrees(s*Z1, s*1.5, s*1, params);
+%    W1 = sqrt(1.5)*gsp_learn_graph_log_degrees(Z1/sqrt(1.5), 1, 1, params);
 else
     W1 = gsp_learn_graph_l2_degrees(s*Z1, s*1.2, params);
 end

@@ -3,7 +3,6 @@
 %  Localisation
 %    gsp_localize       -  Localize a kernel
 %    gsp_modulate       -  Generalized modulation operator
-%    gsp_translate      -  Generalized translation operator
 %
 %  Differential
 %    gsp_grad_mat       -  Compute the gradient sparse matrix
@@ -15,6 +14,12 @@
 %    gsp_igft           -  Inverse graph Fourier transform
 %    gsp_gwft           -  Windowed graph Fourier transform
 %    gsp_ngwft          -  Normalized windowed graph Fourier transform
+%
+%  Time-Vertex Transforms
+%    gsp_jft            -  Joint Time-Vertex Fourier transform
+%    gsp_ijft           -  Inverse Joint Time-Vertex Fourier transform
+%    gsp_tft            -  Time-Vertex Time-Fourier transform
+%    gsp_itft           -  Time-Vertex Inverse Time-Fourier transform
 %
 %  Pyramid - Reduction
 %    gsp_kron_reduce    - Kron reduction
@@ -34,7 +39,7 @@
 %   Url: http://lts2research.epfl.ch/gsp/doc/operators/Contents.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

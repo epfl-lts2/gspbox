@@ -1,4 +1,4 @@
-function [G]=gsp_swiss_roll(N,rand_seed,param)
+function [G, tt]=gsp_swiss_roll(N,rand_state,param)
 %GSP_SWISS_ROLL Initialize a swiss roll graph
 %   Usage:  G = gsp_swiss_roll(N,rand_state,param);
 %
@@ -22,7 +22,7 @@ function [G]=gsp_swiss_roll(N,rand_seed,param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_swiss_roll.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

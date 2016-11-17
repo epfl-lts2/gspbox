@@ -18,7 +18,7 @@ function [ G ] = gsp_nn_graph(Xin, param)
 %
 %           P = gsp_pointcloud('bunny');
 %           param.type = 'knn';
-%           G = gsp_nn_graph(P, param);
+%           G = gsp_nn_graph(double(P), param);
 %           gsp_plot_graph(G);
 %
 %   Additional parameters
@@ -43,7 +43,7 @@ function [ G ] = gsp_nn_graph(Xin, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_nn_graph.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

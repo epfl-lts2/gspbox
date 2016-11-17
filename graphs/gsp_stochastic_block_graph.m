@@ -23,7 +23,7 @@ function G = gsp_stochastic_block_graph(N, k, params)
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_stochastic_block_graph.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ function G = gsp_stochastic_block_graph(N, k, params)
 % http://arxiv.org/abs/1408.5781
 
 % Author: Pierre Vandergheynst, Nathanael Perraudin
-% Date  : 2 novemeber 2015
+% Date  : 2 novemeber 2015 (revision: 6 october 2016 -- Lionel Martin)
 
 
 
@@ -63,16 +63,31 @@ end
 if ~isfield(params, 'p')
     params.p = 0.7;
 end
+
 if ~isfield(params, 'q')
     params.q = (1-params.p) / k;
 end
+
+if ~isfield(params, 'force_full')
+    params.force_full = 0;
+end
+
+if ~isfield(params, 'auto_gen_M')
+    params.auto_gen_M = 0;
+end
+
 if (~isfield(params, 'z') || length(params.z) ~= N || max(params.z) > k || min(params.z) < 1)
     params.z = randi(k, 1, N);
 end
+
 if (~isfield(params, 'M') || size(params.M) ~= [k, k])
-    params.M = params.q * ones(k);
-    params.M(1:k+1:end) = params.p;
+    if params.force_full
+        params.M = params.q * ones(k);
+        params.M(1:k+1:end) = params.p;
+    end
+    params.auto_gen_M = 1;
 end
+
 if ~isfield(params, 'directed')
     params.directed = false;
 end
@@ -89,22 +104,54 @@ end
 % z((k-1)*L + 1:end) = k;
  
 %% Generate adjacency
-M = params.M;
 z = params.z;
-W = sparse(N, N);
 
-for i=1:N
-    for j=i+1:N
-        W(i, j) = ( rand <= M(z(i), z(j)) );
-        if params.directed
-            W(j, i) = ( rand <= M(z(j), z(i)) );
-        else
-            W(j, i) = W(i, j);
-        end
+% for i=1:N
+%     for j=i+1:N
+%         W(i, j) = ( rand <= M(z(i), z(j)) );
+%         if params.directed
+%             W(j, i) = ( rand <= M(z(j), z(i)) );
+%         else
+%             W(j, i) = W(i, j);
+%         end
+%     end
+% end
+if params.auto_gen_M && ~params.force_full
+    [val_z, idx_z] = sort(z);
+    counts = diff(find(diff([0, val_z, N])));
+
+    if length(counts) ~= k
+        error('There is at least one empty class. Check your z.');
     end
+
+    W = sprandsym(counts(k), params.p);
+    nb_cols_rect = 0;
+
+    for i=k:-1:2
+        nb_cols_rect = nb_cols_rect + counts(i);
+        rect = sprand(counts(i-1), nb_cols_rect, params.q);
+        top_left = sprandsym(counts(i-1), params.p);
+        W = vertcat(horzcat(top_left, rect), horzcat(rect', W));
+    end
+
+    W(1:N+1:end) = 0;
+    G.W(idx_z, idx_z) = abs(W) > 0;
+
+else
+    M = params.M;
+
+    if params.directed
+        W = rand(N) <= M(z, z);
+    else
+        A = rand(N);
+        A(logical(triu(ones(N)))) = 1;
+        W = A <= M(z, z);
+        W = W + W';
+    end
+
+    G.W = sparse(W);
 end
  
-G.W = W;
 G = gsp_graph_default_parameters(G);
 G.info.node_com = z;
 

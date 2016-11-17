@@ -93,7 +93,7 @@ function [W, stat] = gsp_learn_graph_log_degrees(Z, a, b, params)
 %   Url: http://lts2research.epfl.ch/gsp/doc/learn_graph/gsp_learn_graph_log_degrees.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -117,11 +117,6 @@ function [W, stat] = gsp_learn_graph_log_degrees(Z, a, b, params)
 % Author: Vassilis Kalofolias
 % Testing: gsp_test_learn_graph
 % Date: June 2015
-
-
-
-
-
 
 
 %% Default parameters
@@ -152,14 +147,13 @@ end
 w_0 = 0;
 
 %% Needed operators
-
-% L*w = sum(W)
+% S*w = sum(W)
 [S, St] = sum_squareform(n);
 
-% L: edges -> nodes
+% S: edges -> nodes
 K_op = @(w) S*w;
 
-% L': nodes -> edges
+% S': nodes -> edges
 Kt_op = @(z) St*z;
 
 % the next is an upper bound if params.fix_zeros
@@ -177,9 +171,9 @@ norm_K = sqrt(2*(n-1));
 % min_W                f(W)          +       g(L_op(W))      +   h(W)
 
 % put proximal of trace plus positivity together
-f.eval = @(w) w'*z;    % half should be counted
+f.eval = @(w) 2*w'*z;    % half should be counted
 %f.eval = @(W) 0;
-f.prox = @(w, c) max(0, w - c*z);  % all change the same
+f.prox = @(w, c) max(0, w - 2*c*z);  % all change the same
 
 param_prox_log.verbose = params.verbosity - 3;
 g.eval = @(z) -a * sum(log(z));
@@ -240,8 +234,13 @@ for i = 1:params.maxit
     elseif params.verbosity > 1
         fprintf('iter %4d: %6.4e   %6.4e\n', i, rel_norm_primal, rel_norm_dual);
     end
-
-    w = w - Y_n + Q_n;
+    
+    % use a few iterations with same w to initialize the duals as well
+    if i <= 1 && isfield(params, 'W_init') 
+        w = squareform(params.W_init)';
+    else
+        w = w - Y_n + Q_n;
+    end
     v_n = v_n - y_n + q_n;
 
     if rel_norm_primal < params.tol && rel_norm_dual < params.tol

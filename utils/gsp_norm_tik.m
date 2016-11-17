@@ -18,7 +18,7 @@ function y = gsp_norm_tik(G,x)
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_norm_tik.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -52,14 +52,21 @@ else
     L = G;
 end
 
-[N,M ] = size(L);
 
+
+[N,M ] = size(L);
+if size(x,1) ~= M
+    error('The dimension of x is not compatible with the dimension of L');
+end
 NL = M/N;
 y = 0;
 for ii = 1:NL;
     ind = (1:N)+(ii-1)*N;
     y = y + sum(x(ind,:) .* (L(:,ind)* x(ind,:)) );
 end
+
+% Previous implementation
+% y = sum(x .* (L* x) );
 
 end
 

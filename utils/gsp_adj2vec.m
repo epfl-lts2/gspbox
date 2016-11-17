@@ -15,7 +15,7 @@ function [G] = gsp_adj2vec(G)
 %   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_adj2vec.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ function [G] = gsp_adj2vec(G)
 %     ArXiv e-prints, Aug. 2014.
 % http://arxiv.org/abs/1408.5781
 
-% Author: Nathanael Perraudin, Vassilis Kalofolias
+% Author: Nathanael Perraudin, Vassilis Kalofolias, Francesco Grassi
 % Date  : 5 August 2014
 % Testing: test_operators
 
@@ -45,15 +45,49 @@ if isfield(G,'Gm');
 end
 
 if G.directed
-    error('GSP_ADJ2VEC: Not implemented yet');
+    % Decompose adjacency matrix W = Wsym + Wasym
+    [Wsym,Wasym]=gsp_decompose_asymmatrix(G.W);
+    
+    % Find sym and asym edges
+    [v_sym_i, v_sym_j, weights_sym] = find(Wsym);
+    [v_asym_i, v_asym_j, weights_asym] = find(Wasym);
+    
+    
+    G.v_out = v_asym_i;
+    G.v_in = v_asym_j;
+    G.weights = weights_asym;
+    G.Ne = length(G.v_in);
+    Diff_dir = gsp_grad_mat( G );
+    
+    G.v_out = v_sym_i;
+    G.v_in = v_sym_j;
+    G.weights = weights_sym;
+    G.Ne = length(G.v_in);
+    Diff_und = gsp_grad_mat( G );
+    
+    
+    G.v_out = [v_sym_i;v_asym_i];
+    G.v_in = [v_sym_j;v_asym_j];
+    G.weights = [weights_sym;weights_asym];
+    G.Ne = length(G.v_in);
+    
+    % Compute gradient matrix
+    G.Diff = [Diff_dir;Diff_und];
+
+    % Compute flow matrix
+    G.Fo = [ Diff_dir;Diff_und  ];
+    G.Fo(G.Fo>0) = 0; 
+    
+    G.Fi = [ Diff_dir;Diff_und  ];
+    G.Fi(G.Fi<0) = 0;
+    
+    G.Adv = G.Diff'*G.Fo;
+    
 else
     % Keep each edge only once (they are duplicated!). Keep also loops.
-    if G.directed
-        error('Not implemented now!')
-    end
     [v_i, v_j, weights] = find(tril(G.W));
-    G.v_in = v_i;
     G.v_out = v_j;
+    G.v_in = v_i;
 
     % the indices of the edges in the Adgacency matrix A:
     %G.ind_edges = sub2ind(size(G.W), G.v_in, G.v_out);

@@ -1,11 +1,11 @@
-function [s] = gsp_filter_synthesis(G, filter, c, param)
+function [s] = gsp_filter_synthesis(G, filters, c, param)
 %GSP_FILTER_SYNTHESIS Synthesis operator of a gsp filterbank
-%   Usage:  s = gsp_filter_synthesis(G, filter, c);
-%           s = gsp_filter_synthesis(G, filter, c, param);
+%   Usage:  s = gsp_filter_synthesis(G, filters, c);
+%           s = gsp_filter_synthesis(G, filters, c, param);
 %
 %   Input parameters:
 %         G         : Graph structure.
-%         filter    : Set of spectral graph filters.
+%         filters   : Set of spectral graph filters.
 %         c         : Transform coefficients
 %         param     : Optional parameter
 %   Output parameters:
@@ -70,7 +70,7 @@ function [s] = gsp_filter_synthesis(G, filter, c, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_filter_synthesis.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -107,7 +107,7 @@ if iscell(G)
     s = cell(NG,1);
     for ii = 1:NG
         warning('Check what happen here')
-       s{ii} = gsp_filter_synthesis(G{ii}, filter{ii}, c{ii}, param);
+       s{ii} = gsp_filter_synthesis(G{ii}, filters{ii}, c{ii}, param);
 %         if iscell(s)
 %             c{ii} = gsp_filter_analysis(G{ii}, fi{ii}, s{ii}, param);
 %         else
@@ -118,10 +118,10 @@ if iscell(G)
 end
 
 
-if isnumeric(filter)
-    Nf = size(filter,2);
+if isnumeric(filters)
+    Nf = size(filters,2);
 else    
-    Nf = numel(filter);
+    Nf = numel(filters);
 end
 
 if isfield(param, 'exact')
@@ -164,23 +164,22 @@ switch param.method
             end
             G=gsp_compute_fourier_basis(G);
         end
-        if isnumeric(filter)
-            fie = filter;
+        if isnumeric(filters)
+            fie = filters;
         else
-            fie = gsp_filter_evaluate(filter,G.e);
+            fie = gsp_filter_evaluate(filters,G.e);
         end
-        Nv = size(c,2);
+%         Nv = size(c,2);
+%         s =zeros(G.N,size(c,2));
+%         for ii=1:Nf
+%             s = s + G.U * ...
+%                 (repmat(fie(:,ii),1,Nv) ...
+%                 .* (G.U' * c((1:G.N)+G.N * (ii-1),:)));
+%         end
 
-        s=zeros(G.N,size(c,2));
-
-        for ii=1:Nf
-            s = s + G.U * ...
-                (repmat(fie(:,ii),1,Nv) ...
-                .* (G.U' * c((1:G.N)+G.N * (ii-1),:)));
-        end
-
-
-
+        chat = gsp_gft(G,gsp_vec2mat(c,numel(filters)));
+        shat = squeeze(sum(bsxfun(@times, fie, chat), 2));
+        s = gsp_igft(G, shat);
 
     case 'cheby'
         if ~isfield(G,'lmax');
@@ -195,7 +194,7 @@ switch param.method
         end
 
 
-        cheb_coeffs = gsp_cheby_coeff(G, filter,...
+        cheb_coeffs = gsp_cheby_coeff(G, filters,...
                 param.order, param.order +1);    
 
         s=zeros(G.N,size(c,2));
@@ -207,11 +206,11 @@ switch param.method
     
     case 'lanczos'
         s=zeros(G.N,size(c,2));
-        if ~iscell(filter)
-            filter = {filter};
+        if ~iscell(filters)
+            filters = {filters};
         end
         for ii=1:Nf
-            s = s + gsp_lanczos_op(G, filter{ii}, c((1:G.N)+G.N * (ii-1),:), param);
+            s = s + gsp_lanczos_op(G, filters{ii}, c((1:G.N)+G.N * (ii-1),:), param);
         end
    
     otherwise

@@ -7,7 +7,7 @@ function [W, stat] = gsp_learn_graph_Lx_fro(X, params)
 %   Url: http://lts2research.epfl.ch/gsp/doc/learn_graph/gsp_learn_graph_Lx_fro.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

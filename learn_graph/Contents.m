@@ -4,6 +4,9 @@
 %    gsp_learn_graph_log_degrees  -  Learn weighted adjacency matrix from pairwise distances using negative log prior on nodes degrees
 %    gsp_learn_graph_l2_degrees   -  Learn weighted adjacency matrix from pairwise distances using l2 prior on nodes degrees
 %
+%  Measure of graph quality   
+%    gsp_learn_tcer               - Compute the total cumulative energy residual.
+% 
 %  For help, bug reports, suggestions etc. please send email to
 %  gspbox 'dash' support 'at' groupes 'dot' epfl 'dot' ch
 %
@@ -11,7 +14,7 @@
 %   Url: http://lts2research.epfl.ch/gsp/doc/learn_graph/Contents.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

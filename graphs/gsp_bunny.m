@@ -21,7 +21,7 @@ function [ G ] = gsp_bunny()
 %   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_bunny.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -47,13 +47,12 @@ function [ G ] = gsp_bunny()
     
     %Create the graph from the point cloud using an epsilon-neighborhood
     %connectivity
-    param.type = 'radius';
+    param.type = 'knn';
     param.rescale = 1;
     param.center = 1;
-    param.epsilon = 0.2;
     
     %Compute it
-    G = gsp_nn_graph(P, param);
+    G = gsp_nn_graph(double(P), param);
     %Reduce vertex size for plotting
     G.plotting.vertex_size = 10;
 end

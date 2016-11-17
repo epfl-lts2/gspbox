@@ -34,7 +34,7 @@ function [sol, infos] = gsp_wiener_inpainting(G,y, M, psd, psd_noise, param)
 %   Url: http://lts2research.epfl.ch/gsp/doc/stationarity/gsp_wiener_inpainting.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -90,7 +90,7 @@ fprior.prox = @(x,T) gsp_filter_analysis(G,fprox(T),x, param);
 fprior.eval = @(x) 0.5*norm(gsp_filter_analysis(G,wl,x,param),'fro')^2;
 
 
-sol = solvep(y,{ffid,fprior},param);
+[sol, infos] = solvep(y,{ffid,fprior},param);
 % [sol, infos] = gsp_wiener_optimization(G, y, ffid, psd, psd_noise, param);
 
 end

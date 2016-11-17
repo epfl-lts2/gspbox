@@ -91,7 +91,7 @@ function [W, stat] = gsp_learn_graph_l2_degrees(Z, a, params)
 %   Url: http://lts2research.epfl.ch/gsp/doc/learn_graph/gsp_learn_graph_l2_degrees.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -167,13 +167,13 @@ norm_K = 2 * sqrt(l);
 % min_W                f(W)          +       g(L_op(W))      +   h(W)
 
 % put proximal of trace plus positivity together
-f.eval = @(w) w'*z;    % half should be counted
+f.eval = @(w) 2*w'*z;    % half should be counted
 %f.eval = @(W) 0;
-f.prox = @(w, c) max(0, w - c*z);  % all change the same
+f.prox = @(w, c) max(0, w - 2*c*z);  % all change the same
 
 % projection of sum of W on n
 % g(w) = IND(sum(w) == n)
-g.eval = @(z) 1000 * abs(z-n);  % this could be 0. Measures violation of the condition sum(w) = n!!
+g.eval = @(z) 10 * abs(z-n);  % this could be 0. Measures violation of the condition sum(w) = n!!
 g.prox = @(z, c) n;
 % proximal of conjugate of g: z - c*g.prox(z/c, 1/c)
 g_star_prox = @(z, c) z - c*n;
@@ -181,7 +181,10 @@ g_star_prox = @(z, c) z - c*n;
 % the following is the squared frobenius norm of the graph Laplacian
 h.eval = @(w) a * (2*norm(w)^2 + norm(sum_op(w))^2);   % CAREFUL: w two times!
 h.grad = @(w) 2 * a * (2*w + sum_t_op(sum_op(w)));
-h.beta = 2 * a * (n+1);    % = norm(ones(n)+eye(n))
+% if the next is wrong we don't converge for time_step != 0.5
+h.beta = 2*(2*a*(n+1));    % = norm(ones(n)+eye(n)) = n+1
+
+% TODO: best convergence when h.beta = 1 ?? then use rescaling!!
 
 % if there is no quadratic term, it reduces to a linear program:
 if a == 0
@@ -212,12 +215,12 @@ else
     gn = lin_map(params.step_size, [epsilon, (1-epsilon)/mu], [0,1]);              % in [epsilon, (1-epsilon)/mu]
     for i = 1:params.maxit
         %Y_n = w - gn * (h.grad(w) + Kt_op(v_n));
-        Y_n = w - gn * (h.grad(w) + v_n);
+        Y_n = w - gn * (h.grad(w) + 2*v_n);
         y_n = v_n + gn * (K_op(w));
         P_n = f.prox(Y_n, gn);
         p_n = g_star_prox(y_n, gn); % = y_n - gn*g_prox(y_n/gn, 1/gn)
         %Q_n = P_n - gn * (h.grad(P_n) + Kt_op(p_n));
-        Q_n = P_n - gn * (h.grad(P_n) + p_n);
+        Q_n = P_n - gn * (h.grad(P_n) + 2*p_n);
         q_n = p_n + gn * (K_op(P_n));
         
         if nargout > 1 || params.verbosity > 2
@@ -231,12 +234,16 @@ else
         rel_norm_dual = norm(- y_n + q_n)/norm(v_n);
         
         if params.verbosity > 2
-            fprintf('iter %3d: %6.4e   %6.4e   %6.3e    %6.3e   %6.3e \n', i, rel_norm_primal, rel_norm_dual, stat.fgh_eval(i), full(sum(w)*2), stat.h_eval(i));
+            fprintf('iter %4d: %6.4e   %6.4e   %6.4e    %6.4e   %6.3e \n', i, rel_norm_primal, rel_norm_dual, stat.fgh_eval(i), full(sum(w)*2), stat.h_eval(i));
         elseif params.verbosity > 1
-            fprintf('iter %3d: %6.4e   %6.4e\n', i, rel_norm_primal, rel_norm_dual);
+            fprintf('iter %4d: %6.4e   %6.4e\n', i, rel_norm_primal, rel_norm_dual);
         end
         
-        w = w - Y_n + Q_n;
+        if i <= 1 && isfield(params, 'W_init') 
+            w = squareform(params.W_init)';
+        else
+            w = w - Y_n + Q_n;
+        end
         v_n = v_n - y_n + q_n;
         
         if rel_norm_primal < params.tol && rel_norm_dual < params.tol
@@ -245,7 +252,7 @@ else
     end
     stat.time = toc;
     if params.verbosity > 0
-        fprintf('# iters: %3d. Rel primal: %6.4e Rel dual: %6.4e   %6.3e\n', i, rel_norm_primal, rel_norm_dual, f.eval(w) + g.eval(K_op(w)) + h.eval(w));
+        fprintf('# iters: %4d. Rel primal: %6.4e Rel dual: %6.4e   %6.3e\n', i, rel_norm_primal, rel_norm_dual, f.eval(w) + g.eval(K_op(w)) + h.eval(w));
         fprintf('Time needed is %f seconds\n', stat.time);
     end
     

@@ -108,13 +108,28 @@
 %   To apply the filter to a given signal, you only need to run a single
 %   function:
 %
+%           % Create a signal
+%           f = zeros(G.N,1);
+%           f(G.info.idx_g) = -1;
+%           f(G.info.idx_s) = 1;
+%           f(G.info.idx_p) = -0.5;
+%           f = f + 0.3*randn(G.N,1);
+%           % Remove the noise
 %           f2 = gsp_filter(G,h,f);
 %
 %   gsp_filter is actually a shortcut to GSP_FILTER_ANALYSIS.
 %   gsp_filter_analysis performs the analysis operator associated to a
 %   filterbank. See the GSP_DEMO_WAVELET for more information.
 %
-%   Finnaly, we display the result of this low pass filtering on the graph
+%   Finnaly, we display the result of this low pass filtering on the graph:
+%
+%           figure;
+%           subplot(211)
+%           gsp_plot_signal(G,f);
+%           title('Signal with noise')
+%           subplot(212)
+%           gsp_plot_signal(G,f2);
+%           title('Signal denoised');
 %
 %   Figure 4: Result of filtering
 %
@@ -128,7 +143,7 @@
 %   Url: http://lts2research.epfl.ch/gsp/doc/demos/gsp_demo.php
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.6.0
+% This file is part of GSPbox version 0.7.0
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
