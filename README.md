@@ -3,8 +3,6 @@ Graph Signal Processing Toolbox (GSPBox)
 
 The official Graph Signal Processing Toolbox (GSPBox)
 
-The development version is available at https://github.com/epfl-lts2/gspbox-dev. Please use that version for any pull request.
-
 Running the toolbox
 ==
 
