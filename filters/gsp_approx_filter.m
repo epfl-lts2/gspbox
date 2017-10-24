@@ -14,7 +14,7 @@ function gt = gsp_approx_filter(G, g, m, N, param)
 %   Output parameters
 %       c   : matrix of Chebyshev coefficients
 % 
-%   This function create the approximate filters of g with a truncated
+%   This function creates the approximate filters of g with a truncated
 %   Chebyshev polynomial.
 %
 %   param contain only one field param.verbose to controle the verbosity.
@@ -43,10 +43,10 @@ function gt = gsp_approx_filter(G, g, m, N, param)
 %   See also: gsp_cheby_eval gsp_filter_analysis
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_approx_filter.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_approx_filter.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -91,7 +91,7 @@ if isstruct(G)
         if param.verbose
         warning(['GSP_APPROX_FILTER: The variable lmax is not ',...
             'available. The function will compute it for you. ',...
-            'However, if you apply many time this function, you ',...
+            'However, if you apply this function many times, you ',...
             'should precompute it using the function: ',...
             'gsp_estimate_lmax']);
         end

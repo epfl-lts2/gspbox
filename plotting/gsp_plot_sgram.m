@@ -21,18 +21,18 @@ function [  ] = gsp_plot_sgram( G,A,param )
 %           G = gsp_compute_fourier_basis(G);
 %           x = [0:N,(N-1):-1:1]';
 %           s = 3;
-%           g = exp(-x.^2/s^2);
-%           f = gsp_modulate(G,gsp_translate(G,g,N),N);
+%           g = exp(-(x-1).^2/s^2);
+%           f = gsp_localize(G,g,N);
 %           c = gsp_gwft(G,f,g);
 %           gsp_plot_sgram(G,c);
 %   
 %   See also: gsp_plot_signal, gsp_plot_graph, gsp_plot_signal_spectral
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/plotting/gsp_plot_sgram.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/plotting/gsp_plot_sgram.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

@@ -1,10 +1,10 @@
 % See http://stackoverflow.com/questions/16146599/create-artificial-data-in-matlab
 % and http://stackoverflow.com/questions/5837572/generate-a-random-point-within-a-circle-uniformly
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/pointsclouds/to_be_included/datasetsdemo.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/pointsclouds/to_be_included/datasetsdemo.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

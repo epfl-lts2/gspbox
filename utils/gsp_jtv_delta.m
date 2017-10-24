@@ -16,10 +16,10 @@ function jd = gsp_jtv_delta( G,vertex,time,param )
 %    param.lag    : If 1 the size of the delta in time is 2T-1 to take into account negative time location.
 %    param.concat : If 1 concatenates 2d-delta in a 3d matrix (N1,N2,#loc) instead of summing them. (default 0)
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_jtv_delta.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/utils/gsp_jtv_delta.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

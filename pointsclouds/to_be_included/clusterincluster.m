@@ -41,10 +41,10 @@ function data = clusterincluster(N, r1, r2, w1, w2, arms)
     scatter(data(:,1), data(:,2), 20, data(:,3)); axis square;
 end
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/pointsclouds/to_be_included/clusterincluster.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/pointsclouds/to_be_included/clusterincluster.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

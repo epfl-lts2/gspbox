@@ -36,10 +36,10 @@ function [ g,t ] = gsp_design_meyer(G, Nf, param)
 %       
 %   See also:
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_design_meyer.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_design_meyer.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

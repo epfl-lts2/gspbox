@@ -38,10 +38,10 @@ function gsp_plot_signal(G,signal,param)
 %   See also: gsp_plot_graph gsp_plot_signal_spectral
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/plotting/gsp_plot_signal.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/plotting/gsp_plot_signal.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -152,7 +152,7 @@ if size(G.coords,2) == 2
         if any(param.vertex_highlight > 0)
             vh = param.vertex_highlight;
             scatter(G.coords(vh,1),G.coords(vh,2), ...
-                param.vertex_size/3, 'ok');
+                param.vertex_size/3, 'ok','LineWidth',3);
 
         end   
     end

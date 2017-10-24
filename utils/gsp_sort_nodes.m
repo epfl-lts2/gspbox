@@ -46,10 +46,10 @@ function [W_sorted, ind_sort, modularity, com_id, com_sizes] = gsp_sort_nodes(W,
 %     
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_sort_nodes.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/utils/gsp_sort_nodes.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

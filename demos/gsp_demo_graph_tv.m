@@ -10,7 +10,7 @@
 %   We express the recovery problem as a convex optimization problem of the
 %   following form:
 %
-%        argmin   ||grad(x)||_1   s. t. ||Mx-b||_2 < epsilon
+%        argmin   ||grad(x)||_1   s. t. Mx = y
 %
 %   Where b represents the known measurements, M is an operator
 %   representing the mask and epsilon is the radius of the l2 ball.
@@ -22,7 +22,7 @@
 %
 %        prox_{f1,gamma} (z) = argmin_{x} 1/2 ||x-z||_2^2  +  gamma  ||grad(z)||_1
 %
-%    f_2 is the indicator function of the set S define by Mx-b||_2 < epsilon
+%    f_2 is the indicator function of the set S define by Mx = y
 %     We define the prox of f_2 as 
 %
 %        prox_{f2,gamma} (z) = argmin_{x} 1/2 ||x-z||_2^2  +  gamma i_S( x ),
@@ -30,7 +30,7 @@
 %     with i_S(x) is zero if x is in the set S and infinity otherwise.
 %     This previous problem has an identical solution as:
 %
-%        argmin_{z} ||x - z||_2^2   s.t.  ||b - M z||_2 < epsilon
+%        argmin_{x} ||x - z||_2^2   s.t.  Mx = y
 %
 %     It is simply a projection on the B2-ball.
 %
@@ -65,10 +65,10 @@
 %      This figure shows the reconstructed signal thanks to the algorithm.
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/demos/gsp_demo_graph_tv.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/demos/gsp_demo_graph_tv.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -133,41 +133,8 @@ M = M>p;
 %applying the Mask to the data
 depleted_graph_value = M.*(graph_value+sigma*randn(G.N,1));
 
-% setting the function f2 (see unlocbox for help)
-% f2.grad = @(x) 2*M.*(M.*x-depleted_graph_value);
-% f2.eval = @(x) norm(M.*x-depleted_graph_value)^2;
-epsilon = sigma*sqrt(sum(M(:)));
-param_b2.verbose = verbose -1;
-param_b2.y = depleted_graph_value;
-param_b2.A = @(x) M.*x;
-param_b2.At = @(x) M.*x;
-param_b2.tight = 1;
-param_b2.epsilon = epsilon;
-f2.prox = @(x,T) proj_b2(x,T,param_b2);
-f2.eval = @(x) eps;
-
-
-% setting the function ftv
-
-param_tv.verbose = verbose-1;
-f1.prox = @(x,T) gsp_prox_tv(x,T,G,param_tv);
-f1.eval = @(x) gsp_norm_tv(G,x);   
-
-% 
-% %% for comparison 
-paramtik.verbose = verbose -1;
-f3.prox = @(x,T) gsp_prox_tik(x,T,G,paramtik);
-f3.eval = @(x) gsp_norm_tik(G,x);   
-
-%% solve the problem
-
-% setting different parameter for the simulation
-param_solver.verbose = verbose;  % display parameter
-param_solver.tol = 1e-7;
-param_solver.maxit = 50;
-sol = douglas_rachford(depleted_graph_value,f1,f2,param_solver);
-
-sol2 = douglas_rachford(depleted_graph_value,f3,f2,param_solver);
+sol = gsp_regression_tv(G,M,depleted_graph_value,0);
+sol2 = gsp_regression_tik(G,M,depleted_graph_value,0);
 
 %% Print the result
 paramplot.show_edges = 1;

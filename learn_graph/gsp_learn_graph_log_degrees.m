@@ -13,7 +13,7 @@ function [W, stat] = gsp_learn_graph_log_degrees(Z, a, b, params)
 %         W         : Weighted adjacency matrix
 %         stat      : Optional output statistics (adds small overhead)
 %
-%   
+%
 %   'W = gsp_learn_graph_log_degrees(Z, a, b, params)' computes a weighted
 %   adjacency matrix W from squared pairwise distances in Z, using the
 %   smoothness assumption that text{trace}(X^TLX) is small, where X is
@@ -26,11 +26,11 @@ function [W, stat] = gsp_learn_graph_log_degrees(Z, a, b, params)
 %
 %      sum(sum(W .* Z))
 %
-%   is small. 
+%   is small.
 %
-%   The minimization problem solved is 
+%   The minimization problem solved is
 %
-%      minimize_W sum(sum(W .* Z)) - a * sum(log(sum(W))) + b * ||W||_F^2/2
+%      minimize_W sum(sum(W .* Z)) - a * sum(log(sum(W))) + b * ||W||_F^2/2 + c * ||W-W_0||_F^2/2
 %
 %   subject to W being a valid weighted adjacency matrix (non-negative,
 %   symmetric, with zero diagonal).
@@ -57,28 +57,44 @@ function [W, stat] = gsp_learn_graph_log_degrees(Z, a, b, params)
 %         W(W<1e-5) = 0;
 %         G2 = gsp_update_weights(G, W);
 %         figure; gsp_plot_graph(G2); title('Graph with edges learned from above 4 signals');
-%       
+%
 %
 %   Additional parameters
 %   ---------------------
-%  
+%
 %    params.W_init   : Initialization point. default: zeros(size(Z))
 %    verbosity       : Default = 1. Above 1 adds a small overhead
 %    maxit           : Maximum number of iterations. Default: 1000
 %    tol             : Tolerance for stopping criterion. Defaul: 1e-5
 %    step_size       : Step size from the interval (0,1). Default: 0.5
+%    max_w           : Maximum weight allowed for each edge (or inf)
+%    w_0             : Vector for adding prior c/2*||w - w_0||^2
+%    c               : multiplier for prior c/2*||w - w_0||^2 if w_0 given
+%    fix_zeros       : Fix a set of edges to zero (true/false)
+%    edge_mask       : Mask indicating the non zero edges if "fix_zeros"
+%
+%   If fix_zeros is set, an edge_mask is needed. Only the edges
+%   corresponding to the non-zero values in edge_mask will be learnt. This
+%   has two applications: (1) for large scale applications it is cheaper to
+%   learn a subset of edges. (2) for some applications we don't want some
+%   connections to be allowed, for example for locality on images.
+%
+%   The cost of each iteration is linear to the number of edges to be
+%   learned, or the square of the number of nodes (numel(Z)) if fix_zeros
+%   is not set.
 %
 %   The function is using the UNLocBoX functions sum_squareform and
-%   squareform_sp. 
+%   squareform_sp.
 %   The stopping criterion is whether both relative primal and dual
-%   distance between two iterations are below a given tolerance. 
-%   
+%   distance between two iterations are below a given tolerance.
+%
 %   To set the step size use the following rule of thumb: Set it so that
 %   relative change of primal and dual converge with similar rates (use
 %   verbosity > 1).
 %
-%   See also: gsp_learn_graph_l2_degrees gsp_distanz gsp_update_weights  
-% 
+%   See also: gsp_learn_graph_l2_degrees gsp_distanz gsp_update_weights
+%       squareform_sp sum_squareform gsp_compute_graph_learning_theta
+%
 %   References:
 %     V. Kalofolias. How to learn a graph from smooth signals. Technical
 %     report, AISTATS 2016: proceedings at Journal of Machine Learning
@@ -88,12 +104,15 @@ function [W, stat] = gsp_learn_graph_log_degrees(Z, a, b, params)
 %     recent primal? dual approaches for solving large-scale optimization
 %     problems. Signal Processing Magazine, IEEE, 32(6):31--54, 2015.
 %     
+%     V. Kalofolias and N. Perraudin. Large Scale Graph Learning from Smooth
+%     Signals. arXiv preprint arXiv:1710.05654, 2017.
+%     
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/learn_graph/gsp_learn_graph_log_degrees.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/learn_graph/gsp_learn_graph_log_degrees.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -114,6 +133,7 @@ function [W, stat] = gsp_learn_graph_log_degrees(Z, a, b, params)
 %     ArXiv e-prints, Aug. 2014.
 % http://arxiv.org/abs/1408.5781
 
+
 % Author: Vassilis Kalofolias
 % Testing: gsp_test_learn_graph
 % Date: June 2015
@@ -128,27 +148,66 @@ if not(isfield(params, 'verbosity')),   params.verbosity = 1;   end
 if not(isfield(params, 'maxit')),       params.maxit = 1000;      end
 if not(isfield(params, 'tol')),         params.tol = 1e-5;      end
 if not(isfield(params, 'step_size')),   params.step_size = .5;      end     % from (0, 1)
+if not(isfield(params, 'fix_zeros')),   params.fix_zeros = false;      end
+if not(isfield(params, 'max_w')),       params.max_w = inf;         end
 
 
 %% Fix parameter size and initialize
-z = squareform(Z);
-z = full(z(:));
-l = length(z);                   % number of edges
+if isvector(Z)
+    z = Z;  % lazy copying of matlab doesn't allocate new memory for z
+else
+    z = squareform_sp(Z);
+end
+% clear Z   % for large scale computation
+
+z = z(:);
+l = length(z);                      % number of edges
 % n(n-1)/2 = l => n = (1 + sqrt(1+8*l))/ 2
 n = round((1 + sqrt(1+8*l))/ 2);    % number of nodes
 
-if isfield(params, 'W_init')
-    w = squareform(params.W_init)';
+if isfield(params, 'w_0')
+    if not(isfield(params, 'c'))
+        error('When params.w_0 is specified, params.c should also be specified');
+    else
+        c = params.c;
+    end
+    if isvector(params.w_0)
+        w_0 = params.w_0;
+    else
+        w_0 = squareform_sp(params.w_0);
+    end
+    w_0 = w_0(:);
 else
-    % w_0 = exp(-6*dx2/mean(dx2));
-    w = zeros(size(z));
+    w_0 = 0;
 end
 
-w_0 = 0;
+% if sparsity pattern is fixed we optimize with respect to a smaller number
+% of variables, all included in w
+if params.fix_zeros
+    if not(isvector(params.edge_mask))
+        params.edge_mask = squareform_sp(params.edge_mask);
+    end
+    % use only the non-zero elements to optimize
+    ind = find(params.edge_mask(:));
+    z = full(z(ind));
+    if not(isscalar(w_0))
+        w_0 = full(w_0(ind));
+    end
+else
+    z = full(z);
+    w_0 = full(w_0);
+end
+
+
+w = zeros(size(z));
 
 %% Needed operators
 % S*w = sum(W)
-[S, St] = sum_squareform(n);
+if params.fix_zeros
+    [S, St] = sum_squareform(n, params.edge_mask(:));
+else
+    [S, St] = sum_squareform(n);
+end
 
 % S: edges -> nodes
 K_op = @(w) S*w;
@@ -156,9 +215,14 @@ K_op = @(w) S*w;
 % S': nodes -> edges
 Kt_op = @(z) St*z;
 
-% the next is an upper bound if params.fix_zeros
-norm_K = sqrt(2*(n-1));
-
+if params.fix_zeros
+    norm_K = normest(S);
+    % approximation: 
+    % sqrt(2*(n-1)) * sqrt(nnz(params.edge_mask) / (n*(n+1)/2)) /sqrt(2)
+else
+    % the next is an upper bound if params.fix_zeros
+    norm_K = sqrt(2*(n-1));
+end
 
 %% TODO: Rescaling??
 % we want    h.beta == norm_K   (see definition of mu)
@@ -173,7 +237,7 @@ norm_K = sqrt(2*(n-1));
 % put proximal of trace plus positivity together
 f.eval = @(w) 2*w'*z;    % half should be counted
 %f.eval = @(W) 0;
-f.prox = @(w, c) max(0, w - 2*c*z);  % all change the same
+f.prox = @(w, c) min(params.max_w, max(0, w - 2*c*z));  % all change the same
 
 param_prox_log.verbose = params.verbosity - 3;
 g.eval = @(z) -a * sum(log(z));
@@ -181,10 +245,16 @@ g.prox = @(z, c) prox_sum_log(z, c*a, param_prox_log);
 % proximal of conjugate of g: z-c*g.prox(z/c, 1/c)
 g_star_prox = @(z, c) z - c*a * prox_sum_log(z/(c*a), 1/(c*a), param_prox_log);
 
-h.eval = @(w) b * norm(w - w_0,'fro')^2;
-h.grad = @(w) 2 * b * (w - w_0);
-h.beta = 2 * b;
-
+if w_0 == 0
+    % "if" not needed, for c = 0 both are the same but gains speed
+    h.eval = @(w) b * norm(w)^2;
+    h.grad = @(w) 2 * b * w;
+    h.beta = 2 * b;
+else
+    h.eval = @(w) b * norm(w)^2 + c * norm(w - w_0,'fro')^2;
+    h.grad = @(w) 2 * ((b+c) * w - c * w_0);
+    h.beta = 2 * (b+c);
+end
 
 %% My custom FBF based primal dual (see [1] = [Komodakis, Pesquet])
 % parameters mu, epsilon for convergence (see [1])
@@ -216,7 +286,7 @@ for i = 1:params.maxit
     p_n = g_star_prox(y_n, gn); % = y_n - gn*g_prox(y_n/gn, 1/gn)
     Q_n = P_n - gn * (h.grad(P_n) + Kt_op(p_n));
     q_n = p_n + gn * (K_op(P_n));
-
+    
     if nargout > 1 || params.verbosity > 2
         stat.f_eval(i) = f.eval(w);
         stat.g_eval(i) = g.eval(K_op(w));
@@ -226,7 +296,7 @@ for i = 1:params.maxit
     end
     rel_norm_primal = norm(- Y_n + Q_n, 'fro')/norm(w, 'fro');
     rel_norm_dual = norm(- y_n + q_n)/norm(v_n);
-
+    
     if params.verbosity > 3
         fprintf('iter %4d: %6.4e   %6.4e   %6.3e', i, rel_norm_primal, rel_norm_dual, stat.fgh_eval(i));
     elseif params.verbosity > 2
@@ -235,14 +305,9 @@ for i = 1:params.maxit
         fprintf('iter %4d: %6.4e   %6.4e\n', i, rel_norm_primal, rel_norm_dual);
     end
     
-    % use a few iterations with same w to initialize the duals as well
-    if i <= 1 && isfield(params, 'W_init') 
-        w = squareform(params.W_init)';
-    else
-        w = w - Y_n + Q_n;
-    end
+    w = w - Y_n + Q_n;
     v_n = v_n - y_n + q_n;
-
+    
     if rel_norm_primal < params.tol && rel_norm_dual < params.tol
         break
     end
@@ -269,7 +334,15 @@ if params.verbosity > 3
     figure; semilogy(max(0,-diff(real(stat.fgh_eval'))),'b.-'); hold on; semilogy(max(0,diff(real(stat.fgh_eval'))),'ro-'); title('|f(i)-f(i-1)|'); legend('going down','going up');
 end
 
-W = squareform(w);
+if params.fix_zeros
+    w = sparse(ind, ones(size(ind)), w, l, 1);
+end
+
+if isvector(Z)
+    W = w;
+else
+    W = squareform_sp(w);
+end
 
 
 

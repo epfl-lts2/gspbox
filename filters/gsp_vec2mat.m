@@ -11,10 +11,10 @@ function [ d ] = gsp_vec2mat( d,Nf )
 %   
 %   Reshape the data from the vector form to the matrix form
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_vec2mat.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_vec2mat.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

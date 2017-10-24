@@ -11,7 +11,7 @@ function [s] = gsp_filter_synthesis(G, filters, c, param)
 %   Output parameters:
 %         signal    : sythesis signal
 %
-%   'gsp_filter_synthesis(G,filters,c)' computes the sythesis
+%   'gsp_filter_synthesis(G,filters,c)' computes the synthesis
 %   operator for coefficient c, where the atoms of the transform 
 %   dictionary are generalized translations of each graph spectral filter
 %   to each vertex on the graph.
@@ -48,7 +48,7 @@ function [s] = gsp_filter_synthesis(G, filters, c, param)
 %   Additional parameters
 %   ---------------------
 % 
-%    param.method  : Select the method ot be used for the computation. 
+%    param.method  : Select the method to be used for the computation.
 %      'exact'     : Exact method using the graph Fourier matrix
 %      'cheby'     : Chebyshev polynomial approximation
 %      'lanczos'   : Lanczos approximation
@@ -67,10 +67,10 @@ function [s] = gsp_filter_synthesis(G, filters, c, param)
 %     
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_filter_synthesis.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_filter_synthesis.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

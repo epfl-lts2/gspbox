@@ -11,6 +11,10 @@
 %    gsp_demo_learn_graph    -  Graph learning demonstration
 %    gsp_demo_stationarity   -  Signal inpainting using stationarity
 %
+%  Graph learning
+%    gsp_demo_learn_graph    - Demonstration of learning a graph from data
+%    gsp_demo_learn_graph_large - Tutorial for graph learning using the GSPBox
+%
 %  Sparse approximation
 %    gsp_demo_pyramid        -  Kron Pyramid applied to a signal
 %
@@ -18,10 +22,10 @@
 %  gspbox 'dash' support 'at' groupes 'dot' epfl 'dot' ch
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/demos/Contents.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/demos/Contents.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

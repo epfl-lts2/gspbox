@@ -1,10 +1,10 @@
 function n = gsp_norm_l1_filterbank(G, W, x)
 %GSP_NORM_L1_FILTERBANK Compute the l2 norm of the analysis coefficients
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_norm_l1_filterbank.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/utils/gsp_norm_l1_filterbank.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

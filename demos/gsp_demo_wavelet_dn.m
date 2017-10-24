@@ -16,10 +16,10 @@
 %      Here we use a mexican hat frame for the wavelet construction. 
 %   
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/demos/gsp_demo_wavelet_dn.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/demos/gsp_demo_wavelet_dn.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

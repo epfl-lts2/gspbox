@@ -22,7 +22,7 @@ function [g]=gsp_design_expwin(G, bmax, a)
 %       s(x) = | exp(-a/x) / ( exp(-a/x) + exp(-a/(1-x)) ) if x in [-1, 1]
 %               \   1                                      if x > 1
 %
-%   It use a clever exponential construction to obtain a infinitely
+%   It uses a clever exponential construction to obtain an infinitely
 %   differentiable function that is band limited!
 %
 %   This function will compute the maximum eigenvalue of the laplacian. To
@@ -39,10 +39,10 @@ function [g]=gsp_design_expwin(G, bmax, a)
 %         gsp_plot_filter(G,g);  
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_design_expwin.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_design_expwin.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

@@ -35,10 +35,10 @@ function G = gsp_jtv_graph(G,T,fs,param)
 %    param.NFFT       : Number of frequency point. (default [])
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_jtv_graph.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/graphs/gsp_jtv_graph.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -106,7 +106,7 @@ end
 %% DIFFERENTIAL OPERATORS
 z = ones(T,1);
 
-G.jtv.LT = spdiags([-z 2*z -z], [-1 0 1], T, T);
+% G.jtv.LT = spdiags([-z 2*z -z], [-1 0 1], T, T);
 
 G.jtv.DiffT = spdiags([-z z], [0 1], T, T);
 
@@ -119,6 +119,8 @@ switch param.transform
         error('Unknown transform');
 end
  
+G.jtv.LT = G.jtv.DiffT'*G.jtv.DiffT;
+
 if strcmpi(param.approx,'backward')
     G.jtv.DiffT = -G.jtv.DiffT.';
 end

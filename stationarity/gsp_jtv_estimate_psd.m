@@ -1,7 +1,7 @@
-function [psd, ft] = gsp_estimate_vertex_time_psd(G, X, param)
-%GSP_ESTIMATE_VERTEX_TIME_PSD Estimation of the Power Spectrum Density
-%   Usage:  psd = gsp_estimate_vertex_time_psd(G, X)
-%           psd = gsp_estimate_vertex_time_psd(G, X, param)
+function [psd, ft] = gsp_jtv_estimate_psd(G, X, param)
+%GSP_JTV_ESTIMATE_PSD Estimate the PSD of a time vertex process
+%   Usage:  psd = gsp_jtv_estimate_psd(G, X)
+%           psd = gsp_jtv_estimate_psd(G, X, param)
 %
 %   Input parameters:
 %         G          : Graph
@@ -11,13 +11,13 @@ function [psd, ft] = gsp_estimate_vertex_time_psd(G, X, param)
 %         psd        : PSD matrix
 %         ft         : Filter type
 %
-%   This function estimate the PSD for vertex time processes. It is a
+%   This function estimates the PSD for vertex time processes. It is a
 %   generalization of the Bartlett method.
 %
 %   Additional parameters
 %   ---------------------
 %
-%    param.method  : Method used for the estimation. By default 'TA'
+%    param.estimator  : Method used for the estimation. By default 'TA'
 %     - 'TA': Average over the time domain.
 %     - 'FC': Fourier convolution a trick used to reduce the computation. 
 %     - 'VA': Average over the vertex domain
@@ -33,10 +33,10 @@ function [psd, ft] = gsp_estimate_vertex_time_psd(G, X, param)
 %     
 %     
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/stationarity/gsp_estimate_vertex_time_psd.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/stationarity/gsp_jtv_estimate_psd.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -64,49 +64,38 @@ function [psd, ft] = gsp_estimate_vertex_time_psd(G, X, param)
 if nargin<3
     param = struct;
 end
-if ~isfield(param,'estimator'),
-    param.estimator = 'TA';
+if ~isfield(param,'estimator')
+    param.estimator = 'FA';
 end
 
 % number of realizations
 [N, T, R] = size(X);
 
-switch param.estimator,
+switch param.estimator
     
     % This method compute the Fourier transform of the signals and average
     % the modulus
     case 'FA'
-        Xhat = gsp_jft(G,X);
-        psd = mean(abs(X).^2,3);
+        if ~isfield(param, 'L')    
+            param.L = compute_default_L(X,T,R);
+        end
+        Xhat = gsp_jft(G,reshape(X,N,param.L,R*T/param.L));
+        psd = mean(abs(Xhat).^2,3);
         ft = 'js';
-        
+       
     
     % This method splits time in windows, and takes an average of the psd
     % over each time window. The size of each window (L) should be 
     % equal to the maximum correlation distance in the process 
-    case 'TA',
+    case 'TA'
         
-        if ~gsp_check_fourier(G),
+        if ~gsp_check_fourier(G)
             error('The Fourier basis is needed the Fourier basis')
             %G = gsp_compute_fourier_basis(G);
         end
 
-        if ~isfield(param, 'L'),    
-            
-            % compute the correlation distance
-            C_T = zeros(T);
-            for r = 1:R,
-                C_T = C_T + abs(X(:,:,r)'*X(:,:,r)) / R;
-            end
-            Toep = toeplitz(0:(T-1));
-            Tmax = round(0.5*T);
-            cor = zeros(Tmax,1);
-            for t = 1:Tmax, cor(t) = mean( vec(C_T(Toep == t-1)) ); end
-            cor = normalize_data(cor, 0, 1);
-            threshold = 0.05;
-            param.L = min(2*find(cor>=threshold, 1, 'last'), T);
-%             figure; plot(0:(Tmax-1), cor, '-o', [1 1]*param.L, [0 1], 'r-');
-            % param.L = round(T/4);
+        if ~isfield(param, 'L')    
+            param.L = compute_default_L(X,T,R);
         end        
         if ~isfield(param, 'a'),       param.a = round(param.L/2); end
         if ~isfield(param, 'M'),       param.M = G.jtv.T; end
@@ -114,7 +103,7 @@ switch param.estimator,
         
         if round(T/param.L) - (T/param.L) ~= 0
             warning('Optimally the length of the signal should be divisible by param.L.')            
-            while round(T/param.L) - (T/param.L) ~= 0,
+            while round(T/param.L) - (T/param.L) ~= 0
                 param.L = param.L + 1;
             end
         end
@@ -148,12 +137,12 @@ switch param.estimator,
         ft = 'js';
 
     case 'FC'
-        if ~isfield(param, 'kernel'),
+        if ~isfield(param, 'kernel')
             param.kernel = exp(-(-20:20).^2/3);
         end
         h = param.kernel;
         
-        if ~gsp_check_fourier(G),
+        if ~gsp_check_fourier(G)
             G = gsp_compute_fourier_basis(G);
         end
                         
@@ -185,7 +174,7 @@ switch param.estimator,
                 error('Unknown boundary condition');
         end
         
-        if ~isfield(G,'lmax');
+        if ~isfield(G,'lmax')
             G = gsp_estimate_lmax(G);
             
             warning(['GSP_PSD_ESTIMATION: The variable lmax is not ',...
@@ -197,7 +186,7 @@ switch param.estimator,
         
         if ~isfield(param,'Nfilt'),   param.Nfilt = 50; end
         if ~isfield(param,'Nrandom'), param.Nrandom = max(10, R); end
-        if ~isfield(param,'g0'),
+        if ~isfield(param,'g0')
             sigma = sqrt(2*G.lmax/param.Nfilt^2 * (param.Nfilt + 1));
             param.g0 = @(x) exp(-x.^2/sigma^2);
         end
@@ -235,7 +224,7 @@ switch param.estimator,
         
    case 'TVA'
 
-        if ~isfield(param, 'L'),    
+        if ~isfield(param, 'L') 
             
             threshold = 0.05;
             
@@ -260,7 +249,7 @@ switch param.estimator,
        % Make sure that the length of the signal should be divisible by param.L  
        if round(T/param.L) - (T/param.L) ~= 0
            % warning('Ideally the length of the signal should be divisible by param.L.')           
-           while (round(T/param.L) - (T/param.L) ~= 0) || (round(param.L/2) - (param.L/2) ~= 0),
+           while (round(T/param.L) - (T/param.L) ~= 0) || (round(param.L/2) - (param.L/2) ~= 0)
               param.L = param.L + 1;  
            end
        end
@@ -289,7 +278,7 @@ switch param.estimator,
                 error('Unknown boundary condition');
         end
         
-        if ~isfield(G,'lmax');
+        if ~isfield(G,'lmax')
             G = gsp_estimate_lmax(G);
             
             warning(['GSP_PSD_ESTIMATION: The variable lmax is not ',...
@@ -301,7 +290,7 @@ switch param.estimator,
         
         if ~isfield(param,'Nfilt'),   param.Nfilt = 50;          end
         if ~isfield(param,'Nrandom'), param.Nrandom = max(10,R); end
-        if ~isfield(param,'g0'),
+        if ~isfield(param,'g0')
             sigma = sqrt(2*G.lmax/param.Nfilt^2 * (param.Nfilt + 1));
             param.g0 = @(x) exp(-x.^2/sigma^2);
         end
@@ -364,5 +353,40 @@ switch param.estimator,
 end
 
 
+
+end
+
+
+function [x] = normalize_data(x, xmin, xmax)
+%NORMALIZE_VECTOR Normalize x between xmin and xmax
+%   x might be a scalar, vector, or matrix.
+
+%normalize to [0,1]
+x = (x - min(min(x))) ./ (max(max(x)) - min(min(x)));
+
+if exist('xmax', 'var') && exist('xmin', 'var')
+   x = x .* (xmax - xmin) + xmin; 
+end
+
+end
+
+function L =  compute_default_L(X,T,R)
+% compute the correlation distance
+C_T = zeros(T);
+for r = 1:R
+    C_T = C_T + abs(X(:,:,r)'*X(:,:,r)) / R;
+end
+Toep = toeplitz(0:(T-1));
+Tmax = round(0.5*T);
+cor = zeros(Tmax,1);
+for t = 1:Tmax
+    cor(t) = mean( vec(C_T(Toep == t-1)) ); 
+end
+cor = normalize_data(cor, 0, 1);
+threshold = 0.05;
+L = min(2*find(cor>=threshold, 1, 'last'), T);
+
+%L = round(T/4);
+%figure; plot(0:(Tmax-1), cor, '-o', [1 1]*param.L, [0 1], 'r-');
 
 end

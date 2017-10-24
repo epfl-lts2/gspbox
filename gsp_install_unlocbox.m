@@ -5,10 +5,10 @@ function [  ] = gsp_install_unlocbox(  )
 %   This function installs the UNLocBoX. It require an internet connection.
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/gsp_install_unlocbox.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/gsp_install_unlocbox.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -36,10 +36,10 @@ fprintf('Install the UNLocBoX: ')
 try
     outputdir = [GLOBAL_gsppath,FS,'3rdparty'];
     if isunix
-        tarfilename = webread('http://lts2.epfl.ch/unlocbox/download_unix.php');
+        tarfilename = webread('https://github.com/epfl-lts2/unlocbox/releases/download/1.7.4/unlocbox-1.7.4.tar.gz');
         untar(tarfilename,outputdir)        
     else
-        zipfilename = webread('https://lts2.epfl.ch/unlocbox/download_win.php');
+        zipfilename = webread('https://github.com/epfl-lts2/unlocbox/releases/download/1.7.4/unlocbox-1.7.4.zip');
         unzip(zipfilename,outputdir)
     end
     fprintf('Installation sucessfull!\n\n')

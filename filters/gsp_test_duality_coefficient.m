@@ -12,14 +12,14 @@ function [ bool ] = gsp_test_duality_coefficient( gcoeff,hcoeff,tol )
 %       bool    : boolean 
 %
 %   This function test if two discrete filterbanks are dual. Each filter is
-%   a culumn in the matrix gcoeff or hcoeff. M is the number of
+%   a column in the matrix gcoeff or hcoeff. M is the number of
 %   filters and N the number of coefficients (size of the graph signal).
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_test_duality_coefficient.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_test_duality_coefficient.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

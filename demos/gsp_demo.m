@@ -43,7 +43,7 @@
 %    G.d*: Degree vector 
 %    G.Ne*: Number of edges
 %    G.coords*: Coordinates of the vertices
-%    G.plotting*: Plotting parameters
+%    G.plotting*: Plotting parameters 
 %
 %   In the folder 'plotting', the GSPBox contains some plotting routine.
 %   For instance, we can plot a graph using:
@@ -140,10 +140,10 @@
 %   Enjoy the GSPBOX !
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/demos/gsp_demo.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/demos/gsp_demo.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -221,7 +221,6 @@ title('Signal with noise')
 subplot(212)
 gsp_plot_signal(G,f2);
 title('Signal denoised');
-
 
 
 

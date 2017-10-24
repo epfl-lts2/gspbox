@@ -10,16 +10,16 @@ function [ s ] = gsp_evaluate_can_dual( g,val,tol )
 %   Ouputs parameters:
 %       s       : Matrix of value
 %
-%   This function compute the value of the canonical dual of a filterbank
-%   g at the point specified in val. The function return a matrix. Each
+%   This function computes the value of the canonical dual of a filterbank
+%   g at the point specified in val. The function returns a matrix. Each
 %   column is the output of one dual filter.
 %
 %   See also: gsp_design_can_dual
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_evaluate_can_dual.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_evaluate_can_dual.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

@@ -23,10 +23,10 @@ function [g,filtertype] = gsp_jtv_design_damped_wave(G,alpha,beta,param)
 %     
 %   See also: gsp_jtv_design_wave, gsp_design_heat, gsp_jtv_design_dgw
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_jtv_design_damped_wave.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_jtv_design_damped_wave.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

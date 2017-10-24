@@ -107,18 +107,21 @@
 %   GSP_LEARN_GRAPH_LOG_DEGREES and GSP_LEARN_GRAPH_L2_DEGREES.
 %
 %
+%   See also: gsp_learn_graph_l2_degrees gsp_demo_learn_graph_large
+%
 %   References:
 %     V. Kalofolias. How to learn a graph from smooth signals. Technical
 %     report, AISTATS 2016: proceedings at Journal of Machine Learning
 %     Research (JMLR)., 2016.
 %     
+%     V. Kalofolias and N. Perraudin. Large Scale Graph Learning from Smooth
+%     Signals. arXiv preprint arXiv:1710.05654, 2017.
+%     
 %
-%   See also: gsp_learn_graph_l2_degrees
-%
-%   Url: http://lts2research.epfl.ch/gsp/doc/demos/gsp_demo_learn_graph.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/demos/gsp_demo_learn_graph.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -139,9 +142,9 @@
 %     ArXiv e-prints, Aug. 2014.
 % http://arxiv.org/abs/1408.5781
 
+
 %% Initialization
 clear
-
 gsp_reset_seed(0);
 method = 1;     %1 = logarithmic prior, 2 = L-2 prior
 n = 100;
@@ -283,6 +286,5 @@ figure; imagesc(gsp_distanz([xc, yc]')); title('Pairwise distances computed from
 % f2 = @(x,y) exp(2*(cos((x+y).^2)))*24;
 % f3 = @(x,y) exp(2*((x-.5).^2 + (y-.5).^3 + x - y))*24;
 % f4 = @(x,y) exp(2*(sin(3*((x-.5).^2+(y-.5).^2))))*30;
-
 
 

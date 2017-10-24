@@ -43,10 +43,10 @@ if ~isfield(param,'edge_size'), param.edge_size = 0; end
                         'Color',G.plotting.edge_color);
 %                     G.plotting.edge_width  (2*G.W(ki(ii),kj(ii))+0.01)
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/plotting/gsp_plot_edges.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/plotting/gsp_plot_edges.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

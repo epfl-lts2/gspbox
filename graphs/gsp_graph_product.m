@@ -18,16 +18,16 @@ function G = gsp_graph_product(G1,G2,param)
 %    param.verbose*: verbosity level. 0 no log - 1 display warnings.
 %     (default 1) 
 %    param.rule   : Graph product rule:
-%     	+ cartesian (default)
-%       + kronecker
-%       + direct_sum
-%       + strong
+%     + cartesian (default)
+%     + kronecker
+%     + direct_sum
+%     + strong
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_graph_product.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/graphs/gsp_graph_product.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

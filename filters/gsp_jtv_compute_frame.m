@@ -12,10 +12,10 @@ function F = gsp_jtv_compute_frame(G,g,filtertype)
 %   Compute the frame tensor of the kernel g on the time-vertex graph G
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_jtv_compute_frame.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_jtv_compute_frame.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

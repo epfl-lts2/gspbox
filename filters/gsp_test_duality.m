@@ -9,10 +9,10 @@ function [ bool ] = gsp_test_duality(G, g,h,tol )
 %       h       : filter 2 (or filterbank)
 %       tol     : tolerance for the test (default 1e-8)
 %
-%   Ouput paramters:
+%   Ouput parameters:
 %       bool    : boolean 
 %
-%   This function test if two filterbanks are dual.
+%   This function tests if two filterbanks are dual.
 %
 %   Example:
 %
@@ -25,10 +25,10 @@ function [ bool ] = gsp_test_duality(G, g,h,tol )
 %
 %   See also: gsp_design_can_dual gsp_test_duality_coefficient
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_test_duality.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_test_duality.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

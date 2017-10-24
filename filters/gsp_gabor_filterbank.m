@@ -9,14 +9,14 @@ function [ g ] = gsp_gabor_filterbank( G,k )
 %   Output parameters:
 %       g       : filterbank
 %   
-%   This function create a filterbank with the kernel k. Every filter is
+%   This function creates a filterbank with the kernel k. Every filter is
 %   centered in a different frequency
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_gabor_filterbank.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_gabor_filterbank.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ function [ g ] = gsp_gabor_filterbank( G,k )
 
 error('To rename and changed!')
 if ~isfield(G,'e')
-   error(['GSP_GABOR_FILTEBANK: You need first to compute the Fourier basis\n',...
+   error(['GSP_GABOR_FILTERBANK: You need first to compute the Fourier basis\n',...
        'You can do it with the function gsp_compute_fourier_basis']);
 end
 

@@ -17,10 +17,10 @@ function r = gsp_jtv_cheby_op(G, c, signal,param)
 %   See also: gsp_jtv_cheby_coeff, gsp_jtv_filter_analysis
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_jtv_cheby_op.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/utils/gsp_jtv_cheby_op.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

@@ -66,6 +66,8 @@ function [W, stat] = gsp_learn_graph_l2_degrees(Z, a, params)
 %    maxit           : Maximum number of iterations. Default: 1000
 %    tol             : Tolerance for stopping criterion. Default: 1e-5
 %    step_size       : Step size from the interval (0,1). Default: 0.5
+%    fix_zeros       : Fix a set of edges to zero (true/false)
+%    edge_mask       : Mask indicating the non zero edges if "fix_zeros"
 %
 %   The stopping criterion is whether both relative primal and dual
 %   distance between two iterations are below a given tolerance. 
@@ -86,12 +88,15 @@ function [W, stat] = gsp_learn_graph_l2_degrees(Z, a, params)
 %     recent primal? dual approaches for solving large-scale optimization
 %     problems. Signal Processing Magazine, IEEE, 32(6):31--54, 2015.
 %     
+%     V. Kalofolias and N. Perraudin. Large Scale Graph Learning from Smooth
+%     Signals. arXiv preprint arXiv:1710.05654, 2017.
+%     
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/learn_graph/gsp_learn_graph_l2_degrees.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/learn_graph/gsp_learn_graph_l2_degrees.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -117,49 +122,94 @@ function [W, stat] = gsp_learn_graph_l2_degrees(Z, a, params)
 % Date: June 2015
 
 
-%% Default parameters
 if nargin < 3
     params = struct;
 end
 
+%% Default parameters
 if not(isfield(params, 'verbosity')),   params.verbosity = 1;   end
-if not(isfield(params, 'maxit')),       params.maxit = 1000;      end
+if not(isfield(params, 'maxit')),       params.maxit = 200;      end
 if not(isfield(params, 'tol')),         params.tol = 1e-5;      end
 if not(isfield(params, 'step_size')),   params.step_size = .5;      end     % from (0, 1)
+if not(isfield(params, 'fix_zeros')),   params.fix_zeros = false;   end
+if not(isfield(params, 'max_w')),       params.max_w = inf;         end
 
 
 %% Fix parameter size and initialize
-z = squareform(Z);
-z = full(z(:));
+if isvector(Z)
+    z = Z;  % lazy copying of matlab doesn't allocate new memory for z
+else
+    z = squareform_sp(Z);
+end
+
+z = z(:);
 l = length(z);                   % number of edges
 % n(n-1)/2 = l => n = (1 + sqrt(1+8*l))/ 2
 n = round((1 + sqrt(1+8*l))/ 2);    % number of nodes
 
-if isfield(params, 'W_init')
-    w = squareform(params.W_init)';
+if isfield(params, 'w_0')
+    if not(isfield(params, 'c'))
+        error('When params.w_0 is specified, params.c should also be specified');
+    else
+        c = params.c;
+    end
+    if isvector(params.w_0)
+        w_0 = params.w_0;
+    else
+        w_0 = squareform_sp(params.w_0);
+    end
+    w_0 = w_0(:);
 else
-    % w_0 = exp(-6*dx2/mean(dx2));
-    w = zeros(size(z));
+    w_0 = 0;
+    c = 0;
 end
 
+% if sparsity pattern is fixed we optimize with respect to a smaller number
+% of variables, all included in w
+if params.fix_zeros
+    if not(isvector(params.edge_mask))
+        params.edge_mask = squareform_sp(params.edge_mask);
+    end
+    % use only the non-zero elements to optimize
+    ind = find(params.edge_mask(:));
+    z = full(z(ind));
+    if not(isscalar(w_0))
+        w_0 = full(w_0(ind));
+    end
+else
+    z = full(z);
+    w_0 = full(w_0);
+end
+
+w = zeros(size(z));
+
+% number of edges over which we finally optimize (l2 <= l)
+l2 = length(w);
+
+
 %% Needed operators
+% S*w = sum(W)
+if params.fix_zeros
+    [S, St] = sum_squareform(n, params.edge_mask(:));
+else
+    [S, St] = sum_squareform(n);
+end
 
-% needed for gradient of h(w)
-% L*w = sum(W)
-[S, St] = sum_squareform(n);
-
-% ones_l = ones(l,1);
+ones_l2 = ones(l2,1);
 
 sum_op = @(w) S*w;
 sum_t_op = @(z) St*z;
-% edges -> scalar
-K_op = @(w) 2*sum(w);   % sum(sum(W)) = 2 * sum(w)
-% scalar -> edges
-% Kt_op = @(z) 2 * z * ones_l;
-norm_K = 2 * sqrt(l);
-%norm_L = l;         % do i need the square norm or the square root?
 
-%% TODO: Rescaling??
+% edges -> scalar
+K_op = @(w) 2*sum(w);
+
+% scalar -> edges
+Kt_op = @(z) 2 * z * ones_l2;
+
+norm_K = 2 * sqrt(l2);
+%norm_L = l2;         % do i need the square norm or the square root?
+
+%% TODO: Normalization??
 
 %% Learn the graph
 % min_{W>=0}     tr(X'*L*X) - gc * sum(log(sum(W))) + gp * norm(W-W0,'fro')^2, where L = diag(sum(W))-W
@@ -169,29 +219,40 @@ norm_K = 2 * sqrt(l);
 % put proximal of trace plus positivity together
 f.eval = @(w) 2*w'*z;    % half should be counted
 %f.eval = @(W) 0;
-f.prox = @(w, c) max(0, w - 2*c*z);  % all change the same
+f.prox = @(w, c) min(params.max_w, max(0, w - 2*c*z));  % all change the same
 
 % projection of sum of W on n
 % g(w) = IND(sum(w) == n)
-g.eval = @(z) 10 * abs(z-n);  % this could be 0. Measures violation of the condition sum(w) = n!!
+g.eval = @(z) 1000 * abs(z-n);  % this could be 0. Measures violation of the condition sum(w) = n!!
 g.prox = @(z, c) n;
 % proximal of conjugate of g: z - c*g.prox(z/c, 1/c)
 g_star_prox = @(z, c) z - c*n;
 
-% the following is the squared frobenius norm of the graph Laplacian
-h.eval = @(w) a * (2*norm(w)^2 + norm(sum_op(w))^2);   % CAREFUL: w two times!
-h.grad = @(w) 2 * a * (2*w + sum_t_op(sum_op(w)));
-% if the next is wrong we don't converge for time_step != 0.5
-h.beta = 2*(2*a*(n+1));    % = norm(ones(n)+eye(n)) = n+1
-
-% TODO: best convergence when h.beta = 1 ?? then use rescaling!!
-
+if w_0 == 0
+	% "if" not needed, for c = 0 both are the same but gains speed
+    % the following is half the squared frobenius norm of the graph Laplacian
+    h.eval = @(w) a/2 * (2*norm(w)^2 + norm(sum_op(w))^2);   % CAREFUL: w two times!
+    h.grad = @(w) a * (2*w + sum_t_op(sum_op(w)));
+    % = (a*2*I + a*St*S)*w
+    % Lipschitz constant of h.grad:   a * norm(2*eye(n) + 2*ones(n))
+    h.beta = 2 * a * n;    % a*2 + a*(2*(n-1))
+    % = normest(a * (2*speye(l) + sum_t_op(sum_op(speye(l)))));
+else
+    % the following is half the squared frobenius norm of the graph Laplacian
+    h.eval = @(w) a/2 * (2*norm(w)^2 + norm(sum_op(w))^2) + c/2 * (2*norm(w-w_0));   % CAREFUL: norm(W, 'fro') = 2*norm(w) two times!
+    h.grad = @(w) a * (2*w + sum_t_op(sum_op(w))) + c*2*(w-w_0);
+    % = (a*2*I + a*St*S + c*2*I)*w  +  const(w)
+    % Lipschitz constant of h.grad:   norm(2*a*eye(n) + 2*a*ones(n) + 2*c*eye(n))
+    h.beta = a*2*(n-1) + 2*(a+c);    % norm(ones(n) + c*eye(n)) = n+c
+end    
+    
+    
 % if there is no quadratic term, it reduces to a linear program:
-if a == 0
+if a == 0 && w_0 == 0
     %   X =     linprog(f,   A,   b,   Aeq,           beq,LB,UB,X0)
     [w, stat.fval, stat.exitflag, stat.output, stat.lambda] = linprog(z, [], [], ones(size(z))', 100*n, zeros(size(z)));
 else
-    %% My custom FBF based primal dual (see [Komodakis, Pesquet])
+    %% My custom FBF based primal dual (see [1] = [Komodakis, Pesquet])
     % parameters mu, epsilon for convergence (see [1])
     mu = h.beta + norm_K;     %TODO: is it squared or not??
     epsilon = lin_map(0.0, [0, 1/(1+mu)], [0,1]);   % in (0, 1/(1+mu) )
@@ -239,11 +300,7 @@ else
             fprintf('iter %4d: %6.4e   %6.4e\n', i, rel_norm_primal, rel_norm_dual);
         end
         
-        if i <= 1 && isfield(params, 'W_init') 
-            w = squareform(params.W_init)';
-        else
-            w = w - Y_n + Q_n;
-        end
+        w = w - Y_n + Q_n;
         v_n = v_n - y_n + q_n;
         
         if rel_norm_primal < params.tol && rel_norm_dual < params.tol
@@ -255,12 +312,12 @@ else
         fprintf('# iters: %4d. Rel primal: %6.4e Rel dual: %6.4e   %6.3e\n', i, rel_norm_primal, rel_norm_dual, f.eval(w) + g.eval(K_op(w)) + h.eval(w));
         fprintf('Time needed is %f seconds\n', stat.time);
     end
-    
-    % Use the following for testing:
-    %     g.L = K_op;
-    %     g.Lt = Kt_op;
-    %     g.norm_L = norm_K;
-    %     [w, info] = fbf_primal_dual(w, f, g, h, params);
+
+% Use the following for testing:
+%     g.L = K_op;
+%     g.Lt = Kt_op;
+%     g.norm_L = norm_K;
+%     [w, info] = fbf_primal_dual(w, f, g, h, params);
     %[w, info] = fb_based_primal_dual(w, f, g, h, params);
     %%
     
@@ -271,6 +328,14 @@ else
     end
 end
 
-W = squareform(w);
+if params.fix_zeros
+    w = sparse(ind, ones(size(ind)), w, l, 1);
+end
+
+if isvector(Z)
+    W = w;
+else
+    W = squareform_sp(w);
+end
 
 

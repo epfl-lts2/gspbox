@@ -15,10 +15,10 @@ function W = gsp_symmetrize(W, type)
 %    'none'    : nothing is done (the matrix might stay unsymmetric!)
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_symmetrize.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/utils/gsp_symmetrize.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -50,13 +50,12 @@ switch type
     case 'average'
         W = (W+W.')/2;
     case 'full'
-        A = W>0;
-        M = logical(A - (A' & A));
-
-        W = W + M'.*W';
- %       Wt = W';
- %       W(M') = Wt(M');
-        
+% Old version, slower
+%         A = W>0;
+%         M = logical(A - (A' & A));
+% 
+%         W = W + M'.*W';
+        W = max(W, W');
     case 'none'
         return
     otherwise

@@ -19,10 +19,10 @@ function gsp_plot_jft(G,Xhat,param)
 %    param.fftshift  : Put zero frequency at center (default 1)
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/plotting/gsp_plot_jft.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/plotting/gsp_plot_jft.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

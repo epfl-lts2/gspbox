@@ -1,10 +1,10 @@
 function rd = gsp_resistance_distance(G,param)
-%GSP_RESISTANCE_DISTANCE see gsp_resistance_distance
+%GSP_RESISTANCE_DISTANCE see gsp_resistance_distances
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_resistance_distance.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/utils/gsp_resistance_distance.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

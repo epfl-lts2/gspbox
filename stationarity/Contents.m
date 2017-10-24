@@ -9,15 +9,17 @@
 %      gsp_wiener_optimization - Solve wiener optimization problem
 %      gsp_wiener_l2 - Solve wiener optimization problem with l2 fidelity term
 %      gsp_wiener_inpainting - Solve wiener in-painting problem
+%      gsp_jtv_wiener_inpainting - Solve wiener in-painting problem for vertex time process
+%      gsp_jtv_estimate_psd - Estimate the PSD of a time vertex process
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  gspbox 'dash' support 'at' groupes 'dot' epfl 'dot' ch
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/stationarity/Contents.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/stationarity/Contents.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

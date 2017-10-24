@@ -34,10 +34,10 @@ function [] = gsp_plot_jtv_filter(G, filters, filtertype, param)
 %    param.domain   : Visualize the spectrum in 'time-spectral' or 'joint-spectral' (default param.domain='joint-spectral')
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/plotting/gsp_plot_jtv_filter.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/plotting/gsp_plot_jtv_filter.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

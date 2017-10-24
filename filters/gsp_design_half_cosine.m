@@ -9,12 +9,12 @@ function [ filters ] = gsp_design_half_cosine( G, Nf,param )
 %   Outputs parameters:
 %       filters : Cell array of filters
 %
-%   This function generate a uniform half cosine filterbank. The main
+%   This function generates a uniform half cosine filterbank. The main
 %   window
 %
 %       0.5 * (1+cos(2*pi*(x/a-1/2)))  for  0 <= x <= a
 %
-%   is translated uniformly to create the filterbank.
+%   is translated uniformaly to create the filterbank.
 %
 %   This function will compute the maximum eigenvalue of the laplacian. To
 %   be more efficient, you can precompute it using:
@@ -35,10 +35,10 @@ function [ filters ] = gsp_design_half_cosine( G, Nf,param )
 %     (default 1) 
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_design_half_cosine.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_design_half_cosine.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

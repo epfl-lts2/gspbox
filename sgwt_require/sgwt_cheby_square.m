@@ -9,10 +9,10 @@
 % d - Chebyshev coefficients for p(x)^2 = sum d(1+k) T_k(x) ;
 %     0<=k<=2*M
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/sgwt_require/sgwt_cheby_square.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/sgwt_require/sgwt_cheby_square.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

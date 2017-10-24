@@ -33,10 +33,10 @@ function [G] = gsp_minnesota(connect)
 %     
 %     
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_minnesota.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/graphs/gsp_minnesota.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

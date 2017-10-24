@@ -32,10 +32,10 @@ function [f] = gsp_igft(G,f_hat)
 %   See also: gsp_gft, gsp_gwft, gsp_compute_fourier_basis
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_igft.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/operators/gsp_igft.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

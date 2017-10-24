@@ -65,10 +65,10 @@
 %      This figure shows the reconstructed signal thanks to the algorithm.
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/demos/gsp_demo_tv_inpainting.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/demos/gsp_demo_tv_inpainting.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -130,6 +130,7 @@ G = gsp_compute_fourier_basis(G);
 % x_0 = (1 + sign(G.U(:,4))) / 2;
 x_0 = round((1 + sign(G.U(:,2))) * 2+(1 + sign(G.U(:,3))) +(1 + sign(G.U(:,4))) / 2);
 % x_0 = round(linspace(0, 5, N))';
+x_0 = G.info.node_com;
 
 %% Set the labels
 % create the mask

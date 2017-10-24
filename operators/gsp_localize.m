@@ -1,11 +1,11 @@
-function [ gt ] = gsp_localize(G, g, i,param)
-%GSP_LOCALIZE Localize a kernel g to the node i
-%   Usage: gt = gsp_localize(G, g, i);
+function [ gt ] = gsp_localize(G, g, n,param)
+%GSP_LOCALIZE Localize a kernel g to the node n
+%   Usage: gt = gsp_localize(G, g, n);
 %
 %   Input parameters
 %       G   : Graph
 %       g   : kernel (or filterbank)
-%       i   : Indices of vertex (int)
+%       n   : Indices of vertex (int)
 %       param: Optional parameters
 %   Output parameters
 %       gt  : translate signal
@@ -14,10 +14,10 @@ function [ gt ] = gsp_localize(G, g, i,param)
 %   is a cell array, the localization will be done to each filter.
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/operators/gsp_localize.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/operators/gsp_localize.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -45,9 +45,9 @@ if nargin <4
     param = struct;
 end
 
-f = zeros(G.N,numel(i));
-for ii = 1:numel(i)
-    f(i,ii) = 1;
+f = zeros(G.N,numel(n));
+for ii = 1:numel(n)
+    f(n(ii),ii) = 1;
 end
 gt = gsp_filter_analysis(G,g,f,param);
 

@@ -12,7 +12,7 @@ function [ g, wf ] = gsp_design_warped_translates( G, Nf, param )
 %       g       : filterbanks
 %       wf      : warped function
 %
-%   This function design filters that are warped versions of the uniform
+%   This function designs filters that are warped versions of the uniform
 %   half cosine translates described above.
 %
 %   This function will compute the maximum eigenvalue of the laplacian. To
@@ -39,7 +39,7 @@ function [ g, wf ] = gsp_design_warped_translates( G, Nf, param )
 %     different methods (default 'spectrum_approximation'). Please read
 %     below for more information about this parameter.
 %    param.log*: On top of the other warping add a log function. An
-%     alterntive way to construct spectral graph wavelets. These are
+%     alternative way to construct spectral graph wavelets. These are
 %     adapted to the specific spectrum, not just the length of 
 %     the spectrum. The final warping function will be:
 %     
@@ -52,10 +52,10 @@ function [ g, wf ] = gsp_design_warped_translates( G, Nf, param )
 %     parameter is used when param.warping_type is 'custom'.
 %    param.interpolation_type*: select the interpolation type for the
 %     spectrum samples. You can choose 'pwl' (piece wise linear)
-%     or 'moncubic'. This attribute is used only when param.warping_type 
+%     or 'monocubic'. This attribute is used only when param.warping_type 
 %     is 'spectrum_interpolation'. (default 'monocubic')
 %    param.filter*: select the initial uniform filterbank 'half_cosine'
-%     or 'itersine'. See gsp_design_uniform_half_cosine and
+%     or 'itersine'. See gsp_design_half_cosine and
 %     gsp_design_itersine for more information about those filterbank.
 %     If you want to use your personal filter, just put it there. For
 %     instance:
@@ -72,7 +72,7 @@ function [ g, wf ] = gsp_design_warped_translates( G, Nf, param )
 %   Warping methods
 %   ---------------
 %
-%   The different warping type availlable in param.warping_type are:
+%   The different warping type available in param.warping_type are:
 %
 %    'spectrum_interpolation': Warping functions based on spectrum
 %     samples. From the samples, an approximation of the spectrum cdf is
@@ -101,10 +101,10 @@ function [ g, wf ] = gsp_design_warped_translates( G, Nf, param )
 %     preprint arXiv:1311.0897, 2013.
 %     
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_design_warped_translates.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_design_warped_translates.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

@@ -19,6 +19,7 @@ function [lambda_k, info] = gsp_fast_estimate_lk(G, k, param)
 %   Example:
 %
 %      G = gsp_sensor(256);
+%      G = gsp_estimate_lmax(G);
 %      k = 8;
 %      param.order = 100;
 %      lambda_k = gsp_fast_estimate_lk(G, k, param);
@@ -49,10 +50,10 @@ function [lambda_k, info] = gsp_fast_estimate_lk(G, k, param)
 %     
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_fast_estimate_lk.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/utils/gsp_fast_estimate_lk.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

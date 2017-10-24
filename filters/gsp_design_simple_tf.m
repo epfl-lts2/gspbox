@@ -11,7 +11,7 @@ function [ g,t ] = gsp_design_simple_tf(G, Nf, param)
 %   Output parameters:
 %         g             : A cell array of filters
 %
-%   This function return a array of filters designed to be simple tight
+%   This function returns a array of filters designed to be simple tight
 %   frame wavelet filterbank.
 %
 %   param is an optional structure containing the following fields
@@ -37,10 +37,10 @@ function [ g,t ] = gsp_design_simple_tf(G, Nf, param)
 %       
 %   See also:
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_design_simple_tf.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_design_simple_tf.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

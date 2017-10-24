@@ -10,7 +10,7 @@ function [ g ] = gsp_design_simoncelli(G, param)
 %   Outputs parameters:
 %       g       : filterbank
 %
-%   This function create a parseval filterbank of 2 filters. The low-pass
+%   This function creates a parseval filterbank of 2 filters. The low-pass
 %   filter is defined by a function f_l(x): 
 %
 %                   /  1                                   if x <= a 
@@ -40,10 +40,10 @@ function [ g ] = gsp_design_simoncelli(G, param)
 %     spectrum is scaled between 0 and 2 (default 2/3).
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_design_simoncelli.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_design_simoncelli.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

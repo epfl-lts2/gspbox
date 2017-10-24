@@ -28,10 +28,10 @@ function r = gsp_stationarity_ratio(G, C, param)
 %     
 %     
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/stationarity/gsp_stationarity_ratio.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/stationarity/gsp_stationarity_ratio.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -57,6 +57,8 @@ function r = gsp_stationarity_ratio(G, C, param)
 % Date    : 6 January 2016
 
 if nargin < 3, param = struct(); end
+
+if ~isfield(param,'verbose'), param.verbose = 0; end
 
 if not(isfield(G, 'U'))
     G = gsp_compute_fourier_basis(G);

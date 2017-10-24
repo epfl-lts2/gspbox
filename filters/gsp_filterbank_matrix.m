@@ -10,7 +10,7 @@ function [ F ] = gsp_filterbank_matrix(G,g,param )
 %   Output parameters:
 %         F     : Frame
 %
-%   This function create the matrix associated to the filterbank g. The
+%   This function creates the matrix associated to the filterbank g. The
 %   size of the matrix is MN x N, where M is the number of filters.
 %
 %   param a Matlab structure containing the following fields:
@@ -19,10 +19,10 @@ function [ F ] = gsp_filterbank_matrix(G,g,param )
 %       By default, it is 1.
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_filterbank_matrix.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_filterbank_matrix.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

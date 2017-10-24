@@ -5,10 +5,10 @@
 %
 % July 2016
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/learn_graph/gsp_learn_graph_l2_degrees_mine.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/learn_graph/gsp_learn_graph_l2_degrees_mine.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -114,7 +114,7 @@ function [W, stat] = gsp_learn_graph_l2_degrees_mine(Z, a, b, params)
 %
 %   See also: gsp_learn_graph_log_degrees gsp_distanz gsp_update_weights
 % 
-%   References: kalofolias2016learn komodakis2015playing
+%   References: kalofolias2016learn komodakis2015playing kalofolias2017large
 %
 
 % Author: Vassilis Kalofolias

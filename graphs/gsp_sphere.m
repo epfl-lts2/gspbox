@@ -30,10 +30,10 @@ function G = gsp_sphere(N, param)
 %   See also: gsp_cube
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_sphere.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/graphs/gsp_sphere.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -73,8 +73,9 @@ end
     K = param.nb_dim;
     
     switch param.sampling
-        %case 'uniform'
-            %TO THINK
+        case 'uniform'
+            % Recursive zonal equal area partition EQ(d, N)
+            pts = eq_point_set(K - 1, N)';
             
         case 'random'
             % Draw angles randomly

@@ -16,10 +16,10 @@ function [x,y] = gsp_point2dcdf(v)
 %       gsp_point2dcdf([0 3 4 2 2 0 1 0 1 1 2])
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/utils/gsp_point2dcdf.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/utils/gsp_point2dcdf.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

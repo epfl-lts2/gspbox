@@ -1,5 +1,5 @@
 function [A, B] = gsp_filterbank_bounds(G,W,param)
-%GSP_FILTERBANK_BOUNDS Compute approximate frame bounds for a filterbank
+%GSP_FILTERBANK_BOUNDS Compute approximated frame bounds for a filterbank
 %   Usage: [A, B] = gsp_filterbank_bounds(G,W);
 %          [A, B] = gsp_filterbank_bounds(G,W,param);
 %          [A, B] = gsp_filterbank_bounds([xmin, xmax],W);
@@ -15,16 +15,16 @@ function [A, B] = gsp_filterbank_bounds(G,W,param)
 %
 %   param is a Matlab structure containing the following fields:
 %
-%    param.N : Number of point for the line search default (default 999)
+%    param.N : Number of points for the line search default (default 999)
 %    param.use_eigenvalues : Use eigenvalues if possible (default 1). To
 %     be used, the eigenvalues have to be computed first using
 %     GSP_COMPUTE_FOURIER_BASIS.
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_filterbank_bounds.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_filterbank_bounds.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

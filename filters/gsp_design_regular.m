@@ -1,5 +1,5 @@
 function [ g ] = gsp_design_regular(G, param)
-%GSP_DESIGN_REGULAR Create a Simoncelli filterbank
+%GSP_DESIGN_REGULAR Create a regular filterbank
 %   Usage: g = gsp_design_regular( G );
 %          g = gsp_design_regular( G, param );
 %   
@@ -10,7 +10,7 @@ function [ g ] = gsp_design_regular(G, param)
 %   Outputs parameters:
 %       g       : filterbank
 %
-%   This function create a parseval filterbank of 2 filters. The low-pass
+%   This function creates a parseval filterbank of 2 filters. The low-pass
 %   filter is defined by a function f_l(x) between 0 and 2. For
 %   d = 0.
 %
@@ -26,7 +26,7 @@ function [ g ] = gsp_design_regular(G, param)
 %
 %   And so on for the other degrees d.
 %
-%   The high pass filter is adaptated to obtain a tight frame.
+%   The high pass filter is adapted to obtain a tight frame.
 %
 %   This function will compute the maximum eigenvalue of the laplacian. To
 %   be more efficient, you can precompute it using:
@@ -48,10 +48,10 @@ function [ g ] = gsp_design_regular(G, param)
 %    param.d*: Degree. See equation for mor informations. (default 3)
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_design_regular.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_design_regular.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

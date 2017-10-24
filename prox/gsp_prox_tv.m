@@ -69,10 +69,10 @@ function [sol, info] = gsp_prox_tv(x,gamma,G,param)
 %   See also: gsp_norm_tv gsp_grad
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/prox/gsp_prox_tv.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/prox/gsp_prox_tv.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -145,7 +145,6 @@ else
 end
 param_l1.verbose = param.verbose;
 param_l1.tol = param.tol;
-
 
 
 [sol,info] = prox_l1(x,gamma,param_l1);

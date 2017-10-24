@@ -1,5 +1,5 @@
 function [ g,t ] = gsp_design_mexican_hat(G, Nf, param)
-%GSP_DESIGN_MEXICAN_HAT Design the mexican hat filter bank
+%GSP_DESIGN_MEXICAN_HAT Design the mexican hat filterbank
 %   Usage: g =  gsp_design_mexican_hat(G, Nf, param);
 %               gsp_design_mexican_hat(G ,Nf);
 %               gsp_design_mexican_hat(G);
@@ -46,7 +46,7 @@ function [ g,t ] = gsp_design_mexican_hat(G, Nf, param)
 %
 %   Example:
 %
-%         Nf = 4;
+%         Nf = 8;
 %         G = gsp_sensor(100);
 %         G = gsp_estimate_lmax(G);
 %         g = gsp_design_mexican_hat(G, Nf);   
@@ -56,10 +56,10 @@ function [ g,t ] = gsp_design_mexican_hat(G, Nf, param)
 %       
 %   See also:
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/gsp_design_mexican_hat.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_design_mexican_hat.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -109,8 +109,9 @@ else
    lmax = G;
 end
 
+lmin=lmax / param.lpfactor;
+
 if ~isfield(param,'t')
-   lmin=lmax / param.lpfactor;
    param.t = gsp_wlog_scales(lmin, lmax, Nf-1);
 end
 
@@ -127,7 +128,7 @@ t = param.t;
 % High pass filter
 gb=@(x) x.*exp(-x);
 % low pass filter
-gl = @(x) exp(-x.^4);   
+gl = @(x) exp(-x.^4);
 
 g = cell(Nf,1);
 

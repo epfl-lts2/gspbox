@@ -35,15 +35,18 @@ function [ G ] = gsp_nn_graph(Xin, param)
 %    param.epsilon   : float               the radius for the range search
 %    param.use_l1    : [0, 1]              use the l1 distance (def 1)
 %    param.symmetrize_type*: ['average','full'] symmetrization type (default 'full')
+%    param.min_weight*: float               constant additive weight for each edge (default 0) 
 %    param.zero_diagonal*: [0, 1]           zero out the diagonal (default 1)
+%    param.weight_kernel*: function         edge-weighting kernel (default gaussian)
+%
 %
 %   See also: gsp_nn_distanz gsp_pointcloud
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/graphs/gsp_nn_graph.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/graphs/gsp_nn_graph.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -84,7 +87,9 @@ function [ G ] = gsp_nn_graph(Xin, param)
     if ~isfield(param, 'use_l1'), param.use_l1 = 0; end
     if ~isfield(param, 'target_degree'), param.target_degree = 0; end;
     if ~isfield(param, 'symmetrize_type'), param.symmetrize_type = 'average'; end
+    if ~isfield(param, 'min_weight'), param.min_weight = 0; end
     if ~isfield(param, 'light'); param.light = 0; end
+    if ~isfield(param, 'weight_kernel'); param.weight_kernel = @(x, sigma) exp(-x/sigma); end
     
     paramnn = param;
     paramnn.k = param.k +1;
@@ -110,9 +115,9 @@ function [ G ] = gsp_nn_graph(Xin, param)
     
     
     if param.use_l1
-        Wmat = @(indx,indy,dist,n,m) sparse(indx, indy, double(exp(-dist/param.sigma)), n, m);
+        Wmat = @(indx,indy,dist,n,m) sparse(indx, indy, param.min_weight+double(param.weight_kernel(dist, param.sigma)), n, m);
     else
-        Wmat = @(indx,indy,dist,n,m) sparse(indx, indy, double(exp(-dist.^2/param.sigma)), n, m);
+        Wmat = @(indx,indy,dist,n,m) sparse(indx, indy, param.min_weight+double(param.weight_kernel(dist.^2, param.sigma)), n, m);
     end
     
     n = size(Xin,1);

@@ -20,6 +20,7 @@ function [ basis, filt_sig, param ] = gsp_eigenspace_estimation( G, k, param )
 %   Example:
 %
 %         G = gsp_sensor(256);
+%         G = gsp_estimate_lmax(G);
 %         k = 8;
 %         param.order = 100;
 %         Uk_est = gsp_eigenspace_estimation(G, k, param);
@@ -52,10 +53,10 @@ function [ basis, filt_sig, param ] = gsp_eigenspace_estimation( G, k, param )
 %     
 %
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/embedding/gsp_eigenspace_estimation.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/embedding/gsp_eigenspace_estimation.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

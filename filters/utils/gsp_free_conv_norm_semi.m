@@ -5,10 +5,10 @@ function [ pdf ] = gsp_free_conv_norm_semi(xx)
 % 2. The phi_k coefficients, an increasing order starting from
 % -approx_order to approx_order (to be loaded in the function)
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/filters/utils/gsp_free_conv_norm_semi.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/utils/gsp_free_conv_norm_semi.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

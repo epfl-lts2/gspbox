@@ -27,10 +27,10 @@ function [TCER, TCER_rand] = gsp_learn_tcer(G, X, params)
 %   See also: gsp_good_graph_index, gsp_stationarity_ratio
 % 
 %
-%   Url: http://lts2research.epfl.ch/gsp/doc/learn_graph/gsp_learn_tcer.php
+%   Url: https://epfl-lts2.github.io/gspbox-html/doc/learn_graph/gsp_learn_tcer.html
 
 % Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.0
+% This file is part of GSPbox version 0.7.4
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
