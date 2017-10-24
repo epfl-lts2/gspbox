@@ -16,21 +16,21 @@ function [Gs]=gsp_graph_multiresolution(G,num_levels,param)
 %   the polarity of the components of the eigenvector associated with the 
 %   largest graph Laplacian eigenvalue. The default graph reduction method
 %   is Kron reduction followed by a graph sparsification step.
-%   param is a structure of optional parameters containing the following
+%   *param* is a structure of optional parameters containing the following
 %   fields:
 %
-%    sparsify*: To perform a spectral sparsification step immediately
+%   * *sparsify*: To perform a spectral sparsification step immediately
 %     after the graph reduction (default=1) 
-%    sparsify_epsilon*: Parameter epsilon used in the spectral
+%   * *sparsify_epsilon*: Parameter epsilon used in the spectral
 %     sparsification (default=min(10/sqrt(G.N),.3))   
-%    downsampling_method*: The graph downsampling method
+%   * *downsampling_method*: The graph downsampling method
 %     (default='largest_eigenvector') 
-%    reduction_method*: The graph reduction method (default='Kron')
-%    compute_full_eigen*: To also compute the graph Laplacian eigenvalues
+%   * *reduction_method*: The graph reduction method (default='Kron')
+%   * *compute_full_eigen*: To also compute the graph Laplacian eigenvalues
 %     and eigenvectors for every graph in the multiresolution sequence
 %     (default=0)  
 %
-%   Example:
+%   Example:::
 %
 %             N = 500;
 %             G = gsp_sensor(N);
@@ -49,39 +49,11 @@ function [Gs]=gsp_graph_multiresolution(G,num_levels,param)
 %
 %   Demo: gsp_demo_pyramid
 %
-%   References:
-%     D. I. Shuman, M. J. Faraji, and P. Vandergheynst. A framework for
-%     multiscale transforms on graphs. arXiv preprint arXiv:1308.4942, 2013.
-%     
-%     
+%   References: shuman2013framework
 %
 %   Authors : David I Shuman, Elle Weeks, Andre Archer, Stefan Faridani, Yan Jin, Nathanael Perraudin.
 %   Date: 26 November 2015
 %   Testing: test_operators 
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/operators/gsp_graph_multiresolution.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 
 if nargin < 3
@@ -201,5 +173,4 @@ end
 
 
   
-
 

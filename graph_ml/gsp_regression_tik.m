@@ -15,50 +15,26 @@ function sol = gsp_regression_tik(G ,M, y , tau, param )
 %
 %   This function solve the following problem
 %
-%      argmin_x  || M x - y ||_2^2 + tau || nabla_G x ||_2^2
+%   .. argmin_x  || M x - y ||_2^2 + tau || nabla_G x ||_2^2
 %
 %   If tau is set to zero, then the following problem is solved
 %
-%       argmin_x   || nabla_G x ||_2^2    s. t.  M x - y = 0
+%   ..  argmin_x   || nabla_G x ||_2^2    s. t.  M x - y = 0
 %
 %   For the las problem, this function can compute an exact solution if
-%   param.exact is activated. It will be efficient if the number of
+%   *param.exact* is activated. It will be efficient if the number of
 %   unlabelled points is low.
 %
 %   Additional parameters
 %   ---------------------
 %
-%    param.verbose : Verbosity of the iterative algorithm
-%    param.maxit : maximum number of iteration for PCG
+%   * *param.verbose* : Verbosity of the iterative algorithm
+%   * *param.maxit* : maximum number of iteration for PCG
 %
 %   This function uses the UNLocBoX. 
 %
 %   See also: gsp_classification_tik gsp_regression_tv
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/graph_ml/gsp_regression_tik.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Author: Nathanael Perraudin
 % Date  : 24 July 2015

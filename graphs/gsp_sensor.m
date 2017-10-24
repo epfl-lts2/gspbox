@@ -13,45 +13,21 @@ function G = gsp_sensor(N, param)
 %   This function creates a 2 dimensional random sensor graph. All the
 %   coordinates are between 0 and 1.
 %
-%   param is an optional structure with the following field
+%   *param* is an optional structure with the following field
 %
-%    param.verbose*: display parameter - 0 no log - 1 display the errors (default 1)
-%    param.N_try*: Number of attempts to create the graph (default 10)
-%    param.distribute*: To distribute the points more evenly (default 0)
-%    param.connected*: To force the graph to be connected (default 1)
-%    param.nnparam*: optional parameter for the gsp_nn_graph
+%   * *param.verbose*: display parameter - 0 no log - 1 display the errors (default 1)
+%   * *param.N_try*: Number of attempts to create the graph (default 10)
+%   * *param.distribute*: To distribute the points more evenly (default 0)
+%   * *param.connected*: To force the graph to be connected (default 1)
+%   * *param.nnparam*: optional parameter for the gsp_nn_graph
 %
 %
-%   Example:
+%   Example:::
 %
 %          G = gsp_sensor(300);
 %          paramplot.show_edges = 1;
 %          gsp_plot_graph(G,paramplot);
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/graphs/gsp_sensor.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 
 
@@ -131,5 +107,4 @@ end
 
 
 end
-
 

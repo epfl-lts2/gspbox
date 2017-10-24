@@ -11,11 +11,13 @@ function [Greduced]=gsp_kron_reduce(G,keep_inds)
 %
 %   'gsp_kron_reduce(G,keep_inds)' performs Kron reduction:
 %
-%      L_reduced = L_{V_1,V_1} - L_{V_1,V_2} * [L_{V_2,V_2}]^-1 * L_{V_2,V_1}
+%   .. L_reduced = L_{V_1,V_1} - L_{V_1,V_2} * [L_{V_2,V_2}]^-1 * L_{V_2,V_1}
+%
+%   .. math:: {\cal L}_{reduced}={\cal L}_{{\cal V}_1,{\cal V}_1}-{\cal L}_{{\cal V}_1,{\cal V}_2} \left[{\cal L}_{{\cal V}_2,{\cal V}_2}\right]^{-1} {\cal L}_{{\cal V}_2,{\cal V}_1}
 %
 %   If a matrix is given, then a matrix is returned
 %
-%   Example:
+%   Example:::
 %
 %           N = 64;
 %           param.distribute = 1;
@@ -38,35 +40,7 @@ function [Greduced]=gsp_kron_reduce(G,keep_inds)
 %
 %   Demos:  
 % 
-%   References:
-%     F. Dorfler and F. Bullo. Kron reduction of graphs with applications to
-%     electrical networks. Circuits and Systems I: Regular Papers, IEEE
-%     Transactions on, 60(1):150--163, 2013.
-%     
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/operators/gsp_kron_reduce.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
+%   References: dorfler2013kron
 
 %   Author : David I Shuman, Nathanael Perraudin.
 %   Date   : 26 November 2016

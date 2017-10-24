@@ -14,23 +14,27 @@ function [g]=gsp_design_expwin(G, bmax, a)
 %
 %   This function design the following filter:
 %
-%      g(x) = s( (1-x) / bmax /lmax )
+%   .. g(x) = s( (1-x) / bmax /lmax )
 %
-%   where  s(x) is the step function
+%   .. math:: g(x) = s\left(\frac{1-x}{\lambda_{\text{max}} b_{\text{max}} }\right)
+%   
+%   where  $s(x)$ is the step function
 %
-%               /   0                                      if x < -1
-%       s(x) = | exp(-a/x) / ( exp(-a/x) + exp(-a/(1-x)) ) if x in [-1, 1]
-%               \   1                                      if x > 1
+%   ..          /   0                                      if x < -1
+%   ..  s(x) = | exp(-a/x) / ( exp(-a/x) + exp(-a/(1-x)) ) if x in [-1, 1]
+%   ..          \   1                                      if x > 1
+%
+%   .. math:: s(x)=\begin{cases} 0 & \mbox{if }x<-1 \\ \frac{e^{-\frac{a}{x}}}{e^{-\frac{a}{x}}+e^{-\frac{a}{1-x}}} & \mbox{if }x\in[-1,1]\\ 1 & \mbox{if }x>1 \end{cases}
 %
 %   It uses a clever exponential construction to obtain an infinitely
 %   differentiable function that is band limited!
 %
 %   This function will compute the maximum eigenvalue of the laplacian. To
-%   be more efficient, you can precompute it using:
+%   be more efficient, you can precompute it using::
 %
 %       G = gsp_estimate_lmax(G);
 %
-%   Example:
+%   Example:::
 %
 %         Nf = 4;
 %         G = gsp_sensor(100);
@@ -38,30 +42,6 @@ function [g]=gsp_design_expwin(G, bmax, a)
 %         g = gsp_design_expwin(G);   
 %         gsp_plot_filter(G,g);  
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_design_expwin.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 
 % Author: Nathanael Perraudin
@@ -103,6 +83,5 @@ g = @(x) gsp_smooth_downstep(x/bmax/lmax, a , 1);
 
     
 end
-
 
 

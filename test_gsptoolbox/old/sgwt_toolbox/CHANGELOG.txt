@@ -1,0 +1,10 @@
+May 1, 2010 - initial release
+May 4, 2010 - Added GPL license text
+June 4, 2012 - Added support for additional kernel types (meyer
+construction, "simple tight frame"), cleaned up naming of
+sgwt_kernel_xxx.m functions, and modifications compatibility with
+octave compatibility (checking with octave 3.4.3)
+- sgwt_inverse uses pcg instead of cgs ( as cgs under octave does not
+support function handles ) 
+- demo1 and demo3 run cleanly under octave (although results of demo1
+appear different, due to diffferent pseudorandom number stream)

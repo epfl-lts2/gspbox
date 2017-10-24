@@ -13,11 +13,11 @@ function [ basis, filt_sig, param ] = gsp_eigenspace_estimation( G, k, param )
 %         param      : Optional parameters (with new entries)
 %
 %   'gsp_eigenspace_estimation(G,k)' computes an estimation of the first 
-%   k eigenvectors of the Laplacian of G using Gaussian random signal
+%   $k$ eigenvectors of the Laplacian of G using Gaussian random signal
 %   filtering, following the FEARS method described in paratte2017fast.
 %
 %
-%   Example:
+%   Example:::
 %
 %         G = gsp_sensor(256);
 %         G = gsp_estimate_lmax(G);
@@ -25,57 +25,29 @@ function [ basis, filt_sig, param ] = gsp_eigenspace_estimation( G, k, param )
 %         param.order = 100;
 %         Uk_est = gsp_eigenspace_estimation(G, k, param);
 %         G = gsp_compute_fourier_basis(G);
-%         proj_energy = norm(Uk_est'  G.U(:, 1:k), 'fro');
+%         proj_energy = norm(Uk_est' * G.U(:, 1:k), 'fro');
 %       
 %
 %   Additional parameters
 %   ---------------------
 %  
-%    param.filter  : Select the filter to be used for the computation. 
-%      'lp-ch'   : Chebyshev polynomial approximation
-%      'lp-jch'  : Jackson-Chebyshev polynomial approximation
-%      'expwin'  : Exponentially decreasing polynomial approximation Default: 'lp-jch'
-%    param.order : Degree of the polynomial approximation (default=50).
-%    param.lk_est_method : Select the version of lk estimation.
-%      'fast'      : Accelerated method using local uniformity assumption
-%      'std'  : Usual method using dichotomy all the time Default: 'fast'
-%    param.R : Random matrix to use (of size N > d, d >= k)
+%   * *param.filter*  : Select the filter to be used for the computation. 
+%     * 'lp-ch'   : Chebyshev polynomial approximation
+%     * 'lp-jch'  : Jackson-Chebyshev polynomial approximation
+%     * 'expwin'  : Exponentially decreasing polynomial approximation Default: 'lp-jch'
+%   * *param.order* : Degree of the polynomial approximation (default=50).
+%   * *param.lk_est_method* : Select the version of lk estimation.
+%     * 'fast'      : Accelerated method using local uniformity assumption
+%     * 'std'  : Usual method using dichotomy all the time Default: 'fast'
+%   * *param.R* : Random matrix to use (of size N > d, d >= k)
 %     (default: Gaussian(0, 1/k) of size Nxk)
-%    param.pcoef : Polynomial coefficients if already known.
-%    param.lk : Estimated value of lambda_k if already known.
-%    param.verbose : Verbosity level (0 no log - 1 display warnings) (default 1).   
+%   * *param.pcoef* : Polynomial coefficients if already known.
+%   * *param.lk* : Estimated value of lambda_k if already known.
+%   * *param.verbose* : Verbosity level (0 no log - 1 display warnings) (default 1).   
 %
 % 
-%   References:
-%     J. Paratte and L. Martin. Fast eigenspace approximation using random
-%     signals. arXiv preprint arXiv:1611.00938, 2016.
-%     
-%     
+%   References: paratte2016fast
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/embedding/gsp_eigenspace_estimation.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Author: Johan Paratte, Lionel Martin
 % Date: 3 November 2016
@@ -165,5 +137,4 @@ t = toc;
 if param.verbose, fprintf('* Time to compute SVD: %f sec.\n', t); end
 
 end
-
 

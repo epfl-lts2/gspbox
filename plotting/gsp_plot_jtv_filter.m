@@ -11,7 +11,7 @@ function [] = gsp_plot_jtv_filter(G, filters, filtertype, param)
 %   Output parameters:
 %       none
 %
-%   Example:
+%   Example:::
 %
 %         alpha = [0.1 0.5 1 2];
 %         G = gsp_sensor(100);
@@ -27,36 +27,12 @@ function [] = gsp_plot_jtv_filter(G, filters, filtertype, param)
 %   Additional parameters
 %   ---------------------
 %
-%    param.npoints  : Number of points where the filters are evaluated if eigenvalues not available (default 100).
-%    param.show_sum : Extra plot showing the sum of the squared magnitudes of the filters (default 1 if there is multiple filters).
-%    param.verbose  : Verbosity level (1 display the warning - 0 no log) (default 1).
-%    param.title    : Cell array of title for subplots. (default 1:Nf)
-%    param.domain   : Visualize the spectrum in 'time-spectral' or 'joint-spectral' (default param.domain='joint-spectral')
+%   * *param.npoints*  : Number of points where the filters are evaluated if eigenvalues not available (default 100).
+%   * *param.show_sum* : Extra plot showing the sum of the squared magnitudes of the filters (default 1 if there is multiple filters).
+%   * *param.verbose*  : Verbosity level (1 display the warning - 0 no log) (default 1).
+%   * *param.title*    : Cell array of title for subplots. (default 1:Nf)
+%   * *param.domain*   : Visualize the spectrum in 'time-spectral' or 'joint-spectral' (default param.domain='joint-spectral')
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/plotting/gsp_plot_jtv_filter.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Author: Francesco Grassi, Nathanael Perraudin
 % Date   : September 2016
@@ -139,4 +115,3 @@ for ii=1:Nf
 end
 
 end
-

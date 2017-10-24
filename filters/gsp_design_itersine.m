@@ -12,8 +12,8 @@ function [ g,mu ] = gsp_design_itersine( G, Nf, param )
 %       g       : filterbanks
 %       mu      : centers of the filters
 %
-%   This function creates an itersine half overlap filterbank of Nf filters
-%   Going from 0 to lambda_{max}
+%   This function creates an itersine half overlap filterbank of *Nf* filters
+%   Going from $0$ to $\lambda_{max}$
 %
 %   This filterbank is tight for an overlap of 2 and other particular
 %   values. The function normalizes the window such that the framebound is
@@ -21,14 +21,16 @@ function [ g,mu ] = gsp_design_itersine( G, Nf, param )
 %
 %   The itersine window between -0.5 and 0.5 is defined as
 %
-%       g(t) = sin( 0.5 pi (cos pi t)^2 )
+%   ..  g(t) = sin( 0.5 pi (cos pi t)^2 )
+%
+%   .. math:: g(t) = \sin \left( 0.5 \pi \cos (\pi t)^2 \right) 
 %
 %   This function will compute the maximum eigenvalue of the laplacian. To
-%   be more efficient, you can precompute it using:
+%   be more efficient, you can precompute it using::
 %
 %       G = gsp_estimate_lmax(G);
 %
-%   Example:
+%   Example:::
 %
 %         Nf = 20;
 %         G = gsp_sensor(100);
@@ -37,36 +39,12 @@ function [ g,mu ] = gsp_design_itersine( G, Nf, param )
 %         gsp_plot_filter(G,g);  
 %         [A,B] = gsp_filterbank_bounds(G,g)
 %
-%   param is an optional structure containing the following fields
+%   *param* is an optional structure containing the following fields
 %
-%    param.verbose*: verbosity level. 0 no log - 1 display warnings.
+%   * *param.verbose*: verbosity level. 0 no log - 1 display warnings.
 %     (default 1) 
-%    param.overlap*: Overlap : default 2
+%   * *param.overlap*: Overlap : default 2
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_design_itersine.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Author: Nathanael Perraudin
 % Date  : 18 June 2014
@@ -108,5 +86,4 @@ end
 
 
 end
-
 

@@ -10,13 +10,13 @@ function G = gsp_graph_default_parameters(G)
 % 
 %   This function will fill a graph with all missing parameters such that
 %   it is compabatible with all functions of the GSPBox. If you create a
-%   graph manually, you need to set only the weight matrix W. If you have
-%   some coordonate, you can also set G.coords. G.coords is a N x 2
-%   or a N x 3 matrix with each columns beeing the coordonates in each
-%   dimention. Finally, we recommend to set the fiel G.type with a name
+%   graph manually, you need to set only the weight matrix *W*. If you have
+%   some coordonate, you can also set *G.coords*. *G.coords* is a $N$ x $2$
+%   or a $N$ x $3$ matrix with each columns beeing the coordonates in each
+%   dimention. Finally, we recommend to set the fiel *G.type* with a name
 %   that suits your graph.
 %
-%   Example:
+%   Example::
 %          
 %          W = rand(30);
 %          W = (W + W')/2;
@@ -25,7 +25,7 @@ function G = gsp_graph_default_parameters(G)
 %
 %   This function can be used to update the weights of your graph. It will
 %   recompute the Laplacian operator. Warning this function does not
-%   perform any change to the Fourier basis:
+%   perform any change to the Fourier basis::
 %
 %          G.W = Wnew;
 %          G = gsp_graph_default_parameters(G);
@@ -37,54 +37,30 @@ function G = gsp_graph_default_parameters(G)
 %   By default, a graph structure in the GSPbox contains the following
 %   parameters:
 %   
-%    G.W*: Weight matrix (empty by default)
-%    G.A*: Adacency matrix (constructed with W*)
-%    G.N*: Number of nodes (size(W,1))
-%    G.type*: Type of graph ('unknown' by default)
-%    G.directed*: 1 if the graph is directed, 0 if not
-%    G.lap_type*: Laplacian type (default 'combinatorial') See the
-%     function GSP_CREATE_LAPLACIAN for a exhaustive list of the
+%   * *G.W*: Weight matrix (empty by default)
+%   * *G.A*: Adacency matrix (constructed with *W*)
+%   * *G.N*: Number of nodes (`size(W,1)`)
+%   * *G.type*: Type of graph ('unknown' by default)
+%   * *G.directed*: 1 if the graph is directed, 0 if not
+%   * *G.lap_type*: Laplacian type (default 'combinatorial') See the
+%     function |gsp_create_laplacian| for a exhaustive list of the
 %     available laplacians.
-%    G.d*: Degree vector (Computed with G.W*)
-%    G.Ne*: Number of edges
-%    G.coords*: Coordinates of the vertices (default (0,0) )
-%    G.plotting*: Plotting parameters
-%      G.plotting.edge_width*: Width of edges (default 1)
-%      G.plotting.edge_color*: Color of edges (default [255,88,41]/255 )
-%      G.plotting.edge_style*: Style of edges (default '-')
-%      G.plotting.vertex_size*: Size of vertex (default 50)
-%      G.plotting.vertex_color*: Color of vertex (default 'b')
+%   * *G.d*: Degree vector (Computed with *G.W*)
+%   * *G.Ne*: Number of edges
+%   * *G.coords*: Coordinates of the vertices (default (0,0) )
+%   * *G.plotting*: Plotting parameters
+%     * *G.plotting.edge_width*: Width of edges (default 1)
+%     * *G.plotting.edge_color*: Color of edges (default [255,88,41]/255 )
+%     * *G.plotting.edge_style*: Style of edges (default '-')
+%     * *G.plotting.vertex_size*: Size of vertex (default 50)
+%     * *G.plotting.vertex_color*: Color of vertex (default 'b')
 %   
-%   Remark: There is redudancy between A, W, L. However, the GSPBox
+%   Remark: There is redudancy between $A$, $W$, $L$. However, the GSPBox
 %   is done in matlab and is not suppose yet to scale to graph sufficiently
 %   large that your matlab have memory problem. However, this will be most
 %   likely change for milestone 1.0.0. If you do have a urgent need to
 %   overcome this problem, please contact the devolper team.
 %          
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/graphs/gsp_graph_default_parameters.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Author: Nathanael Perraudin
 % Date  : 09.12.2013

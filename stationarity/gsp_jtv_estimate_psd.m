@@ -17,45 +17,17 @@ function [psd, ft] = gsp_jtv_estimate_psd(G, X, param)
 %   Additional parameters
 %   ---------------------
 %
-%    param.estimator  : Method used for the estimation. By default 'TA'
+%   * *param.estimator*  : Method used for the estimation. By default 'TA'
 %     - 'TA': Average over the time domain.
 %     - 'FC': Fourier convolution a trick used to reduce the computation. 
 %     - 'VA': Average over the vertex domain
 %     - 'TVA': Average over the time and the vertex domain
 %     - 'FA' : Average on multiple realization in the joint spectral domain
-%    param.L       : Length of the window for the 'GSTFT' method
-%    param.kernel  : Kernel for the convolution for 'FC' method.
+%   * *param.L*       : Length of the window for the 'GSTFT' method
+%   * *param.kernel*  : Kernel for the convolution for 'FC' method.
 %
 %
-%   References:
-%     N. Perraudin and P. Vandergheynst. Stationary signal processing on
-%     graphs. arXiv preprint arXiv:1601.02522, 2016.
-%     
-%     
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/stationarity/gsp_jtv_estimate_psd.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
+%   References: perraudin2016stationary
 
 % Author : Nathanael Perraudin
 % Date: 6 January 2016

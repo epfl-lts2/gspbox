@@ -18,7 +18,7 @@ function gsp_plot_jtv_signal(G,signal,param)
 %   (G.vertex_size). If the figure loses the focus the visualization will
 %   stop
 %
-%   Example:
+%   Example:::
 %
 %          G = gsp_sensor();
 %          G = gsp_jtv_graph(G,50);
@@ -28,45 +28,21 @@ function gsp_plot_jtv_signal(G,signal,param)
 %   Additional parameters
 %   ---------------------
 %
-%    param.step       : Time step (default round(log(param.T)))
-%    param.T          : Final time (use if you want to visualize only the first param.T samples)
-%    param.show_edges : Set to 0 to only draw the vertices. (default 0, really slow )
-%    param.cp         : Camera position for a 3D graph.
-%    param.vertex_size*: Size of circle representing each signal component.
-%    param.colorbar   : Set to 0 to not show the colorbar
-%    param.climits    : Limits of the colorbar
-%    param.vertex_highlight*: Vector of indices of vertices to be highlighted
-%    param.bar        : 1 Display bar for the graph. 0 Display color
+%   * *param.step*       : Time step (default round(log(param.T)))
+%   * *param.T*          : Final time (use if you want to visualize only the first param.T samples)
+%   * *param.show_edges* : Set to 0 to only draw the vertices. (default 0, really slow )
+%   * *param.cp*         : Camera position for a 3D graph.
+%   * *param.vertex_size*: Size of circle representing each signal component.
+%   * *param.colorbar*   : Set to 0 to not show the colorbar
+%   * *param.climits*    : Limits of the colorbar
+%   * *param.vertex_highlight*: Vector of indices of vertices to be highlighted
+%   * *param.bar*        : 1 Display bar for the graph. 0 Display color
 %                          points. (default 0);
-%    param.bar_width  : Width of the bar (default 1)
-%    param.clear      : Clear axes (default 1)
+%   * *param.bar_width*  : Width of the bar (default 1)
+%   * *param.clear*      : Clear axes (default 1)
 %
 %   See also: gsp_plot_signal
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/plotting/gsp_plot_jtv_signal.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 
 if nargin < 3
@@ -171,6 +147,5 @@ set(jAxis.getComponent(1),'FocusLostCallback',{});
 
 
 end
-
 
 

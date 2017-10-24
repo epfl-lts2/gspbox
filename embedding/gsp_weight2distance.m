@@ -14,7 +14,7 @@ function D = gsp_weight2distance(G, method, sigma)
 %         D         : Distance matrix (sparse)
 %
 %   This function uses the weight matrix of a graph in order to compute the
-%   distance matrix D. If G is a structure it is considered as a graph
+%   distance matrix $D$. If G is a structure it is considered as a graph
 %   otherwise it is considered as a weight matrix. The resulting matrix is
 %   in sparse form. The indices idx are of the nearest neighbors or (if k
 %   is not used) the indices of all non zero elements of the weight matrix.
@@ -22,36 +22,12 @@ function D = gsp_weight2distance(G, method, sigma)
 %   vector jj of indices where D(ii, jj) are the Distances of the nearest
 %   neighbours of element ii.
 %
-%   The type of method one can use are the following:
-%    'exp'        : exponential kernel (e^(frac{-d_{ij}}{sigma^2}))
-%    '1/x'        : inverse of x kernel (frac{1}{sigma+d_{ij}})
-%    '1/x^2'      : inverse of x^2 kernel (frac{1}{(sigma+d_{ij})^2})
-%    'resistance' : Resistance distance.
+%   The type of *method* one can use are the following:
+%   * 'exp'        : exponential kernel ($e^(\frac{-d_{ij}}{\sigma^2})$)
+%   * '1/x'        : inverse of x kernel ($\frac{1}{\sigma+d_{ij}}$)
+%   * '1/x^2'      : inverse of x^2 kernel ($\frac{1}{(\sigma+d_{ij})^2}$)
+%   * 'resistance' : Resistance distance.
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/embedding/gsp_weight2distance.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Authors : Dion O. E. Tzamarias
 % Date    : 20/11/2015

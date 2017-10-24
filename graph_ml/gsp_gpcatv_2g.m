@@ -24,55 +24,29 @@ function [Lr, Sp, G1, G2, U, S, V] = gsp_gpcatv_2g(X, gamma1, gamma2, G1, G2, pa
 %       V       : Part of the SVD of Lr
 %
 %   This function compute a low rank approximation of the data stored in
-%   Lr by solving an optimization problem:
+%   *Lr* by solving an optimization problem:
 %
-%      argmin_Lr || Lr - X ||_1  + gamma1 || X ||_TVG + gamma2 tr( X L2 X^T)
+%   .. argmin_Lr || Lr - X ||_1  + gamma1 || X ||_TVG + gamma2 tr( X L2 X^T)
 %
-%   The sparse part is given by  S = X - L_r . 
+%   .. math:: argmin_Lr || Lr - X ||_1  + \gamma_1 \|\nabla_G X \|_1 + \gamma_2 tr( X L2 X^T)
+%
+%   The sparse part is given by $ S = X - L_r $. 
 %   
-%   If 0 is given for G1 and/or G2, the corresponding graph(s) will
+%   If $0$ is given for *G1* and/or *G2*, the corresponding graph(s) will
 %   be computed internally. The graph construction can be tuned using the
-%   optional parameter: param.paramnn.
+%   optional parameter: *param.paramnn*.
 %
 %   Other optional parameters are used in optimization. For details about
-%   those, please see the help of the function SOLVEP . 
+%   those, please see the help of the function |solvep| . 
 %
 %   If the number of output argument is greater than 2. The function, will
-%   additionally compute a very economical SVD such that  Lr = U S V^T.
+%   additionally compute a very economical SVD such that $ Lr = U S V^T$.
 %
 %   This function uses the UNLocBoX to be working.
 %
-%   References:
-%     N. Shahid, N. Perraudin, V. Kalofolias, and P. Vandergheynst. Fast
-%     robust pca on graphs. arXiv preprint arXiv:1507.08173, 2015.
-%     
-%     
+%   References: shahid2015fast
 %
 %   See also: gsp_frpcaog_1g
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/graph_ml/gsp_gpcatv_2g.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Author: Nathanael Perraudin
 % Date  : 19th October 2015
@@ -144,6 +118,5 @@ if nargout>4
 end
 
 end
-
 
 

@@ -6,59 +6,33 @@ function [f_interpolated]=gsp_interpolate(G,f_subsampled,keep_inds,param)
 %   Input parameters:
 %         f_subsampled     : A signal on the subset of the vertices of G indexed by keep_inds
 %         G                : Graph structure.
-%         keep_inds        : The vertex indices of V_1
+%         keep_inds        : The vertex indices of $V_1$
 %   Output parameters:
 %         f_interpolated   : Interpolated graph signal on G.
 %
 %   'gsp_interpolate(f_subsampled,G,keep_inds)' performs the interpolation:
 %
-%      f_interpolated = \Phi_{V_1} \Phi_{V_1,V_1}^{-1} f_{V_1} 
-%                     = \Phi_{V_1} [\bar{L}_{V_1,V_1}-\bar{L}_{V_1,V_1^c}(\bar{L}_{V_1^c,V_1^c})^{-1}\bar{L}_{V_1^c,V_1}] f_{V_1} 
+%   .. f_interpolated = \Phi_{V_1} \Phi_{V_1,V_1}^{-1} f_{V_1} 
+%   ..                = \Phi_{V_1} [\bar{L}_{V_1,V_1}-\bar{L}_{V_1,V_1^c}(\bar{L}_{V_1^c,V_1^c})^{-1}\bar{L}_{V_1^c,V_1}] f_{V_1} 
 %
-%   Note that keep_inds are the vertex indices of V_1; i.e., those
+%   .. math:: f_{interpolated}=\Phi_{{\cal V}_1} \Phi_{{\cal V}_1,{\cal V}_1}^{-1} f_{{\cal V}_1} = \Phi_{{\cal V}_1} \left[\bar{{\cal L}}_{{\cal V}_1,{\cal V}_1}-\bar{{\cal L}}_{{\cal V}_1,{\cal V}_1^c}(\bar{{\cal L}}_{{\cal V}_1^c,{\cal V}_1^c})^{-1}\bar{{\cal L}}_{{\cal V}_1^c,{\cal V}_1}\right] f_{{\cal V}_1}
+%
+%   Note that *keep_inds* are the vertex indices of $V_1$; i.e., those
 %   where the signal values are available to use in the interpolation. 
 %
-%   param contains the following fields
+%   *param* contains the following fields
 %
-%    param.order : Degree of the Chebyshev approximation (default=100 
+%   * *param.order* : Degree of the Chebyshev approximation (default=100 
 %     to yield a good approximation of the default Green's kernel). This
 %     parameter is passed to gsp_filter_analysis.
-%    param.regularize_epsilon  : The regularized graph Laplacian is
-%     bar{L}=L+epsilon I (default = 0.005). A smaller epsilon may 
+%   * *param.regularize_epsilon*  : The regularized graph Laplacian is
+%     $\bar{L}=L+\epsilon I$ (default = 0.005). A smaller epsilon may 
 %     lead to better regularization, but will also require a higher order 
 %     Chebyshev approximation. 
 %
 %   See also: gsp_filter_analysis 
 % 
-%   References:
-%     I. Pesenson. Variational splines and paley--wiener spaces on
-%     combinatorial graphs. Constructive Approximation, 29(1):1--21, 2009.
-%     
-%     
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/operators/gsp_interpolate.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
+%   References: pesenson2009variational
 
 %   See also: gsp_resgression_tik
 

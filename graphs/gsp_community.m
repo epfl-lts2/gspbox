@@ -13,54 +13,30 @@ function [G] = gsp_community(n, param)
 %   This function create a 2 dimentional random sensor graph. All the
 %   coordonates are between 0 and 1.
 %   
-%   param is an optional structure with the following fields
+%   *param* is an optional structure with the following fields
 %
-%    param.Nc : Number of communities (default round(sqrt(N)/2) )
-%    param.verbose*: display parameter - 0 no log - 1 display the errors
+%   * *param.Nc* : Number of communities (default round(sqrt(N)/2) )
+%   * *param.verbose*: display parameter - 0 no log - 1 display the errors
 %     (default 1) 
-%    param.com_sizes : size of the communities. The sum of the sizes has
-%     to be equal to N. Leave this field empty if you want random sizes.
-%    param.min_comm : Minimum size of the community 
+%   * *param.com_sizes* : size of the communities. The sum of the sizes has
+%     to be equal to $N$. Leave this field empty if you want random sizes.
+%   * *param.min_comm* : Minimum size of the community 
 %     (default: round(N / param.Nc / 3) )
-%    param.min_deg*: Minimum degree of each nodes (default:
+%   * *param.min_deg*: Minimum degree of each nodes (default:
 %     round(param.min_comm / 2)) (NOT WORKING YET!)
-%    param.size_ratio*: ratio between radius of world and radius of
+%   * *param.size_ratio*: ratio between radius of world and radius of
 %     communities (default 1)
-%    param.world_density  probability of a random edge between any pair
+%   * *param.world_density*  probability of a random edge between any pair
 %     of nodes (default 1/N)
 %
 %
-%   Example:
+%   Example:::
 %
 %          G = gsp_community();
 %          paramplot.show_edges = 1;
 %          gsp_plot_graph(G,paramplot);
 %
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/graphs/gsp_community.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Author: Vassilis Kalofolias, Nathanael Perraudin, Johan Paratte
 % Date: March 2014
@@ -215,7 +191,6 @@ G = gsp_graph_default_parameters( G );
 
 
 end
-
 
 
 

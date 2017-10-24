@@ -17,43 +17,17 @@ function [sol, infos] = gsp_wiener_inpainting(G,y, M, psd, psd_noise, param)
 %
 %   This function solves the following wiener optimization problem:
 %
-%        argmin_x || M x - y ||_2^2 + || w(L) x ||_2^2 
+%     .. argmin_x || M x - y ||_2^2 + || w(L) x ||_2^2 
+%
+%     .. math:: arg\min_x \| M x - y \|_2^2 + \| w(L) x \|_2^2 
 %
 %   Please refer to the reference for more information about this problem.
 %   This function requires the UNLocBox to work.
 %
 %   Please refer to the function gsp_filter_analysis and solvep to know how
-%   param can be set.
+%   *param* can be set.
 %
-%   References:
-%     N. Perraudin and P. Vandergheynst. Stationary signal processing on
-%     graphs. arXiv preprint arXiv:1601.02522, 2016.
-%     
-%     
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/stationarity/gsp_wiener_inpainting.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
+%   References: perraudin2016stationary
 
 % Author : Nathanael Perraudin
 % Date: 6 January 2016

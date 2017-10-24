@@ -12,51 +12,25 @@ function [G] = gsp_compute_fourier_basis(G,param)
 %   'gsp_compute_fourier_basis(G)' computes a full eigendecomposition of the graph
 %   Laplacian G.L:
 %
-%      L = U Lambda U* 
+%   .. L = U Lambda U* 
 %
-%   where Lambda is a diagonal matrix of the Laplacian eigenvalues. 
-%   G.e is a column vector of length G.N containing the Laplacian
-%   eigenvalues. The function will store the basis U, the eigenvalues
-%   e, the maximum eigenvalue lmax and G.mu the coherence of the
-%   Fourier basis into the structure G.
+%   .. math:: {\cal L} = U \Lambda U^*
+%
+%   where $\Lambda$ is a diagonal matrix of the Laplacian eigenvalues. 
+%   *G.e* is a column vector of length *G.N* containing the Laplacian
+%   eigenvalues. The function will store the basis *U*, the eigenvalues
+%   *e*, the maximum eigenvalue *lmax* and *G.mu* the coherence of the
+%   Fourier basis into the structure *G*.
 % 
-%   Example:
+%   Example:::
 %
 %       N = 50;
 %       G = gsp_sensor(N);
 %       G = gsp_compute_fourier_basis(G);
 %       gsp_plot_signal(G,G.U(:,2));
 % 
-%   References:
-%     F. R. K. Chung. Spectral Graph Theory. Vol. 92 of the CBMS Regional
-%     Conference Series in Mathematics, American Mathematical Society, 1997.
-%     
-%     
+%   References: chung1997spectral
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/utils/gsp_compute_fourier_basis.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Author : David I Shuman, Nathanael Perraudin
 % Testing: test_operators
@@ -158,4 +132,3 @@ n = signal.internal.sigcasttofloat(n,'double','dftmtx','N',...
 D = fft(eye(n));
 
 end
-

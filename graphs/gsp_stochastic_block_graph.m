@@ -10,39 +10,15 @@ function G = gsp_stochastic_block_graph(N, k, params)
 %   Output parameters:
 %         G     : Graph structure.
 %
-%   param is an optional structure with the following fields
+%   *param* is an optional structure with the following fields
 %
-%    params.p        : Intra-cluster edge probability (default 0.7)
-%    params.q        : Inter-cluster edge probability (default 0.3/k)
-%    params.z        : Assignment vector of nodes (default uniform random)
-%    params.M        : Link probability matrix between clusters (default uses p and q)
-%    params.directed : Flag the graph as directed or not (default false)
+%   * *params.p*        : Intra-cluster edge probability (default 0.7)
+%   * *params.q*        : Inter-cluster edge probability (default 0.3/k)
+%   * *params.z*        : Assignment vector of nodes (default uniform random)
+%   * *params.M*        : Link probability matrix between clusters (default uses p and q)
+%   * *params.directed* : Flag the graph as directed or not (default false)
 %
 %   Use the stochastic block model to create a graph.
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/graphs/gsp_stochastic_block_graph.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Author: Pierre Vandergheynst, Nathanael Perraudin
 % Date  : 2 novemeber 2015 (revision: 6 october 2016 -- Lionel Martin)
@@ -175,4 +151,3 @@ for ii = 1:k
 end
 
 end
-

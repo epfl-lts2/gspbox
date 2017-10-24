@@ -14,7 +14,7 @@ function [RMSE, N_obs] = gsp_rmse_mv(X, param)
 %   The RMSE between two different columns will only take into account the
 %   common observed values.
 %
-%   C(i,j) = xi-xj||/sqrt(N), where xi and xj only contain the elements
+%   C(i,j) = ||xi-xj||/sqrt(N), where xi and xj only contain the elements
 %   that are commonly observed in both and N is the number of these
 %   elements. 
 % 
@@ -23,37 +23,13 @@ function [RMSE, N_obs] = gsp_rmse_mv(X, param)
 %   N_obs gives the number of commonly observed values for all pairs of
 %   columns.
 %
-%   param is an optional structure of argument containing the following
+%   *param* is an optional structure of argument containing the following
 %   fields:
-%    param.verbose*: Verbosity level of the function (default 0)
+%   * *param.verbose*: Verbosity level of the function (default 0)
 %
 %   TODO: write fast implementation for case with no missing values!! like
 %   corr of matlab does
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/utils/gsp_rmse_mv.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 
 %
@@ -125,6 +101,5 @@ if nargout>1
 end
 
 end
-
 
 

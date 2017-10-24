@@ -1,0 +1,15 @@
+Thanks to Stephan Harmeling for agreeing to allow redistribution of
+code contained in the files demo/distanz.m and
+demo/create_synthetic_dataset.m
+
+Thanks to David Gleich for allowing redistribution of the
+minnesota.mat file containing the minnesota traffic graph (originally
+distributed with the matlab_bgl software package).
+
+Thanks to Nora Leonardi and Dimitri Van De Ville for contributing code
+for the meyer kernel construction to produce a tight frame, as
+originally described in thir paper 
+"Wavelet frames on graphs defined by fMRI functional connectivity"
+IEEE International Symposium on Biomedical Imaging: From Nano to
+Macro, 2011
+

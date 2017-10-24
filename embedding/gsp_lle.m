@@ -12,57 +12,29 @@ function coords = gsp_lle(G, dim, param)
 %         coords     : Coordinates of the embedding
 %
 %   This function uses the weight matrix of a graph G, in order to compute
-%   a dim -dimensional embedding (output coordinates). The algorithm used
+%   a *dim* -dimensional embedding (output coordinates). The algorithm used
 %   is Locally Linear Embedding (LLE). Warning, this function might not
 %   work if the graph is not connected.
 %
-%   param is a structure with optional parameters:
+%   *param* is a structure with optional parameters:
 %
-%    param.tol    : Tolerance for the spectral gap (default 1e-6).
-%    param.kernel : The kernel used to create the graph weight matrix:
-%     + 'exp'        : exponential kernel (e^(frac{-d_{ij}}{sigma^2}))
-%     + '1/x'        : inverse of x kernel (frac{1}{sigma+d_{ij}})
-%     + '1/x^2'      : inverse of x^2 kernel (frac{1}{(sigma+d_{ij})^2})
+%   * *param.tol*    : Tolerance for the spectral gap (default 1e-6).
+%   * *param.kernel* : The kernel used to create the graph weight matrix:
+%     + 'exp'        : exponential kernel ($e^(frac{-d_{ij}}{sigma^2})$)
+%     + '1/x'        : inverse of x kernel ($frac{1}{sigma+d_{ij}}$)
+%     + '1/x^2'      : inverse of x^2 kernel ($frac{1}{(sigma+d_{ij})^2}$)
 %     + 'resistance' : Resistance distance.
-%    param.k      : Max number of nearest neighbors. If not defined, the
+%   * *param.k*      : Max number of nearest neighbors. If not defined, the
 %
 %   number of neighbors varies from node to node since the algorithm
-%   considers all the columns j of the weight matrix that have non
-%   zero values on the line i as the neighbors of i.
+%   considers all the columns $j$ of the weight matrix that have non
+%   zero values on the line $i$ as the neighbors of $i$.
 %
-%   References:
-%     L. K. Saul and S. T. Roweis. An introduction to locally linear
-%     embedding. unpublished. Available at: http://www. cs. toronto. edu/~
-%     roweis/lle/publications. html, 2000.
-%     
+%   References: saul2000introduction
 %
 %   See also: gsp_update_coordinates gsp_isomap gsp_laplacian_eigenmaps
 %
 %   Demo: gsp_demo_graph_embedding
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/embedding/gsp_lle.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Authors : Dion O. E. Tzamarias
 % Date    : 20/11/2015
@@ -170,4 +142,3 @@ end
 %         end
 %
 %     case 'weight_matrix'
-

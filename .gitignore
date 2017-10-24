@@ -1,3 +1,11 @@
 .DS_Store
-*.DS_Store
-.*DS_Store
+*.pyc
+ref-gsp.txt
+ref-gspbox.txt
+mat2doc/startup.m
+mat2doc/conf_local.py
+mat2doc/publish_local.py
+untracked/*
+*~
+*.mexa64
+*.mexmaci64

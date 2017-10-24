@@ -10,43 +10,57 @@
 %   We express the recovery problem as a convex optimization problem of the
 %   following form:
 %
-%        argmin   ||grad(x)||_1   s. t. ||Mx-b||_2 < epsilon
+%   ..   argmin   ||grad(x)||_1   s. t. ||Mx-b||_2 < epsilon
+%
+%   .. math:: arg \min_x  \|\nabla(x)\|_1 \text{ s. t. } \|Mx-b\|_2 \leq \epsilon
 %
 %   Where b represents the known measurements, M is an operator
-%   representing the mask and epsilon is the radius of the l2 ball.
+%   representing the mask and $\epsilon$ is the radius of the l2 ball.
 %
 %   We set
 %
-%    f_1(x)=||nabla x _1
-%     We define the prox of f_1 as:
+%   * $f_1(x)=||\nabla x ||_1$
+%     We define the prox of $f_1$ as:
 %
-%        prox_{f1,gamma} (z) = argmin_{x} 1/2 ||x-z||_2^2  +  gamma  ||grad(z)||_1
+%     .. prox_{f1,gamma} (z) = argmin_{x} 1/2 ||x-z||_2^2  +  gamma  ||grad(z)||_1
 %
-%    f_2 is the indicator function of the set S define by Mx-b||_2 < epsilon
-%     We define the prox of f_2 as
+%     .. math:: prox_{f1,\gamma} (z) = arg \min_{x} \frac{1}{2} \|x-z\|_2^2 +  \gamma \| \nabla z \|_1
 %
-%        prox_{f2,gamma} (z) = argmin_{x} 1/2 ||x-z||_2^2  +  gamma i_S( x ),
+%   * $f_2$ is the indicator function of the set S define by $||Mx-b||_2 < \epsilon$
+%     We define the prox of $f_2$ as
 %
-%     with i_S(x) is zero if x is in the set S and infinity otherwise.
+%     .. prox_{f2,gamma} (z) = argmin_{x} 1/2 ||x-z||_2^2  +  gamma i_S( x ),
+%
+%     .. math:: prox_{f2,\gamma} (z) = arg \min_{x} \frac{1}{2} \|x-z\|_2^2   + i_S(x) ,
+%
+%     with $i_S(x)$ is zero if x is in the set S and infinity otherwise.
 %     This previous problem has an identical solution as:
 %
-%        argmin_{z} ||x - z||_2^2   s.t.  ||b - M z||_2 < epsilon
+%     .. argmin_{z} ||x - z||_2^2   s.t.  ||b - M z||_2 < epsilon
+%
+%     .. math:: arg \min_{z} \|x - z\|_2^2   \hspace{1cm} such \hspace{0.25cm} that \hspace{1cm} \|Mz-b\|_2 \leq \epsilon
 %
 %     It is simply a projection on the B2-ball.
 %
 %   Results
 %   -------
 %
-%   Figure 1: Original signal on graph
+%   .. figure::
+%
+%      Original signal on graph
 %
 %      This figure shows the original signal on graph.
 %
-%   Figure 2: Depleted signal on graph
+%   .. figure::
+%
+%      Depleted signal on graph
 %
 %      This figure shows the signal on graph after the application of the
 %      mask and addition of noise. Half of the vertices are set to 0.
 %
-%   Figure 3: Reconstructed signal on graph usign TV
+%   .. figure::
+%
+%      Reconstructed signal on graph usign TV
 %
 %      This figure shows the reconstructed signal thanks to the algorithm.
 %
@@ -56,38 +70,18 @@
 %   We can also use the Tikhonov regularizer that will promote smoothness.
 %   In this case, we solve:
 %
-%        argmin   ||grad(x)||_2^2   s. t. ||Mx-b||_2 < epsilon
+%   ..   argmin   ||grad(x)||_2^2   s. t. ||Mx-b||_2 < epsilon
+%
+%   .. math:: arg \min_x \tau \|\nabla(x)\|_2^2 \text{ s. t. } \|Mx-b\|_2 \leq \epsilon
 %
 %   The result is presented in the following figure:
 %
-%   Figure 4: Reconstructed signal on graph using Tikhonov
+%   .. figure::
+%
+%      Reconstructed signal on graph using Tikhonov
 %
 %      This figure shows the reconstructed signal thanks to the algorithm.
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/demos/gsp_demo_tv_inpainting.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 
 % Author: Nathanael Perraudin
@@ -308,6 +302,5 @@ end
 
 figure; plot(sol_mine_x)
 hold on; plot(sol_mine_y)
-
 
 

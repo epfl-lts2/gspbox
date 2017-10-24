@@ -3,24 +3,24 @@
 %   In this demonstration file, we show how to reduce a graph using the
 %   GSPBox. Then we apply the pyramid to a simple signal.
 %
-%   The function GSP_GRAPH_MULTIRESOLUTION computes the graph pyramid for you:
+%   The function |gsp_graph_multiresolution| computes the graph pyramid for you::
 %
 %             param.sparsify = 1;
 %             Gs = gsp_graph_multiresolution(G, Nlevel,param);
 %
-%   Gs is a cell array of graph representing the pyramid of graphs. Here
+%   *Gs* is a cell array of graph representing the pyramid of graphs. Here
 %   all optional parameter are important:
 %
-%    param.sparsify*: When a graph is reduced, the density of edges has
+%   * *param.sparsify*: When a graph is reduced, the density of edges has
 %     tendency to be amplified. One way to counterbalance this effect is to
 %     sparsify the graph for each sublevel. The function
-%     GSP_GRAPH_SPARSIFY is used to perform this operation. However, this
+%     |gsp_graph_sparsify| is used to perform this operation. However, this
 %     could lead to bad graphs (disconnected for instance).
-%    sparsify_epsilon*: Parameter epsilon used in the sparsification
-%    param.filters*: is a cell array of filters (or a single filter).
+%   * *sparsify_epsilon*: Parameter epsilon used in the sparsification
+%   * *param.filters*: is a cell array of filters (or a single filter).
 %     Thoses filter will be used in the analysis and synthesis operator.
 %
-%   Let's display the results:
+%   Let's display the results::
 %
 %             figure;
 %             for ii = 1:numel(Gs)
@@ -29,7 +29,9 @@
 %                 title(['Reduction level: ', num2str(ii-1)]);
 %             end
 %
-%   Figure 1: Reduction of the graph
+%   .. figure::
+%
+%      Reduction of the graph
 %
 %      
 %
@@ -37,17 +39,19 @@
 %   a signal. Here we create a signal that is smooth over the graph but
 %   with a big discontinuity in the middle
 %
-%   Figure 2: Signal to be analysed
+%   .. figure::
+%
+%      Signal to be analysed
 %
 %
 %
 %   The graph pyramid can be simply applied thanks to the function 
-%   GSP_PYRAMID_ANALYSIS:
+%   |gsp_pyramid_analysis|::
 %
 %             [ca,pe]=gsp_pyramid_analysis(Gs,f);
 %
-%   ca contains the coarse approximation of each level and pe the
-%   prediction errors. Let's display them:
+%   *ca* contains the coarse approximation of each level and *pe* the
+%   prediction errors. Let's display them::
 %
 %             figure
 %             paramplot.show_edges = 0;
@@ -64,47 +68,27 @@
 %                 title(['C. A. level: ', num2str(ii-1)]);
 %             end
 %
-%   Figure 3: Prediction errors
+%   .. figure::
+%
+%      Prediction errors
 %
 %
 %
-%   Figure 4: Coarse approximations
+%   .. figure::
+%
+%      Coarse approximations
 %
 %
 %   Finally, you can perform a synthesis operation using the function
-%   GSP_PYRAMID_SYNTHESIS :
+%   |gsp_pyramid_synthesis| ::
 %   
 %             coeff = gsp_pyramid_cell2coeff(ca,pe);
 %             f_pred = gsp_pyramid_synthesis(Gs,coeff);
 %
-%   The function GSP_PYRAMID_CELL2COEFF remove all unecessary
+%   The function |gsp_pyramid_cell2coeff| remove all unecessary
 %   coefficients and keep only the last sublevel and the prediction error.
 %
 %   Enjoy!
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/demos/gsp_demo_pyramid.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 
 %% Initialization
@@ -176,4 +160,3 @@ f_pred = gsp_pyramid_synthesis(Gs,ca{end},pe);
 err = norm(f_pred-f)/norm(f);
 
 fprintf('The relative reconstruction error is : %g \n',err);
-

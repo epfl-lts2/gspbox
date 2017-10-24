@@ -15,40 +15,16 @@ function [G] = gsp_spiral(N,k,param)
 %   'gsp_spiral(N)' initializes a graph structure for the sprial graph.
 %   
 %   The optional parameters are:
-%    param.noise  : Noise level (Default 5)
-%    param.start : Starting angle in degree (Default 90)
-%    param.k : Approximate number of connections per nodes (Default 4)
+%   * *param.noise*  : Noise level (Default 5)
+%   * *param.start* : Starting angle in degree (Default 90)
+%   * *param.k* : Approximate number of connections per nodes (Default 4)
 %
-%   Example:
+%   Example:::
 %
 %          G = gsp_spiral(64);
 %          param.show_edges = 1;
 %          gsp_plot_graph(G,param);
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/graphs/gsp_spiral.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Author : Nathanael Perraudin
 % Date   : 11 December 2015
@@ -93,4 +69,3 @@ G.type = 'spiral';
 G = gsp_graph_default_parameters(G);
 
 end
-

@@ -15,36 +15,36 @@ function [ g,t ] = gsp_design_mexican_hat(G, Nf, param)
 %   wavelet. The mexican hat wavelet is the second oder derivative of a
 %   Gaussian. Since we express the filter in the Fourier domain, we find:
 %
-%           g_h(f) =   f^2 * exp(-f^2)
+%   ..      g_h(f) =   f^2 * exp(-f^2)
 %
-%      math: g_h(f) =  f^2 * exp(-f^2)
+%   .. math: g_h(f) =  f^2 * exp(-f^2)
 %
 %   In our convention the eigenvalues of Laplacian are equivalent to the
-%   square of vertex frequencies: f = lambda^2.
+%   square of vertex frequencies: $f = \lambda^2$.
 %
 %   The low pass filter is given by
 %
-%           g_l(f) =   exp(-f^8)
+%   ..      g_l(f) =   exp(-f^8)
 %
-%      math: g_l(f) =  exp(-f^8)
+%   .. math: g_l(f) =  exp(-f^8)
 %
-%   param is an optional structure containing the following fields
+%   *param* is an optional structure containing the following fields
 %
-%    param.t*: vector of scale to be used (default: log scale)
-%    param.lpfactor*: lmin*=*lmax*/*lpfactor will be used to determine
+%   * *param.t*: vector of scale to be used (default: log scale)
+%   * *param.lpfactor*: *lmin*=*lmax*/*lpfactor* will be used to determine
 %     scales, then scaling function kernel will be created to fill the
 %     lowpass gap. (default 20)
-%    param.verbose*: verbosity level. 0 no log - 1 display warnings.
+%   * *param.verbose*: verbosity level. 0 no log - 1 display warnings.
 %     (default 1) 
-%    param.normalize*: normalize the wavelet by the factor sqrt{t}
+%   * *param.normalize*: normalize the wavelet by the factor $\sqrt{t}$
 %     (default 0.)
 %
 %   This function will compute the maximum eigenvalue of the laplacian. To
-%   be more efficient, you can precompute it using:
+%   be more efficient, you can precompute it using::
 %
 %       G = gsp_estimate_lmax(G);
 %
-%   Example:
+%   Example:::
 %
 %         Nf = 8;
 %         G = gsp_sensor(100);
@@ -55,30 +55,6 @@ function [ g,t ] = gsp_design_mexican_hat(G, Nf, param)
 %   This function is inspired by the sgwt_toolbox. 
 %       
 %   See also:
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_design_mexican_hat.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Author: Nathanael Perraudin, David K. Hammond
 % Date: 18 March 2014
@@ -146,5 +122,4 @@ end
 
 
 end
-
 

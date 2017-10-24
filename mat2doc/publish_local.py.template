@@ -1,0 +1,20 @@
+#!/usr/bin/python
+
+project = 'the root path for the gsp'
+
+# Configure HTML placement at remote server
+user = 'user for publication on sourceforge'
+outputdirweb= 'local site web directory'
+
+# -------- Configuration of mat2doc ------------
+mat2docpath='location of mat2doc'
+
+# Configure matlab paths
+unlocxpath = 'path of unlocx toolbox';
+gsppath = 'path of gsp toolbox';
+
+
+
+
+
+

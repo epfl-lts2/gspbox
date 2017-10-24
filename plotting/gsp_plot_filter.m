@@ -14,7 +14,7 @@ function [] = gsp_plot_filter(G, filters, param)
 %   'gsp_plot_filters(G, filter, param)' plots a system of graph spectral
 %   filters. 
 %
-%   Example:
+%   Example:::
 %
 %         Nf = 4;
 %         G = gsp_sensor(100);
@@ -26,55 +26,31 @@ function [] = gsp_plot_filter(G, filters, param)
 %   Additional parameters
 %   ---------------------
 %
-%    param.line_width : Width of the filter plots (default 4).
-%    param.npoints : Number of point where the filters are evaluated
+%   * *param.line_width* : Width of the filter plots (default 4).
+%   * *param.npoints* : Number of point where the filters are evaluated
 %     (default 1000).
-%    param.x_tic : Distance between x-tick labels.
-%    param.y_tic : Distance between y-tick labels (default 0.25).
-%    param.minor_tick : To show minor tick marks (default 1).
-%    param.plot_eigenvalues : To plot black X marks at all eigenvalues
+%   * *param.x_tic* : Distance between x-tick labels.
+%   * *param.y_tic* : Distance between y-tick labels (default 0.25).
+%   * *param.minor_tick* : To show minor tick marks (default 1).
+%   * *param.plot_eigenvalues* : To plot black X marks at all eigenvalues
 %     of the graph (You need to compute the Fourier basis to use this
 %     option). By default the eigenvalues are plot if they are contained in
 %     the Graph.
-%    param.lambda_highlights : To plot red X marks at highlight
+%   * *param.lambda_highlights* : To plot red X marks at highlight
 %     eigenvalues (default 0).
-%    param.x_width : Width of X marks for the eigenvalues (default 3).
-%    param.x_size : Size of X marks for the eigenvalues (default 8).
-%    param.show_sum : To plot an extra line showing the sum of the
+%   * *param.x_width* : Width of X marks for the eigenvalues (default 3).
+%   * *param.x_size* : Size of X marks for the eigenvalues (default 8).
+%   * *param.show_sum* : To plot an extra line showing the sum of the
 %     squared magnitudes of the filters (default 1 if there is multiple
 %     filters). 
-%    param.colors_rgb : To specify the line colors.
-%    param.cla : Clear axis (default 1).
-%    param.yrange : To specify a range for the y axis.
-%    param.verbose : Verbosity level (1 display the warning - 0 no log)
+%   * *param.colors_rgb* : To specify the line colors.
+%   * *param.cla* : Clear axis (default 1).
+%   * *param.yrange* : To specify a range for the y axis.
+%   * *param.verbose* : Verbosity level (1 display the warning - 0 no log)
 %     (default 1).
 %
 %   Demos: gsp_demo
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/plotting/gsp_plot_filter.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Author : David I Shuman, Nathanael Perraudin
 % Testing: test_filter 
@@ -186,6 +162,5 @@ set(gca,'XTick',0:param.x_tic:G.lmax);
 
 hold off;
 end
-
 
 

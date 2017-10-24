@@ -16,11 +16,11 @@ function [ g, wf ] = gsp_design_warped_translates( G, Nf, param )
 %   half cosine translates described above.
 %
 %   This function will compute the maximum eigenvalue of the laplacian. To
-%   be more efficient, you can precompute it using:
+%   be more efficient, you can precompute it using::
 %
 %       G = gsp_estimate_lmax(G);
 %
-%   Example:
+%   Example:::
 %
 %             figure();
 %             Nf = 10;
@@ -31,99 +31,73 @@ function [ g, wf ] = gsp_design_warped_translates( G, Nf, param )
 %             gsp_plot_filter(G,g);
 %             [A,B] = gsp_filterbank_bounds(G,g)
 %
-%   param is an optional structure containing the following fields
+%   *param* is an optional structure containing the following fields
 %
-%    param.verbose*: verbosity level. 0 no log - 1 display warnings.
+%   * *param.verbose*: verbosity level. 0 no log - 1 display warnings.
 %     (default 1) 
-%    param.warping_type*: Create a warping function according two
+%   * *param.warping_type*: Create a warping function according two
 %     different methods (default 'spectrum_approximation'). Please read
 %     below for more information about this parameter.
-%    param.log*: On top of the other warping add a log function. An
+%   * *param.log*: On top of the other warping add a log function. An
 %     alternative way to construct spectral graph wavelets. These are
 %     adapted to the specific spectrum, not just the length of 
 %     the spectrum. The final warping function will be:
 %     
-%           log(f(x))
+%     ..    log(f(x))
 %
-%     where the function f(x) is defined by the attribute
-%     param.warping_type.
-%     Warning: Additional required inputs: param.warp_function.
-%    param.warp_function*: To provide a special warping function. This
-%     parameter is used when param.warping_type is 'custom'.
-%    param.interpolation_type*: select the interpolation type for the
+%     .. math:: \log(f(x))
+%
+%     where the function $f(x)$ is defined by the attribute
+%     *param.warping_type*.
+%     Warning: Additional required inputs: *param.warp_function*.
+%   * *param.warp_function*: To provide a special warping function. This
+%     parameter is used when *param.warping_type* is 'custom'.
+%   * *param.interpolation_type*: select the interpolation type for the
 %     spectrum samples. You can choose 'pwl' (piece wise linear)
-%     or 'monocubic'. This attribute is used only when param.warping_type 
+%     or 'monocubic'. This attribute is used only when *param.warping_type* 
 %     is 'spectrum_interpolation'. (default 'monocubic')
-%    param.filter*: select the initial uniform filterbank 'half_cosine'
+%   * *param.filter*: select the initial uniform filterbank 'half_cosine'
 %     or 'itersine'. See gsp_design_half_cosine and
 %     gsp_design_itersine for more information about those filterbank.
 %     If you want to use your personal filter, just put it there. For
-%     instance:
+%     instance::
 %               
 %               param.filter = gsp_design_abspline(G,Nf);
 %
 %     (Default 'half_cosine')
 %
-%    param.overlap*: overlap of the initial filter. Works only
-%     with param.filter set to 'itersine'. For tight frame, input an even
+%   * *param.overlap*: overlap of the initial filter. Works only
+%     with *param.filter* set to 'itersine'. For tight frame, input an even
 %     number (default 2).
 %   
 %
 %   Warping methods
 %   ---------------
 %
-%   The different warping type available in param.warping_type are:
+%   The different warping type available in *param.warping_type* are:
 %
-%    'spectrum_interpolation': Warping functions based on spectrum
+%   * 'spectrum_interpolation': Warping functions based on spectrum
 %     samples. From the samples, an approximation of the spectrum cdf is
 %     obtained by interpolation. Then this function is used for the
 %     warping. (i.e., like the filter banks [1] in Section 2, these are
 %     spectrum-adapted filter banks).
 %     
 %     If you use this method you need to specify the input
-%     param.approx_spectrum that contains two fields:
-%     param.approx_spectrum.x and param.approx_spectrum.y that are the
+%     *param.approx_spectrum* that contains two fields:
+%     *param.approx_spectrum.x* and *param.approx_spectrum.y* that are the
 %     the point of the cumulative density distribution.
 %
-%    'spectrum_approximation': This function will compute an approximation
+%   * 'spectrum_approximation': This function will compute an approximation
 %     of the cumulative density function of the graph Laplacian
 %     eigenvalues and use it as warping function. If you want to use the
-%     cdf later, you should precompute it using:
+%     cdf later, you should precompute it using::
 %
 %       G = gsp_spectrum_cdf_approx(G);
 %   
-%    'custom': The user provide the warping function in the parameter:
-%     param.warp_function.
+%   * 'custom': The user provide the warping function in the parameter:
+%     *param.warp_function*.
 %
-%   References:
-%     D. I. Shuman, C. Wiesmeyr, N. Holighaus, and P. Vandergheynst.
-%     Spectrum-adapted tight graph wavelet and vertex-frequency frames. arXiv
-%     preprint arXiv:1311.0897, 2013.
-%     
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_design_warped_translates.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
+%   References: shuman2013spectrum
 
 % Author: Nathanael Perraudin, David Shuman
 % Date  : 18 June 2014
@@ -313,4 +287,3 @@ end
 
 
 end
-

@@ -1,0 +1,6 @@
+fext='.php'
+urlbase='/gsp/doc'
+urlext='.php'
+widthstr=''
+imagetype='png'
+includedir='../include'

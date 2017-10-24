@@ -10,45 +10,19 @@ function gf = gsp_experimental_psd(G,C)
 %
 %   This function estimate the PSD from the covariance matrix with
 %
-%      T = U' * C * U 
+%   .. T = U' * C * U 
 %
-%   where U is the graph Fourier basis. The function then interpolates
-%   the diagonal of T with splines.
+%   .. math:: T = U^{*} C U
 %
-%   To compute the Fourier basis of a graph G, you can use the function:
+%   where $U$ is the graph Fourier basis. The function then interpolates
+%   the diagonal of $T$ with splines.
+%
+%   To compute the Fourier basis of a graph G, you can use the function::
 %
 %           G = gsp_compute_fourier_basis(G);
 %
 %
-%   References:
-%     N. Perraudin and P. Vandergheynst. Stationary signal processing on
-%     graphs. arXiv preprint arXiv:1601.02522, 2016.
-%     
-%     
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/stationarity/gsp_experimental_psd.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
+%   References: perraudin2016stationary
 
 
 % Author : Nathanael Perraudin
@@ -83,5 +57,4 @@ end
 %     alpha = Pinv(X)*cf;
 %     [p,S,mu] = polyfit(G.e,cf,Order);
 %     gf = @(x) abs(polyval(p,x,S,mu))+ eps;
-
 

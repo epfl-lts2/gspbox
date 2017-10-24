@@ -12,18 +12,20 @@ function [coarse_approximations,prediction_errors]=gsp_pyramid_analysis(Gs,signa
 %         prediction_errors       : Cell array with the prediction errors at each level.
 %
 %   'gsp_pyramid_analysis(Gs,signal,num_levels)' computes 
-%   the graph pyramid transform coefficients of a signal f.
+%   the graph pyramid transform coefficients of a signal $f$.
 %   
-%   param is a structure containing optional arguments including
+%   *param* is a structure containing optional arguments including
 %
-%    param.regularize_epsilon : Interpolation parameter.
-%    param.h_filters : A cell array of graph spectral filters. If just
+%   * *param.regularize_epsilon* : Interpolation parameter.
+%   * *param.h_filters* : A cell array of graph spectral filters. If just
 %     one filter is included, it is used at every level of the pyramid. 
 %     Default 
 %
-%            h(x) = 0.5 / ( 0.5 + x)
+%     ..     h(x) = 0.5 / ( 0.5 + x)
 %   
-%   Please read the documentation of GSP_FILTER_ANALYSIS for other
+%     .. math:: h(x) = \frac{0.5}{0.5+x}
+%
+%   Please read the documentation of |gsp_filter_analysis| for other
 %   optional arguments.
 %
 %   See also: gsp_graph_multiresolution gsp_pyramid_synthesis 
@@ -31,35 +33,7 @@ function [coarse_approximations,prediction_errors]=gsp_pyramid_analysis(Gs,signa
 %
 %   Demo: gsp_demo_pyramid
 % 
-%   References:
-%     D. I. Shuman, M. J. Faraji, and P. Vandergheynst. A framework for
-%     multiscale transforms on graphs. arXiv preprint arXiv:1308.4942, 2013.
-%     
-%     
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/operators/gsp_pyramid_analysis.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
+%   References: shuman2013framework 
 
 % Author: David I Shuman, Nathanael Perraudin
 % Date: 26 November 2015

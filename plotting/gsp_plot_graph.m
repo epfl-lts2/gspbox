@@ -16,43 +16,19 @@ function gsp_plot_graph(G,param)
 %   vertex size (G.plotting.vertex_size), and the vertex color (G.vertex_color).
 %
 %   Additional parameters:
-%    param.show_edges     : Set to 0 to only draw the vertices. (default G.Ne < 10000 )
-%    param.num_clusters   : Number of clusters for a clustered graph.
-%    param.clusters       : Cluster identities for a clustered graph.
-%    param.cluster_colors : Cluster colors for a clustered graph.
-%    param.cp             : Camera position for a 3D graph
+%   * *param.show_edges*     : Set to 0 to only draw the vertices. (default G.Ne < 10000 )
+%   * *param.num_clusters*   : Number of clusters for a clustered graph.
+%   * *param.clusters*       : Cluster identities for a clustered graph.
+%   * *param.cluster_colors* : Cluster colors for a clustered graph.
+%   * *param.cp*             : Camera position for a 3D graph
 %
-%   Example:
+%   Example:::
 %
 %          G = gsp_swiss_roll(200);
 %          gsp_plot_graph(G);
 %
 %   See also: gsp_plot_signal gsp_plot_signal_spectral
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/plotting/gsp_plot_graph.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 
 % Author: David I Shuman, Nathanael Perraudin
@@ -161,4 +137,3 @@ if isfield(G, 'type')
 end
 
 end
-

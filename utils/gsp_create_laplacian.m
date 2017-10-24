@@ -12,55 +12,43 @@ function G = gsp_create_laplacian(G, lap_type)
 %   This function create the graph laplacian of the graph G and store it
 %   into G.
 %
-%   The variable type contains the different laplacian type. For
+%   The variable *type* contains the different laplacian type. For
 %   undirected graph, the following type are availlable:
 %
-%    combinatorial*: Non normalized laplacian. This is the default.
+%   * *combinatorial*: Non normalized laplacian. This is the default.
 %
-%          L =  D  - W 
+%     ..   L =  D  - W 
+%
+%     .. math:: L= D - W
+%   * *normalized*: Normalized laplacian
+%     .. L_n = I - D^-0.5 W D^-0.5 
+%
+%     .. math:: L_{n}=I - D^{-\frac{1}{2}}WD^{-\frac{1}{2}}
+%   * *none*: No laplacian
 %
 %   And for directed graph, the following types are availlable.
 %
-%    combinatorial : Non normalized laplacian. This is the default
+%   * *combinatorial* : Non normalized laplacian. This is the default
 %
-%          L =  1/2 [ D^+ + D^- - W - W^*]
+%     ..   L =  1/2 [ D^+ + D^- - W - W^*]
 %
-%    chung*: Normalized laplacian with the Perron eigenvector
+%     .. math:: L=\frac{1}{2} ( D^+ + D^- - W - W^*)
 %
-%        L_cn = I - 1/2 [Pi^0.5 P Pi^-0.5 + Pi^-0.5 P^T Pi^0.5 ]
+%   * *chung*: Normalized laplacian with the Perron eigenvector
+%
+%     .. L_cn = I - 1/2 [Pi^0.5 P Pi^-0.5 + Pi^-0.5 P^T Pi^0.5 ]
+%
+%     .. math:: L_{cn}=I-\frac{\Pi^{\frac{1}{2}}P\Pi^{-\frac{1}{2}}+\Pi^{-\frac{1}{2}}P^{*}\Pi^{\frac{1}{2}}}{2}
+%   * *chung-non-normalized*: Experimental version of non normalized Chung
+%     laplacian
+%     .. L_c = Pi^0.5 L_cn Pi^0.5 
+%
+%     .. math:: L_{c}= \Pi^{\frac{1}{2}} L_{cn} \Pi^{\frac{1}{2}}
 %
 %
 %   see also: gsp_laplacian
 %       
-%   References:
-%     F. Chung. Laplacians and the cheeger inequality for directed graphs.
-%     Annals of Combinatorics, 9(1):1--19, 2005.
-%     
-%     
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/utils/gsp_create_laplacian.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
+%   References: chung2005laplacians
 
 
 % Author: Nathanael Perraudin
@@ -209,4 +197,3 @@ function [phi,P] = compute_perron(A)
     phi=phi/norm(phi,1);
 
 end
-

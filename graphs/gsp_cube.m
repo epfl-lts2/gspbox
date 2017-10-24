@@ -16,12 +16,12 @@ function [ G ] = gsp_cube( param )
 %   Additional parameters
 %   ---------------------
 %
-%    param.radius    : float                 the edge length
-%    param.nb_pts    : int                   the number of vertices
-%    param.nb_dim    : int                   the dimension
-%    param.sampling  : ['random']            the variance of the distance kernel
+%   * *param.radius*    : float                 the edge length
+%   * *param.nb_pts*    : int                   the number of vertices
+%   * *param.nb_dim*    : int                   the dimension
+%   * *param.sampling*  : ['random']            the variance of the distance kernel
 %
-%   Example:
+%   Example:::
 %
 %          G = gsp_cube();
 %          gsp_plot_graph(G);
@@ -29,30 +29,6 @@ function [ G ] = gsp_cube( param )
 %
 %   See also: gsp_sphere
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/graphs/gsp_cube.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Author : Johan Paratte
      if nargin < 1
@@ -110,5 +86,4 @@ function [ G ] = gsp_cube( param )
     G = gsp_nn_graph(pts, param);
     
 end
-
 

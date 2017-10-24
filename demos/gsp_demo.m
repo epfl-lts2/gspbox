@@ -8,49 +8,51 @@
 %
 %   A banner will popup telling you that everything happens correctly. To
 %   speedup some processing, you might want to compile some mexfile. Refer
-%   to GSP_MAKE for more informations. However, if the compilation is not
+%   to |gsp_make| for more informations. However, if the compilation is not
 %   working on your computer, keep quiet, everything should still work and
 %   most of the routine are implemented only in matlab.
 %
 %   Most likely, the first thing you would like to do is to create a graph.
-%   To do so, you only need the adjacendy or the weight matrix W. Once
-%   you have it, you can construct a graph using:
+%   To do so, you only need the adjacendy or the weight matrix $W$. Once
+%   you have it, you can construct a graph using::
 %
 %           G = gsp_graph(W);
 %
 %   This function will create a full structure ready to be used with the
 %   toolbox. To know a bit more about what is in this structure, you can
-%   refer to the help of the function GSP_GRAPH_DEFAULT_PARAMETERS.
+%   refer to the help of the function |gsp_graph_default_parameters|.
 %
 %   The GSPBox contains also a list of graph generators. To see a full list
-%   of these graphs, type:
+%   of these graphs, type:::
 %
 %           help graphs
 %
-%   For this demo, we will use the graph GSP_LOGO. You can load it
-%   using:
+%   For this demo, we will use the graph |gsp_logo|. You can load it
+%   using:::
 %
 %           G = gsp_logo
 %
-%   Here observe the attribute of the structure G. 
+%   Here observe the attribute of the structure *G*. 
 %
-%    G.W*: Weight matrix 
-%    G.A*: Adacency matrix 
-%    G.N*: Number of nodes 
-%    G.type*: Type of graph 
-%    G.directed*: 1 if the graph is directed, 0 if not
-%    G.lap_type*: Laplacian type 
-%    G.d*: Degree vector 
-%    G.Ne*: Number of edges
-%    G.coords*: Coordinates of the vertices
-%    G.plotting*: Plotting parameters 
+%   * *G.W*: Weight matrix 
+%   * *G.A*: Adacency matrix 
+%   * *G.N*: Number of nodes 
+%   * *G.type*: Type of graph 
+%   * *G.directed*: 1 if the graph is directed, 0 if not
+%   * *G.lap_type*: Laplacian type 
+%   * *G.d*: Degree vector 
+%   * *G.Ne*: Number of edges
+%   * *G.coords*: Coordinates of the vertices
+%   * *G.plotting*: Plotting parameters 
 %
 %   In the folder 'plotting', the GSPBox contains some plotting routine.
-%   For instance, we can plot a graph using:
+%   For instance, we can plot a graph using::
 %
 %           gsp_plot_graph(G);
 %
-%   Figure 1: GSP graph
+%   .. figure::
+%
+%      GSP graph
 %
 %      This figure shows the result of the command 'gsp_plot_graph(G)'
 %
@@ -59,18 +61,18 @@
 %   precompute the Fourier basis of the graph. This operation could be
 %   relatively long since it involves a full diagonalization of the
 %   Laplacian. Don't worry, you do not need to perform this operation to
-%   filter signals on graph. The fourier basis is computed by:
+%   filter signals on graph. The fourier basis is computed by::
 %
 %           G = gsp_compute_fourier_basis(G);
 %
-%   The function GSP_COMPUTE_FOURIER_BASIS add two new fields to the
-%   structure G*:
+%   The function |gsp_compute_fourier_basis| add two new fields to the
+%   structure *G*:
 %
-%    G.U*: The eigenvectors of the Fourier basis
-%    G.e*: The eigenvalues
+%   * *G.U*: The eigenvectors of the Fourier basis
+%   * *G.e*: The eigenvalues
 %
 %   The fourier eigenvectors does look like a sinusoide on the graph. Let's
-%   plot the second and the third ones. (The first one is constant!):
+%   plot the second and the third ones. (The first one is constant!)::
 %
 %           gsp_plot_signal(G,G.U(:,2));
 %           title('Second eigenvector')
@@ -78,35 +80,41 @@
 %           gsp_plot_signal(G,G.U(:,3));
 %           title('Third eigenvector')
 %
-%   Figure 2: Eigenvectors
+%   .. figure::
+%
+%      Eigenvectors
 %
 %
 %
 %   Now, we are going to show a basic filtering operation. Filters are usually
 %   defined in the spectral domain. To define the following filter
 %
-%        h(x) = 1/(1+tau*x),
+%   ..   h(x) = 1/(1+tau*x),
 %
-%   just write in Matlab:
+%   .. math:: h(x) =\frac{1}{1+\tau x},
+%
+%   just write in Matlab::
 %
 %           tau = 1;
 %           h = @(x) 1./(1+tau*x);
 %
 %   Hint: You can define filterbank using cell array!
 %
-%   Let's display this filter:
+%   Let's display this filter::
 %
 %           gsp_plot_filter(G,h);
 %
-%   Figure 3: Low pass filter $h$
+%   .. figure::
 %
-%      The filter h is plotted along all the spectrum of the graph.
+%      Low pass filter $h$
+%
+%      The filter $h$ is plotted along all the spectrum of the graph.
 %      The black cross are the eigenvalues of the Laplacian. They are the
 %      points where the continuous filter will be evaluated to create a
 %      discrete filter.
 %
 %   To apply the filter to a given signal, you only need to run a single
-%   function:
+%   function::
 %
 %           % Create a signal
 %           f = zeros(G.N,1);
@@ -117,11 +125,11 @@
 %           % Remove the noise
 %           f2 = gsp_filter(G,h,f);
 %
-%   gsp_filter is actually a shortcut to GSP_FILTER_ANALYSIS.
-%   gsp_filter_analysis performs the analysis operator associated to a
-%   filterbank. See the GSP_DEMO_WAVELET for more information.
+%   `gsp_filter` is actually a shortcut to |gsp_filter_analysis|.
+%   `gsp_filter_analysis` performs the analysis operator associated to a
+%   filterbank. See the |gsp_demo_wavelet| for more information.
 %
-%   Finnaly, we display the result of this low pass filtering on the graph:
+%   Finnaly, we display the result of this low pass filtering on the graph::
 %
 %           figure;
 %           subplot(211)
@@ -131,7 +139,9 @@
 %           gsp_plot_signal(G,f2);
 %           title('Signal denoised');
 %
-%   Figure 4: Result of filtering
+%   .. figure::
+%
+%      Result of filtering
 %
 %      The noise is largely removed thanks to the filter. However, some
 %      energy is diffused between the letters. This is the typical
@@ -139,30 +149,6 @@
 %
 %   Enjoy the GSPBOX !
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/demos/gsp_demo.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 
 % Author: Nathanael Perraudin
@@ -221,7 +207,6 @@ title('Signal with noise')
 subplot(212)
 gsp_plot_signal(G,f2);
 title('Signal denoised');
-
 
 
 

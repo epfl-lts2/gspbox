@@ -11,48 +11,20 @@ function coords = gsp_laplacian_eigenmaps(G, dim, param)
 %         coords : Coordinates of the embedding
 % 
 %   This function uses the weight matrix of a graph G, in order to compute
-%   a dim -dimensional embedding (output coordinates). The algorithm used
+%   a *dim* -dimensional embedding (output coordinates). The algorithm used
 %   is Laplacian eigenmaps. Warning, this function might not work if the
 %   graph is not connected.
 %
-%   param is a structure optional parameters:
+%   *param* is a structure optional parameters:
 %     
-%    param.tol : Tolerance for the spectral gap (default 1e-6).   
+%   * *param.tol* : Tolerance for the spectral gap (default 1e-6).   
 %
 %
 %   See also: gsp_update_coordinates gsp_isomap gsp_lle
 %   
 %   Demo: gsp_demo_graph_embedding
 %
-%   References:
-%     M. Belkin and P. Niyogi. Laplacian eigenmaps and spectral techniques
-%     for embedding and clustering. In NIPS, volume 14, pages 585--591, 2001.
-%     
-%     
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/embedding/gsp_laplacian_eigenmaps.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
+%   References: belkin2001laplacian
 
 % Authors : Dion O. E. Tzamarias
 % Date    : 20/11/2015
@@ -85,5 +57,4 @@ end
 coords = coords(:, ind);
 coords = coords(:, 2:end);
 end
-
 

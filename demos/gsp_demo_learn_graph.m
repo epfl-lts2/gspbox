@@ -7,14 +7,14 @@
 %   [1] V. Kalofolias, How to learn a graph from smooth signals, AISTATS
 %   2016.
 %
-%   Suppose that we have some 2 dimensional smooth functions:
+%   Suppose that we have some 2 dimensional smooth functions::
 %
-%             f1 = @(x,y) 20  (-sin((2-x-y).^2)/2 + cos(y*3));
-%             f2 = @(x,y) 30  cos((x+y).^2);
-%             f3 = @(x,y) 30  ((x-.5).^2 + (y-.5).^3 + x - y);
-%             f4 = @(x,y) 50  sin(3*((x-.5).^2+(y-.5).^2));
+%             f1 = @(x,y) 20 * (-sin((2-x-y).^2)/2 + cos(y*3));
+%             f2 = @(x,y) 30 * cos((x+y).^2);
+%             f3 = @(x,y) 30 * ((x-.5).^2 + (y-.5).^3 + x - y);
+%             f4 = @(x,y) 50 * sin(3*((x-.5).^2+(y-.5).^2));
 %
-%   and we have uniform samples as features, displayed below:
+%   and we have uniform samples as features, displayed below::
 %
 %             figure;
 %             subplot(2,2,1); scatter(xc, yc, 700, X(:,1), '.'); 
@@ -26,12 +26,14 @@
 %             subplot(2,2,4); scatter(xc, yc, 700, X(:,4), '.'); 
 %             title('4th smooth signal'); axis off; colorbar;
 %
-%   Figure 1: Different signals
+%   .. figure::
+%
+%      Different signals
 %
 %      
 %
 %   We can compute the pairwise distances of the features and learn a graph
-%   using them:
+%   using them::
 %
 %             Z1 = gsp_distanz(X(:, 1)').^2;
 %             W1 = gsp_learn_graph_log_degrees(Z1, 1.5, 1, params);
@@ -39,15 +41,15 @@
 %   The second parameter penalizes the formation of un-connected nodes, and
 %   the third penalizes the formation of too strong weights. We then clean
 %   any tiny edges (due to numerical error), to obtain a sparse weighted
-%   adjacency matrix. We feed this to GSP_GRAPH to create a graph with
-%   the given coordinates and weights: 
+%   adjacency matrix. We feed this to |gsp_graph| to create a graph with
+%   the given coordinates and weights:: 
 %             
 %             W1(W1<1e-5) = 0;
 %             G1 = gsp_graph(W1, [xc, yc]);
 %
 %   We can also update the weights of an already existing graph using
-%   GSP_UPDATE_WEIGHTS. If we learn the graphs of all four above
-%   functions, we get quite different results:
+%   |gsp_update_weights|. If we learn the graphs of all four above
+%   functions, we get quite different results::
 %
 %             figure;
 %             subplot(2,2,1); gsp_plot_edges(G1, params_plot);
@@ -59,33 +61,37 @@
 %             subplot(2,2,4); gsp_plot_edges(G4, params_plot);
 %             title('graph learned from 4th smooth signal');
 %
-%   Figure 2: Different graphs learned
+%   .. figure::
+%
+%      Different graphs learned
 %
 %      
 %
 %   Note that the edges follow the level curves of the above functions.
 %
 %   If we use all four above smooth functions as features to learn the
-%   graph:
+%   graph::
 %
 %             Z = gsp_distanz(X').^2;
 %             W = gsp_learn_graph_log_degrees(Z/500, 2, 1, params);
 %
-%   we get a result that has more local edges:
+%   we get a result that has more local edges::
 %
 %             params_plot.show_edges = 1;
 %             G.plotting.vertex_size = 5;
 %             figure; gsp_plot_graph(G, params_plot);
 %             title('Graph with edges learned from above 4 signals');
 %             
-%   Figure 3: Graph with edges learned from above 4 signals
+%   .. figure::
+%
+%      Graph with edges learned from above 4 signals
 %
 %      
 %
 %   This is close to the graph that we would learn using the acutal
 %   coordinates as features. So why does it work so well? We can see that
 %   the pattern of the pairwise distances using these features is similar
-%   to the one of the pairwise geometric distances between nodes:
+%   to the one of the pairwise geometric distances between nodes::
 %
 %             figure;
 %             subplot(1, 2, 1); 
@@ -95,52 +101,25 @@
 %             imagesc(gsp_distanz([xc, yc]'));
 %             title('Pairwise distances computed from features');
 %
-%   Figure 4: Geometric pairwise distances between nodes
+%   .. figure::
+%
+%      Geometric pairwise distances between nodes
 %
 %      
 %
-%   Figure 5: Pairwise distances computed from features
+%   .. figure::
+%
+%      Pairwise distances computed from features
 %
 %      
 %
 %   The functions available for learning a graph are
-%   GSP_LEARN_GRAPH_LOG_DEGREES and GSP_LEARN_GRAPH_L2_DEGREES.
+%   |gsp_learn_graph_log_degrees| and |gsp_learn_graph_l2_degrees|.
 %
 %
 %   See also: gsp_learn_graph_l2_degrees gsp_demo_learn_graph_large
 %
-%   References:
-%     V. Kalofolias. How to learn a graph from smooth signals. Technical
-%     report, AISTATS 2016: proceedings at Journal of Machine Learning
-%     Research (JMLR)., 2016.
-%     
-%     V. Kalofolias and N. Perraudin. Large Scale Graph Learning from Smooth
-%     Signals. arXiv preprint arXiv:1710.05654, 2017.
-%     
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/demos/gsp_demo_learn_graph.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
+%   References: kalofolias2016learn kalofolias2017large
 
 
 %% Initialization
@@ -286,5 +265,4 @@ figure; imagesc(gsp_distanz([xc, yc]')); title('Pairwise distances computed from
 % f2 = @(x,y) exp(2*(cos((x+y).^2)))*24;
 % f3 = @(x,y) exp(2*((x-.5).^2 + (y-.5).^3 + x - y))*24;
 % f4 = @(x,y) exp(2*(sin(3*((x-.5).^2+(y-.5).^2))))*30;
-
 

@@ -8,41 +8,19 @@ function gr = gsp_grad(G,s)
 %   Output parameters:
 %       gr  : Gradient living on the edges
 %
-%   For the non normalized Laplacian, the gradient of the node signal f
-%   evaluated at the edge linking x and y is given by:
+%   For the non normalized Laplacian, the gradient of the node signal $f$
+%   evaluated at the edge linking $x$ and $y$ is given by:
 %
-%           grad f (x,y) = sqrt( w(x,y) ) ( f(x) - f(y) )
+%   ..      grad f (x,y) = sqrt( w(x,y) ) ( f(x) - f(y) )
 %
-%   Before using this function, you need to call the function: 
+%   .. math:: \nabla f(x,y) = \sqrt{ w(x,y) } \left( f(x) - f(y) \right)
+%
+%   Before using this function, you need to call the function:: 
 %
 %           G = gsp_adj2vec(G)
 %
 %   See also: gsp_div gsp_adj2vec
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/operators/gsp_grad.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Author: Nathanael Perraudin, Vassilis Kalofolias
 % Date  : 5 August 2014
@@ -114,7 +92,6 @@ end
 % in the size of A that has a zero diagonal and is antisymmetric (!).
 
 % the form above is however more compact and we will keep it.
-
 
 
 

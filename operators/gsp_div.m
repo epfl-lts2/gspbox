@@ -10,40 +10,16 @@ function di = gsp_div(G,s)
 %
 %   The divergence operator is the adjoint of the gradient operator. For
 %   graphs, the divergence of a signal residing on edges gives a signal
-%   living on the nodes. The result should be such that: 
+%   living on the nodes. The result should be such that:: 
 %
-%        gsp_div(G,gsp_grad(G,s)) = G.L  s,
+%        gsp_div(G,gsp_grad(G,s)) = G.L * s,
 %
-%   Before using this function, you need to call the function: 
+%   Before using this function, you need to call the function:: 
 %
 %           G = gsp_adj2vec(G)
 %
 %   See also: gsp_grad gsp_adj2vec
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/operators/gsp_div.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 
 % Author: Nathanael Perraudin, Vassilis Kalofolias
@@ -123,4 +99,3 @@ end
 %
 %code author: Vassilis Kalofolias
 %date: Aug 2013
-

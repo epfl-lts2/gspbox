@@ -16,35 +16,11 @@ function [c] = gsp_jtv_filter_analysis(G, g, filtertype, X, param)
 %   Additional parameters
 %   ---------------------
 %
-%    param.verbose   : verbosity level. 0 no log - 1 display warnings (default 1)
-%    param.method    : Exact or Cheby
-%    param.order     : Order of Cheby approximation
-%    param.vectorize   : 1 if coefficients are in vectorized form (default 0)
+%   * *param.verbose*   : verbosity level. 0 no log - 1 display warnings (default 1)
+%   * *param.method*    : Exact or Cheby
+%   * *param.order*     : Order of Cheby approximation
+%   * *param.vectorize*   : 1 if coefficients are in vectorized form (default 0)
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/filters/gsp_jtv_filter_analysis.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 
 % Author :  Francesco Grassi
@@ -165,4 +141,3 @@ end
 
 
 end
-

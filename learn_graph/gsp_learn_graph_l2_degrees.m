@@ -5,7 +5,7 @@ function [W, stat] = gsp_learn_graph_l2_degrees(Z, a, params)
 %
 %   Inputs:
 %         Z         : Matrix with (squared) pairwise distances of nodes
-%         a         : L||_F^2 prior constant   (bigger a -> more dense W)
+%         a         : ||L||_F^2 prior constant   (bigger a -> more dense W)
 %         params    : Optional parameters
 %
 %   Outputs:
@@ -13,33 +13,39 @@ function [W, stat] = gsp_learn_graph_l2_degrees(Z, a, params)
 %         stat      : Optional output statistics (adds small overhead)
 %
 %   'W = gsp_learn_graph_l2_degrees(Z, a, params)' computes a weighted
-%   adjacency matrix W from squared pairwise distances in Z, using the
-%   smoothness assumption that text{trace}(X^TLX) is small, where X is
+%   adjacency matrix $W$ from squared pairwise distances in $Z$, using the
+%   smoothness assumption that $\text{trace}(X^TLX)$ is small, where $X$ is
 %   the data (columns) changing smoothly from node to node on the graph and
-%   L = D-W is the combinatorial graph Laplacian.
+%   $L = D-W$ is the combinatorial graph Laplacian.
 %
 %   Alternatively, Z can contain other types of distances and use the
 %   smoothness assumption that
 %
-%      sum(sum(W .* Z))
+%   .. sum(sum(W .* Z))
+%
+%   .. math:: \sum_i\sum_j W_{ij}Z_{ij}
 %
 %   is small. 
 %
 %   The minimization problem solved is 
 %
-%      minimize_W sum(sum(W .* Z)) + a/2 * ||W||_F^2/2 
-%                 + a/2 * ||sum(W)||_2^2 
-%                 s.t. sum(sum(W)) == n
+%   .. minimize_W sum(sum(W .* Z)) + a/2 * ||W||_F^2/2 
+%   ..            + a/2 * ||sum(W)||_2^2 
+%   ..            s.t. sum(sum(W)) == n
 %
-%   subject to W being a valid weighted adjacency matrix (non-negative,
+%   .. math:: \min_W \sum_i\sum_j W_{ij}Z_{ij} +\frac{\alpha}{2}\|W\|_F^2  +\frac{\alpha}{2}\|W1\|_2^2 s.t. \|W\|=n 
+%
+%   subject to $W$ being a valid weighted adjacency matrix (non-negative,
 %   symmetric, with zero diagonal). Note that 
 %
-%      .||W||_F^2/2 + ||sum(W)||_2^2  = ||L||^2
+%   .. .||W||_F^2/2 + ||sum(W)||_2^2  = ||L||^2
+%
+%   .. math:: \|W\|_F^2 + \|W1\|_2^2 = \|L\|_F^2
 %
 %   The algorithm used is forward-backward-forward (FBF) based primal dual
 %   optimization (see references).
 %
-%   Example:
+%   Example:::
 %
 %         G = gsp_sensor(256);
 %         f1 = @(x,y) sin((2-x-y).^2);
@@ -61,13 +67,13 @@ function [W, stat] = gsp_learn_graph_l2_degrees(Z, a, params)
 %   Additional parameters
 %   ---------------------
 %  
-%    params.W_init   : Initialization point. default: zeros(size(Z))
-%    verbosity       : Above 1 adds a small overhead. Default: 1
-%    maxit           : Maximum number of iterations. Default: 1000
-%    tol             : Tolerance for stopping criterion. Default: 1e-5
-%    step_size       : Step size from the interval (0,1). Default: 0.5
-%    fix_zeros       : Fix a set of edges to zero (true/false)
-%    edge_mask       : Mask indicating the non zero edges if "fix_zeros"
+%   * *params.W_init*   : Initialization point. default: zeros(size(Z))
+%   * *verbosity*       : Above 1 adds a small overhead. Default: 1
+%   * *maxit*           : Maximum number of iterations. Default: 1000
+%   * *tol*             : Tolerance for stopping criterion. Default: 1e-5
+%   * *step_size*       : Step size from the interval (0,1). Default: 0.5
+%   * *fix_zeros*       : Fix a set of edges to zero (true/false)
+%   * *edge_mask*       : Mask indicating the non zero edges if "fix_zeros"
 %
 %   The stopping criterion is whether both relative primal and dual
 %   distance between two iterations are below a given tolerance. 
@@ -79,43 +85,8 @@ function [W, stat] = gsp_learn_graph_l2_degrees(Z, a, params)
 %
 %   See also: gsp_learn_graph_log_degrees gsp_distanz gsp_update_weights
 % 
-%   References:
-%     V. Kalofolias. How to learn a graph from smooth signals. Technical
-%     report, AISTATS 2016: proceedings at Journal of Machine Learning
-%     Research (JMLR)., 2016.
-%     
-%     N. Komodakis and J.-C. Pesquet. Playing with duality: An overview of
-%     recent primal? dual approaches for solving large-scale optimization
-%     problems. Signal Processing Magazine, IEEE, 32(6):31--54, 2015.
-%     
-%     V. Kalofolias and N. Perraudin. Large Scale Graph Learning from Smooth
-%     Signals. arXiv preprint arXiv:1710.05654, 2017.
-%     
+%   References: kalofolias2016learn kalofolias2017large komodakis2015playing
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/learn_graph/gsp_learn_graph_l2_degrees.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Author: Vassilis Kalofolias
 % Testing: gsp_test_learn_graph
@@ -337,5 +308,4 @@ if isvector(Z)
 else
     W = squareform_sp(w);
 end
-
 

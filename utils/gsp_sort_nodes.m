@@ -16,7 +16,7 @@ function [W_sorted, ind_sort, modularity, com_id, com_sizes] = gsp_sort_nodes(W,
 %         com_id    : Community ID of each node in the initial W
 %         com_sizes : Number of nodes in each community
 %
-%   gsp_sort_nodes(W) sorts the nodes of the weighted adjacency matrix W
+%   gsp_sort_nodes(W) sorts the nodes of the weighted adjacency matrix $W$
 %   by clustering them according to the "Louvain" method.
 %
 %   By default the clustering is recursive and the level of recursion that
@@ -27,7 +27,7 @@ function [W_sorted, ind_sort, modularity, com_id, com_sizes] = gsp_sort_nodes(W,
 %   Scherrer available here: 
 %   https://perso.uclouvain.be/vincent.blondel/research/louvain.html 
 %
-%   Example:
+%   Example:::
 %
 %         G = gsp_nn_graph([[randn(100, 1)-1; (randn(100, 1)+7)], ...
 %           [randn(50, 1); (randn(100,1)-4); (randn(50, 1)*2+8)]]);
@@ -39,36 +39,8 @@ function [W_sorted, ind_sort, modularity, com_id, com_sizes] = gsp_sort_nodes(W,
 %
 %   See also: cluster_jl
 % 
-%   References:
-%     V. D. Blondel, J.-L. Guillaume, R. Lambiotte, and E. Lefebvre. Fast
-%     unfolding of communities in large networks. Journal of statistical
-%     mechanics: theory and experiment, 2008(10):P10008, 2008.
-%     
+%   References: blondel2008fast
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/utils/gsp_sort_nodes.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Author: Vassilis Kalofolias
 % Date: June 2016
@@ -102,6 +74,5 @@ modularity = COMTY.MOD(ind_best_splitting);
 com_sizes = COMTY.SIZE{ind_best_splitting};
 
 W_sorted = W(ind_sort, ind_sort);
-
 
 

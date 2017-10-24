@@ -17,79 +17,59 @@ function [sol, info] = gsp_wavelet_dn(G, w, x, lambda, param)
 %   This function will denoise a signal by solving the following convex
 %   promblem:
 %
-%      sol = argmin_{z} || W^* z - x' ||_2^2 + lambda * ||z||_1
+%   .. sol = argmin_{z} || W^* z - x' ||_2^2 + lambda * ||z||_1
 %
-%   Where W is the frame associated to the filterbank w, x' a part of
-%   the signal to be denoised and z the wavelet coefficient. 
+%   .. math::  sol = \min_{z} \| W^* z - x'\|_2^2 + \gamma  \|z\|_{TV}
 %
-%   x' consists of the high frequency part of x. It is obtained by
-%   setting down to zero the low pass filter of the filerbank w.
+%   Where $W$ is the frame associated to the filterbank $w$, $x'$ a part of
+%   the signal to be denoised and *z* the wavelet coefficient. 
+%
+%   $x'$ consists of the high frequency part of *x*. It is obtained by
+%   setting down to zero the low pass filter of the filerbank *w*.
 %
 %   This function require the UNLocBoX to be executed. You can download it
 %   at http://unlcobox.sourceforge.net
 %
 %   param is a Matlab structure containing the following fields:
 %   
-%    param.tol : is stop criterion for the loop. The algorithm stops if
+%   * *param.tol* : is stop criterion for the loop. The algorithm stops if
 %
-%         (  n(t) - n(t-1) )  / n(t) < tol,
+%     ..  (  n(t) - n(t-1) )  / n(t) < tol,
 %      
-%     where  n(t) = f(x)+ 0.5 X-Z_2^2 is the objective function at iteration t*
-%     by default, tol=10e-4.
+%     .. math:: \frac{  n(t) - n(t-1) }{ n(t)} < tol,
 %
-%    param.maxit : max. nb. of iterations (default: 200).
+%     where  $n(t) = f(x)+ 0.5 \|x-z\|_2^2$ is the objective function at iteration *t*
+%     by default, `tol=10e-4`.
 %
-%    param.tight : 1 W^ are both tight frame or 0 if not
+%   * *param.maxit* : max. nb. of iterations (default: 200).
+%
+%   * *param.tight* : 1 $W^*$ are both tight frame or 0 if not
 %     (default = 0) 
 %
-%    param.verbose : 0 no log, 1 a summary at convergence, 2 print main
+%   * *param.verbose* : 0 no log, 1 a summary at convergence, 2 print main
 %     steps (default: 1)
 %
-%    param.method : Solver to be used ('FISTA', 'ISTA', 'DG') By default
+%   * *param.method* : Solver to be used ('FISTA', 'ISTA', 'DG') By default
 %     it is 'FISTA'. ('DG' is Douglas Rachford) 
 %
-%    param.gamma : stepsize for the 'DG' algorithm
+%   * *param.gamma* : stepsize for the 'DG' algorithm
 %
 %   info is a Matlab structure containing the following fields:
 %
-%    info.algo : Algorithm used
+%   * *info.algo* : Algorithm used
 %
-%    info.iter : Number of iteration
+%   * *info.iter* : Number of iteration
 %
-%    info.time : Time of exectution of the function in sec.
+%   * *info.time* : Time of exectution of the function in sec.
 %
-%    info.final_eval : Final evaluation of the function
+%   * *info.final_eval* : Final evaluation of the function
 %
-%    info.crit : Stopping critterion used 
+%   * *info.crit* : Stopping critterion used 
 %
 %   Demo: gsp_demo_wavelet_dn
 %
 %   See also: gsp_prox_tv gsp_solve_l1 gsp_solve_l0
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/prox/gsp_wavelet_dn.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Author: Nathanael Perraudin
 % Date: 25 March 2014
@@ -185,4 +165,3 @@ end
 sol =Wtop(denoise_y_wav2_c)+y_noise_bf;
     
 end
-

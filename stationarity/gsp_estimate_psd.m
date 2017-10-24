@@ -16,44 +16,18 @@ function psd = gsp_estimate_psd(G, x, param)
 %   Additional parameters
 %   ---------------------
 %  
-%    param.Nfilt  : Number of filters (default 50)
-%    param.Nrandom : Number of random signal (default 10)
-%    param.g0 : Initial window. Default:
+%   * *param.Nfilt*  : Number of filters (default 50)
+%   * *param.Nrandom* : Number of random signal (default 10)
+%   * *param.g0* : Initial window. Default:
 %
-%        g(x)  = exp(-( Nfilt^2 * x).^2/(Nfilt*lmax)^2) 
+%     .. g(x)  = exp(-( Nfilt^2 * x).^2/(Nfilt*lmax)^2) 
+%
+%     .. math:: g(x)  = e^{-\frac{N_f^4 x^2}{(N_f + 1)^2\lambda_{\max}^2}}
 %
 %   Additional parameters are availlable in the function
 %   gsp_filter_analysis.
 %   
-%   References:
-%     N. Perraudin and P. Vandergheynst. Stationary signal processing on
-%     graphs. arXiv preprint arXiv:1601.02522, 2016.
-%     
-%     
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/stationarity/gsp_estimate_psd.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
+%   References: perraudin2016stationary
 
 % Author : Nathanael Perraudin
 % Date: 6 January 2016
@@ -110,5 +84,4 @@ end
 psd = @(s) max(spline(mu,mu_y./mu_y2,s),0);
 
 end
-
 

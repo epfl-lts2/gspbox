@@ -14,25 +14,27 @@ function [reconstruction,coarse_approximations]=gsp_pyramid_synthesis(Gs,coarses
 %   'gsp_pyramid_synthesis(Gs,coarsest_approximation,prediction_errors)' 
 %   synthesizes a signal from its graph pyramid transform coefficients. 
 %  
-%   param is a structure containing optional arguments including
+%   *param* is a structure containing optional arguments including
 %
-%    param.regularize_epsilon : Interpolation parameter.
-%    param.least_squares : Set to 1 to use the least squares synthesis 
+%   * *param.regularize_epsilon* : Interpolation parameter.
+%   * *param.least_squares* : Set to 1 to use the least squares synthesis 
 %     (default=0)  
-%    param.use_landweber : Set to 1 to use the Landweber iteration 
+%   * *param.use_landweber* : Set to 1 to use the Landweber iteration 
 %     approximation in the least squares synthesis.
-%    param.landweber_its : Number of iterations in the Landweber 
+%   * *param.landweber_its* : Number of iterations in the Landweber 
 %     approximation for least squares synthesis.
-%    param.landweber_tau : Parameter for the Landweber iteration.
-%    param.h_filters : A cell array of graph spectral filters. If just
+%   * *param.landweber_tau* : Parameter for the Landweber iteration.
+%   * *param.h_filters* : A cell array of graph spectral filters. If just
 %     one filter is included, it is used at every level of the pyramid. 
 %     These filters are required for least squares synthesis, but not for 
 %     the direct synthesis method 
 %     Default 
 %
-%            h(x) = 0.5 / ( 0.5 + x)
+%     ..     h(x) = 0.5 / ( 0.5 + x)
 %   
-%   Please read the documentation of GSP_FILTER_ANALYSIS for other
+%     .. math:: h(x) = \frac{0.5}{0.5+x}
+%
+%   Please read the documentation of |gsp_filter_analysis| for other
 %   optional arguments.
 %
 %   See also: gsp_graph_multiresolution gsp_pyramid_analysis 
@@ -41,35 +43,7 @@ function [reconstruction,coarse_approximations]=gsp_pyramid_synthesis(Gs,coarses
 %
 %   Demo: gsp_demo_pyramid
 % 
-%   References:
-%     D. I. Shuman, M. J. Faraji, and P. Vandergheynst. A framework for
-%     multiscale transforms on graphs. arXiv preprint arXiv:1308.4942, 2013.
-%     
-%     
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/operators/gsp_pyramid_synthesis.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
+%   References: shuman2013framework 
 
 %   Author : David I Shuman, Nathanael Perraudin.
 %   Date   : 26 November 2015
@@ -119,5 +93,4 @@ for i=num_levels:-1:1
     coarse_approximations{i}=gsp_pyramid_synthesis_single(Gs{i},coarse_approximations{i+1},prediction_errors{i},Gs{i+1}.mr.idx,param);
 end
 reconstruction=coarse_approximations{1};
-
 

@@ -14,7 +14,7 @@ function [ G ] = gsp_nn_graph(Xin, param)
 %   connected to their neighbors (either belonging to the k nearest 
 %   neighbors or to the epsilon-closest neighbors. 
 %
-%   Example:
+%   Example:::
 %
 %           P = gsp_pointcloud('bunny');
 %           param.type = 'knn';
@@ -24,48 +24,24 @@ function [ G ] = gsp_nn_graph(Xin, param)
 %   Additional parameters
 %   ---------------------
 %
-%    param.type      : ['knn', 'radius']   the type of graph (default 'knn')
-%    param.use_flann : [0, 1]              use the FLANN library (default 0)
-%    param.use_full  : [0, 1] - Compute the full distance matrix and then
+%   * *param.type*      : ['knn', 'radius']   the type of graph (default 'knn')
+%   * *param.use_flann* : [0, 1]              use the FLANN library (default 0)
+%   * *param.use_full*  : [0, 1] - Compute the full distance matrix and then
 %     sparsify it (default 0) 
-%    param.center    : [0, 1]              center the data (default 0)
-%    param.rescale   : [0, 1]              rescale the data on a 1-ball (def 0)
-%    param.sigma     : float               the variance of the distance kernel
-%    param.k         : int                 number of neighbors for knn (def 10)
-%    param.epsilon   : float               the radius for the range search
-%    param.use_l1    : [0, 1]              use the l1 distance (def 1)
-%    param.symmetrize_type*: ['average','full'] symmetrization type (default 'full')
-%    param.min_weight*: float               constant additive weight for each edge (default 0) 
-%    param.zero_diagonal*: [0, 1]           zero out the diagonal (default 1)
-%    param.weight_kernel*: function         edge-weighting kernel (default gaussian)
+%   * *param.center*    : [0, 1]              center the data (default 0)
+%   * *param.rescale*   : [0, 1]              rescale the data on a 1-ball (def 0)
+%   * *param.sigma*     : float               the variance of the distance kernel
+%   * *param.k*         : int                 number of neighbors for knn (def 10)
+%   * *param.epsilon*   : float               the radius for the range search
+%   * *param.use_l1*    : [0, 1]              use the l1 distance (def 1)
+%   * *param.symmetrize_type*: ['average','full'] symmetrization type (default 'full')
+%   * *param.min_weight*: float               constant additive weight for each edge (default 0) 
+%   * *param.zero_diagonal*: [0, 1]           zero out the diagonal (default 1)
+%   * *param.weight_kernel*: function         edge-weighting kernel (default gaussian)
 %
 %
 %   See also: gsp_nn_distanz gsp_pointcloud
 %
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/graphs/gsp_nn_graph.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 % Author: Johan Paratte, Nathanael Perraudin
 % Date: 16 June 2014
@@ -174,4 +150,3 @@ m = size(x,1);
 W = Wmat(indx,indy,dist,n,m)';
 
 end
-

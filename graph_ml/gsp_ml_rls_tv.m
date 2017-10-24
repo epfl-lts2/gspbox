@@ -19,22 +19,22 @@ function [sol, infos] = gsp_ml_rls_tv(G, xl, y, k, tau,lambda, A, At, param)
 %       sol     : solution of the problem (kernel coefficients)
 %       infos   : convergence info
 %       
-%   param is a structure of optional argument given to the solver
+%   *param* is a structure of optional argument given to the solver
 %   gradient_descent. Please see the function gradient descent for more
 %   information. 
 %
-%   In param, you also have to set an upperbound for the operator A as
+%   In *param*, you also have to set an upperbound for the operator A as
 %   param.nu!
 %
 %   This function solves the following problem:
 %
-%       argmin_alpha  || A (K alpha) - y ||_2^2 
+%   ..  argmin_alpha  || A (K alpha) - y ||_2^2 
 %                       + tau *alpha^T K alpha 
 %                       + lambda || L K alpha ||_TVG
 %
 %   If tau is set to zero, then the following problem is solved
 %
-%       argmin_alpha alpha^T K alpha
+%   ..  argmin_alpha alpha^T K alpha
 %                      + lambda || L K alpha ||_TVG
 %                      s. t.  A (K alpha) = y
 %
@@ -44,30 +44,6 @@ function [sol, infos] = gsp_ml_rls_tv(G, xl, y, k, tau,lambda, A, At, param)
 
 
 if nargin<7
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/graph_ml/gsp_ml_rls_tv.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
     A = @(x) x;
 end
 

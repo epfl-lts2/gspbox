@@ -1,44 +1,24 @@
 %GSP_DEMO_WAVELET_DN Demonstratration of the use of wavelet for denoising
 %
 %   In this small example, we show how to perform wavelet denoising using
-%   the GSPBox and particularly the function GSP_WAVELET_DN .
+%   the GSPBox and particularly the function |gsp_wavelet_dn| .
 %
-%   The function GSP_WAVELET_DN removes the low frequency part of the
+%   The function |gsp_wavelet_dn| removes the low frequency part of the
 %   signal and solves a l1 minimization problem to remove the noise.
 %
-%   Figure 1: Result of filtering
+%   .. figure::
+%
+%      Result of filtering
 %
 %      We observe that the wavelet denoising allows rapid change on the
 %      graph signal. This is not possible with a simple low pass filtering.
 %
-%   Figure 2: Choosen wavelet filterbank
+%   .. figure::
+%
+%      Choosen wavelet filterbank
 %
 %      Here we use a mexican hat frame for the wavelet construction. 
 %   
-%
-%   Url: https://epfl-lts2.github.io/gspbox-html/doc/demos/gsp_demo_wavelet_dn.html
-
-% Copyright (C) 2013-2016 Nathanael Perraudin, Johan Paratte, David I Shuman.
-% This file is part of GSPbox version 0.7.4
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% If you use this toolbox please kindly cite
-%     N. Perraudin, J. Paratte, D. Shuman, V. Kalofolias, P. Vandergheynst,
-%     and D. K. Hammond. GSPBOX: A toolbox for signal processing on graphs.
-%     ArXiv e-prints, Aug. 2014.
-% http://arxiv.org/abs/1408.5781
 
 %% Initialization
 clear
@@ -112,4 +92,3 @@ title('Denoised signal wavelets')
 figure;
 gsp_plot_filter(G,w);
 title('Wavelet filterbank')
-
