@@ -18,7 +18,14 @@ function c = gsp_cheby_coeff(G, filter, m, N,param)
 %   matrix. Every collumn correspond to a filter. The coefficients are
 %   ordered such that c(j+1) is j'th Chebyshev coefficient
 %
-%   *param* contain only one field param.verbose to controle the verbosity.
+%   Additional parameters
+%   ---------------------
+%  
+%   * *param.use_chebfun*  : 1 to use the Chebfun package to compute 
+%     Chebyshev coefficients
+%   * *param.splitting_on* : 1 to call chebfun with splitting on
+%   * *param.verbose* : Verbosity level (0 no log - 1 display warnings)
+%     (default 1). 
 %
 %   Example:::
 %
@@ -33,7 +40,7 @@ function c = gsp_cheby_coeff(G, filter, m, N,param)
 %   See also: gsp_cheby_op gsp_filter_analysis
 %
 
-% Author: David K Hammond, Nathanael Perraudin
+% Author: David K Hammond, Nathanael Perraudin, David Shuman
 % Testing: test_filter
 % Date: 19 March 2014
 
@@ -76,9 +83,9 @@ else
   arange = G;
 end
 
-if ~isfield(param,'use_chebfun'), param.chebfun = 0; end;
+if ~isfield(param,'use_chebfun'), param.use_chebfun = 0; end;
 
-if param.chebfun % Use Chebfun package, available at (http://www.chebfun.org/)
+if param.use_chebfun % Use Chebfun package, available at (http://www.chebfun.org/)
     if ~isfield(param,'splitting_on'), param.splitting_on = 0; end;
     if param.splitting_on
         h=chebfun(@(s) filter(s),arange,'splitting','on');
