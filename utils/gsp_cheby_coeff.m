@@ -75,13 +75,26 @@ if isstruct(G)
 else
   arange = G;
 end
-  
-a1=(arange(2)-arange(1))/2;
-a2=(arange(2)+arange(1))/2;
-c = zeros(m+1,1);
-for ii=1:m+1
-    c(ii) = sum( filter( a1* cos( (pi*((1:N)-0.5))/N) + a2) .* ...
-             cos( pi*(ii-1)*((1:N)-.5)/N) ) *2/N;
+
+if ~isfield(param,'use_chebfun'), param.chebfun = 0; end;
+
+if param.chebfun % Use Chebfun package, available at (http://www.chebfun.org/)
+    if ~isfield(param,'splitting_on'), param.splitting_on = 0; end;
+    if param.splitting_on
+        h=chebfun(@(s) filter(s),arange,'splitting','on');
+    else
+        h=chebfun(@(s) filter(s),arange);
+    end
+    c=chebcoeffs(h,m+1); 
+    c(1)=c(1)*2; 
+else
+    a1=(arange(2)-arange(1))/2;
+    a2=(arange(2)+arange(1))/2;
+    c = zeros(m+1,1);
+    for ii=1:m+1
+        c(ii) = sum( filter( a1* cos( (pi*((1:N)-0.5))/N) + a2) .* ...
+                cos( pi*(ii-1)*((1:N)-.5)/N) ) *2/N;
+    end
 end
 
 end
