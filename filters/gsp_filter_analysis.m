@@ -58,10 +58,12 @@ function [c] = gsp_filter_analysis(G, fi, s, param)
 %     Default: if the Fourier matrix is present: 'exact' otherwise 'cheby'
 %   * *param.order* : Degree of the Chebyshev approximation
 %     (default=30). 
+%   * *param.grid_order* : grid order used to compute quadrature 
+%     (default is param.order+1)
 %   * *param.verbose* : Verbosity level (0 no log - 1 display warnings)
-%     (default 1).   
+%     (default 1)   
 %
-%   See also: gsp_filter_synthesis gsp_filter_inverse
+%   See also: gsp_filter_synthesis gsp_filter_inverse 
 % 
 %   References: hammond2011wavelets
 %
@@ -114,6 +116,7 @@ if ~isfield(param,'method')
 end
 
 if ~isfield(param,'order'); param.order = 30; end
+if ~isfield(param,'grid_order'); param.grid_order = param.order+1; end
 if ~isfield(param,'verbose'); param.verbose = 1; end
 
 if isfield(param, 'cheb_order')
@@ -174,7 +177,7 @@ c = gsp_mat2vec(gsp_igft(G, chat));
 
 
         cheb_coeffs = gsp_cheby_coeff(G, fi,...
-                param.order, param.order +1);      
+                param.order, param.grid_order, param);    
         c = gsp_cheby_op(G, cheb_coeffs, s);
 %     case 'cheby_p'
 % 
