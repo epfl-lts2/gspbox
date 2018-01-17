@@ -18,7 +18,14 @@ function c = gsp_cheby_coeff(G, filter, m, N,param)
 %   matrix. Every collumn correspond to a filter. The coefficients are
 %   ordered such that c(j+1) is j'th Chebyshev coefficient
 %
-%   *param* contain only one field param.verbose to controle the verbosity.
+%   Additional parameters
+%   ---------------------
+%  
+%   * *param.use_chebfun*  : 1 to use the Chebfun package to compute 
+%     Chebyshev coefficients
+%   * *param.splitting_on* : 1 to call chebfun with splitting on
+%   * *param.verbose* : Verbosity level (0 no log - 1 display warnings)
+%     (default 1). 
 %
 %   Example:::
 %
@@ -33,7 +40,7 @@ function c = gsp_cheby_coeff(G, filter, m, N,param)
 %   See also: gsp_cheby_op gsp_filter_analysis
 %
 
-% Author: David K Hammond, Nathanael Perraudin
+% Author: David K Hammond, Nathanael Perraudin, David Shuman
 % Testing: test_filter
 % Date: 19 March 2014
 
@@ -75,13 +82,26 @@ if isstruct(G)
 else
   arange = G;
 end
-  
-a1=(arange(2)-arange(1))/2;
-a2=(arange(2)+arange(1))/2;
-c = zeros(m+1,1);
-for ii=1:m+1
-    c(ii) = sum( filter( a1* cos( (pi*((1:N)-0.5))/N) + a2) .* ...
-             cos( pi*(ii-1)*((1:N)-.5)/N) ) *2/N;
+
+if ~isfield(param,'use_chebfun'), param.use_chebfun = 0; end;
+
+if param.use_chebfun % Use Chebfun package, available at (http://www.chebfun.org/)
+    if ~isfield(param,'splitting_on'), param.splitting_on = 0; end;
+    if param.splitting_on
+        h=chebfun(@(s) filter(s),arange,'splitting','on');
+    else
+        h=chebfun(@(s) filter(s),arange);
+    end
+    c=chebcoeffs(h,m+1); 
+    c(1)=c(1)*2; 
+else
+    a1=(arange(2)-arange(1))/2;
+    a2=(arange(2)+arange(1))/2;
+    c = zeros(m+1,1);
+    for ii=1:m+1
+        c(ii) = sum( filter( a1* cos( (pi*((1:N)-0.5))/N) + a2) .* ...
+                cos( pi*(ii-1)*((1:N)-.5)/N) ) *2/N;
+    end
 end
 
 end
