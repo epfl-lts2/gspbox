@@ -9,7 +9,6 @@ function r = gsp_cheby_eval(x,c,arange)
 %   Output parameters
 %       r       : Result
 %
-%   In this function, arrange has to be [0, lmax ]!
 %
 %   Url: https://epfl-lts2.github.io/gspbox-html/doc/utils/gsp_cheby_eval.html
 
