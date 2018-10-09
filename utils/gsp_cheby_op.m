@@ -13,7 +13,7 @@ function r = gsp_cheby_op(G, c, signal,param)
 %   Chebyshev basis) applied to input.
 %
 %   Coefficients for multiple polynomials may be passed as a matrix.
-%   This is equivalent to setting::
+%   This is equivalent to setting:
 %
 %       r(1) = gsp_cheby_op(G, c(:,1), signal);
 %       r(2) = gsp_cheby_op(G, c(:,2), signal);
@@ -41,9 +41,9 @@ function r = gsp_cheby_op(G, c, signal,param)
 %   See also: gsp_cheby_coeff gsp_filter_analysis
 %
 
-% Author: David K Hammond, Nathanael Perraudin
+% Author: David K Hammond, Nathanael Perraudin, Li Fan, David Shuman
 % Testing: test_filter
-% Date: 19 March 2014
+% Date: 5 October 2018
 
 if nargin < 4
     param = struct;
@@ -63,8 +63,11 @@ assert(all(M>=2));
 maxM=max(M);
 
 
+if ~isfield(G,'lmin')
+    G.lmin=0;
+end
 
-if ~isfield(G,'lmax');
+if ~isfield(G,'lmax')
     G = gsp_estimate_lmax(G);
     if param.verbose
     warning(['GSP_CHEBY_OP: The variable lmax is not ',...
@@ -82,7 +85,7 @@ else
     bsingle = 0;
 end
 
-arange = [0, G.lmax];
+arange = [G.lmin, G.lmax];
 
 a1 = (arange(2) - arange(1))/2;
 a2 = (arange(2) + arange(1))/2;
@@ -120,3 +123,4 @@ if bsingle
 end
 
 end
+

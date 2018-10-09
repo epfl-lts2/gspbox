@@ -12,27 +12,27 @@ function [G] = gsp_compute_fourier_basis(G,param)
 %   'gsp_compute_fourier_basis(G)' computes a full eigendecomposition of the graph
 %   Laplacian G.L:
 %
-%   .. L = U Lambda U* 
+%      L = U Lambda U* 
 %
-%   .. math:: {\cal L} = U \Lambda U^*
-%
-%   where $\Lambda$ is a diagonal matrix of the Laplacian eigenvalues. 
-%   *G.e* is a column vector of length *G.N* containing the Laplacian
-%   eigenvalues. The function will store the basis *U*, the eigenvalues
-%   *e*, the maximum eigenvalue *lmax* and *G.mu* the coherence of the
-%   Fourier basis into the structure *G*.
+%   where Lambda is a diagonal matrix of the Laplacian eigenvalues. 
+%   G.e is a column vector of length G.N containing the Laplacian
+%   eigenvalues. The function will store the basis U, the eigenvalues
+%   e, the maximum eigenvalue lmax and G.mu the coherence of the
+%   Fourier basis into the structure G.
 % 
-%   Example:::
+%   Example:
 %
 %       N = 50;
 %       G = gsp_sensor(N);
 %       G = gsp_compute_fourier_basis(G);
 %       gsp_plot_signal(G,G.U(:,2));
 % 
-%   References: chung1997spectral
-%
+%   References:
+%     F. R. K. Chung. Spectral Graph Theory. Vol. 92 of the CBMS Regional
+%     Conference Series in Mathematics, American Mathematical Society, 1997.
+%     
 
-% Author : David I Shuman, Nathanael Perraudin
+% Author : David I Shuman, Nathanael Perraudin, Li Fan
 % Testing: test_operators
 
 if nargin < 2
@@ -49,6 +49,7 @@ if numel(G)>1
 end
 
 if ~isfield(param,'verbose'), param.verbose = 1; end
+if ~isfield(param,'force_svd'), param.force_svd = 0; end
 
 
 
@@ -88,7 +89,7 @@ else
     if ~isfield(G,'L')
         error('Graph Laplacian is not provided.');
     end
-    [G.U, G.e] = gsp_full_eigen(G.L);
+    [G.U, G.e] = gsp_full_eigen(G.L,param);
 end
 
 G.lmax=max(G.e);
@@ -104,16 +105,20 @@ G.mu = max(abs(G.U(:)));
 end
 
 
-function [U,E] = gsp_full_eigen(L)
+function [U,E] = gsp_full_eigen(L, param) 
 %GSP_FULL_EIGEN Compute and order the eigen decomposition of L
 
-    % Compute and all eigenvalues and eigenvectors 
-%     try
-%         [eigenvectors,eigenvalues]=eig(full(L+L')/2);
-%     catch
+    % Compute and all eigenvalues and eigenvectors
+    if param.force_svd
         [eigenvectors,eigenvalues,~]=svd(full(L+L')/2);
-%     end
-    
+    else   
+        try
+            [eigenvectors,eigenvalues]=eig(full(L+L')/2);
+        catch
+            [eigenvectors,eigenvalues,~]=svd(full(L+L')/2);
+        end
+    end
+
     % Sort eigenvectors and eigenvalues
     [E,inds] = sort(diag(eigenvalues),'ascend');
     eigenvectors=eigenvectors(:,inds);
@@ -132,3 +137,4 @@ n = signal.internal.sigcasttofloat(n,'double','dftmtx','N',...
 D = fft(eye(n));
 
 end
+
