@@ -9,6 +9,8 @@ function r = gsp_cheby_eval(x,c,arange)
 %   Output parameters
 %       r       : Result
 %
+%   See also: gsp_cheby_op
+%
 
 % Author: David K Hammond, Nathanael Perraudin, Li Fan, David Shuman
 % Testing: test_dual
