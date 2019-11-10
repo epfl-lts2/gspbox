@@ -6,6 +6,8 @@
 %
 %   [1] V. Kalofolias, How to learn a graph from smooth signals, AISTATS
 %   2016.
+%   [1] V. Kalofolias, N. Perraudin, Large Scale Graph Learning From Smooth Signals, ICLR
+%   2019.
 %
 %   Suppose that we have some 2 dimensional smooth functions::
 %

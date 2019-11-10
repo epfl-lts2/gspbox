@@ -4,9 +4,9 @@
 %   aspects needed to know in order to use graph learning:
 %
 %   1) standard graph learning [Kalofolias 2016]
-%   2) setting params automatically for given sparsity [Kalofolias, Perraudin 2017]
-%   3) setting zero-edges up-front [Kalofolias, Perraudin 2017]
-%   4) large scale graph learning [Kalofolias, Perraudin 2017]
+%   2) setting params automatically for given sparsity [Kalofolias, Perraudin 2019]
+%   3) setting zero-edges up-front [Kalofolias, Perraudin 2019]
+%   4) large scale graph learning [Kalofolias, Perraudin 2019]
 %
 %   Let's create some artificial coordinates data::
 %
