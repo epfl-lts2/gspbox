@@ -122,6 +122,7 @@ if 'copyhtml' in todo:
     # os.system('cp -r '+outputdirhtml+'include/* '+ htmldirgit+'include/')
     # os.system('rm -r '+outputdirhtml+'include ')
     os.system('cp -r '+outputdirhtml+'* '+ htmldirgit+'doc/')
+    print('cp -r '+outputdirhtml+'* '+ htmldirgit+'doc/')
 
 #  Send to the server
 
