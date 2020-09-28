@@ -45,5 +45,4 @@ software.
 Documentation
 ===
 
-You can find the complete online documentation here : http://lts2research.epfl.ch/gsp/doc/start/
-  
+You can find the complete documentation at https://epfl-lts2.github.io/gspbox-html/.
